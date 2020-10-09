@@ -23,11 +23,7 @@ public class UserController {
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true ),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "body", required = true)
     })
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "成功"),
-//            @ApiResponse(code = 30001, message = "参数不能为空"),
-//            @ApiResponse(code = 40001, message = "用户名或密码错误")
-//    })
+
     public CommonReturnType login(String id, String password){
         return CommonReturnType.success();
     }

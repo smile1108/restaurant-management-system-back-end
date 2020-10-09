@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
  * Date: 2020/10/9 14:43
  */
 @Repository
-@ApiModel
 public class User {
     //学号
     private String id;
