@@ -19,14 +19,14 @@ import java.sql.Time;
 @Api(value = "订单controller", description = "订单操作")
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends BaseController{
 
     @ApiOperation("创建订单操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "number", value = "预定菜品的数量", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "isPackage", value = "是否打包", dataType = "int", paramType = "body", required = true),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "number", value = "预定菜品的数量", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "isPackage", value = "是否打包", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "predictTime", value = "用户预取时间", dataType = "string", paramType = "body", required = true)
     })
     public CommonReturnType create(Integer foodId, Integer number, Integer isPackage, String predictTime){
@@ -37,7 +37,7 @@ public class OrderController {
     @ApiOperation("取消订单操作")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "orderId", value = "要取消的订单号", dataType = "int", paramType = "body", required = true)
+        @ApiImplicitParam(name = "orderId", value = "要取消的订单号", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0")
     })
     public CommonReturnType delete(Integer orderId){
         return null;

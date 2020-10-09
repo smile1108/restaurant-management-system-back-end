@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "商家controller", description = "商家操作")
 @RestController
 @RequestMapping("/merchant")
-public class MerchantController {
+public class MerchantController extends BaseController{
 
     @ApiOperation("商家登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)

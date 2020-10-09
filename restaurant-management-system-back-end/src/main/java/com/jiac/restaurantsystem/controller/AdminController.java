@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "管理员controller", description = "管理员操作")
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController{
 
     @ApiOperation("管理员登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)

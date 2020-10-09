@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "窗口controller", description = "窗口操作")
 @RestController
 @RequestMapping("/window")
-public class WindowController {
+public class WindowController extends BaseController{
 
     @ApiOperation("窗口开通操作")
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "windowId", value = "窗口id", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true)
+            @ApiImplicitParam(name = "windowId", value = "窗口id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0")
     })
     public CommonReturnType open(Integer windowId, Integer merchantId){
         return null;

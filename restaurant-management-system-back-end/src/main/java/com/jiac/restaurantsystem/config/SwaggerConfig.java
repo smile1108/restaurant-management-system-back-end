@@ -3,16 +3,21 @@ package com.jiac.restaurantsystem.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * FileName: SwaggerConfig
@@ -25,6 +30,12 @@ import java.util.ArrayList;
 public class SwaggerConfig {
     @Bean
     public Docket docker(){
+//        List<ResponseMessage> responseMessageList = new ArrayList<>();
+//        responseMessageList.add(new ResponseMessageBuilder().code(404).message("找不到资源").build());
+//        responseMessageList.add(new ResponseMessageBuilder().code(401).message("没有认证").build());
+//        responseMessageList.add(new ResponseMessageBuilder().code(500).message("服务器内部错误").build());
+//        responseMessageList.add(new ResponseMessageBuilder().code(403).message("没有没有访问权限").build());
+//        responseMessageList.add(new ResponseMessageBuilder().code(200).message("请求成功").responseModel(null).build());
         // 构造函数传入初始化规范，这是swagger2规范
         return new Docket(DocumentationType.SWAGGER_2)
                 //apiInfo： 添加api详情信息，参数为ApiInfo类型的参数，这个参数包含了第二部分的所有信息比如标题、描述、版本之类的，开发中一般都会自定义这些信息

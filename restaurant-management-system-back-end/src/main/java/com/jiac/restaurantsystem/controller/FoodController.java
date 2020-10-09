@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Api(value = "菜品controller", description = "菜品操作")
 @RestController
 @RequestMapping("/food")
-public class FoodController {
+public class FoodController extends BaseController{
 
     @ApiOperation("搜索全部菜品")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -30,8 +30,8 @@ public class FoodController {
     @ApiOperation("修改菜品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "foodPrice", value = "菜品价格", dataType = "double", paramType = "body", required = true),
             @ApiImplicitParam(name = "foodTaste", value = "菜品口味", dataType = "string", paramType = "body", required = true),
@@ -43,8 +43,8 @@ public class FoodController {
     @ApiOperation("删除菜品")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
     })
     public CommonReturnType delete(Integer merchantId, Integer foodId){
         return null;
@@ -53,12 +53,12 @@ public class FoodController {
     @ApiOperation("增加菜品")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "foodPrice", value = "菜品价格", dataType = "double", paramType = "body", required = true),
             @ApiImplicitParam(name = "foodTaste", value = "菜品口味", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "windowId", value = "窗口id", dataType = "int", paramType = "body", required = true),
+            @ApiImplicitParam(name = "windowId", value = "窗口id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
     })
     public CommonReturnType add(Integer merchantId, Integer foodId, String foodName, Double foodPrice, String foodTaste, Integer windowId){
         return null;
@@ -67,7 +67,7 @@ public class FoodController {
     @ApiOperation("按照窗口号查找菜品")
     @RequestMapping(value = "/getByWindowId", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "windowId", value = "窗口号", dataType = "int", paramType = "query", required = true)
+            @ApiImplicitParam(name = "windowId", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
     public CommonReturnType getByWindowId(Integer windowId){
         return null;
@@ -85,7 +85,7 @@ public class FoodController {
     @ApiOperation("按照楼层查找菜品")
     @RequestMapping(value = "/getByLevel", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "level", value = "楼层", dataType = "int", paramType = "query", required = true)
+            @ApiImplicitParam(name = "level", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
     public CommonReturnType getByTaste(Integer level){
         return null;
