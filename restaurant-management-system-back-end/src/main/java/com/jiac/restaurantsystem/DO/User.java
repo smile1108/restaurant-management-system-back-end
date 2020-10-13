@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
  * Author: Jiac
  * Date: 2020/10/9 14:43
  */
-@Repository
 public class User {
     //学号
     private String id;

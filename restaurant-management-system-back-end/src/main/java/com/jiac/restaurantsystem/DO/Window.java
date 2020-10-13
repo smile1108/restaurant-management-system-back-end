@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
  * Author: Jiac
  * Date: 2020/10/9 22:29
  */
-@Repository
 public class Window {
     //窗口id
     private Integer windowId;

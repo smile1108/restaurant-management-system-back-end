@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
  * Author: Jiac
  * Date: 2020/10/9 22:30
  */
-@Repository
 public class Merchant {
     //商家id
     private Integer merchantId;

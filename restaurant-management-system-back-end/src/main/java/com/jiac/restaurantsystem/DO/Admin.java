@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
  * Author: Jiac
  * Date: 2020/10/9 22:25
  */
-@Repository
 public class Admin {
     private Integer id;
 

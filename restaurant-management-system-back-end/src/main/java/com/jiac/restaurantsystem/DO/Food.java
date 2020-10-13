@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
  * Author: Jiac
  * Date: 2020/10/9 22:27
  */
-@Repository
 public class Food {
     //菜id
     private Integer id;

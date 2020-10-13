@@ -9,7 +9,6 @@ import java.sql.Time;
  * Author: Jiac
  * Date: 2020/10/9 22:31
  */
-@Repository
 public class Order {
     //订单id
     private String orderId;
