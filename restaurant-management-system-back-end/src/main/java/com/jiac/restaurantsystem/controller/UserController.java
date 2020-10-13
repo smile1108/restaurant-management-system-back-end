@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.util.Set;
 
 /**
  * FileName: UserController
@@ -23,10 +27,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JedisPool jedisPool;
+
     @GetMapping("/test")
     public CommonReturnType test(int id){
-        String test = userService.test(id);
-        return CommonReturnType.success(test);
+        Jedis jedis = jedisPool.getResource();
+        jedis.set("hello", "s1");
+        return CommonReturnType.success(null);
     }
 
     @ApiOperation("用户登录验证")
