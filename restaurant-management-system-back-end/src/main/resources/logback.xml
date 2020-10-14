@@ -44,39 +44,6 @@
         </rollingPolicy>
     </appender>
 
-    <!-- INFO 输入到文件，按日期和文件大小 -->
-    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder charset="utf-8">
-            <pattern>[%-5level] %d{} [%thread] %logger{36} - %m%n
-            </pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/info/%d.log</fileNamePattern>
-            <maxHistory>10</maxHistory>
-        </rollingPolicy>
-    </appender>
-    <!-- DEBUG 输入到文件，按日期和文件大小 -->
-    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder charset="utf-8">
-            <pattern>[%-5level] %d{} [%thread] %logger{36} - %m%n
-            </pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>DEBUG</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/debug/%d.log</fileNamePattern>
-            <maxHistory>10</maxHistory>
-        </rollingPolicy>
-    </appender>
-
     <!-- SQL相关日志输出-->
     <logger name="org.apache.ibatis" level="INFO" additivity="false"/>
     <logger name="org.mybatis.spring" level="INFO" additivity="false"/>
@@ -85,9 +52,7 @@
     <!-- Logger 根目录 -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="DEBUG"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="WARN"/>
-        <appender-ref ref="INFO"/>
     </root>
 </configuration>

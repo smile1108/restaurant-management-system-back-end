@@ -67,8 +67,22 @@ public class UserController extends BaseController{
         @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "body", required = true),
         @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType modifyPass(String id, String newPass, String qualifyPass){
-        return null;
+    public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
+        //首先验证参数是否为空
+        if(id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+            || newPass == null || newPass.trim().length() == 0 || qualifyPass == null || qualifyPass.trim().length() == 0){
+            LOG.error("参数校验失败, 参数为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 验证两次输入的密码是否一致
+        if(!newPass.equals(qualifyPass)){
+            LOG.error("两次输入密码不一致");
+            throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
+        }
+        // 如果参数验证成功 就调用service查询数据库
+        userService.modifyPass(id, oldPass, newPass, qualifyPass);
+        
+        return CommonReturnType.success();
     }
 
     @ApiOperation("用户找回密码")
