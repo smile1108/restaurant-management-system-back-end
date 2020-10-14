@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "商家controller", description = "商家操作")
 @RestController
-@RequestMapping("/merchant")
+@RequestMapping("/api/dbcourse/merchant")
 public class MerchantController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(MerchantController.class);

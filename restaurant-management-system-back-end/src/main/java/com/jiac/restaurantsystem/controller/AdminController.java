@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "管理员controller", description = "管理员操作")
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/dbcourse/admin")
 public class AdminController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);

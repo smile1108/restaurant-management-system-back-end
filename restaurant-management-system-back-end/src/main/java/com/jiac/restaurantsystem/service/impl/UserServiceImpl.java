@@ -1,6 +1,9 @@
 package com.jiac.restaurantsystem.service.impl;
 
+import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.UserMapper;
+import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +18,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserMapper userMapper;
 
+    @Override
+    public User login(String id, String password) throws CommonException {
+        //使用UserMapper获取数据库中对应id的学生数据
+        User user = userMapper.selectUserById(id);
+        // 如果user等于空 表示用户不存在
+        if(user == null){
+            LOG.error("用户不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
+        }
+
+        // 用户存在的话 判断密码是否正确
+        // 表示用户名或密码错误
+        if(!user.getId().equals(id) || !user.getPassword().equals(password)){
+            LOG.error("用户名或密码错误");
+            throw new CommonException(ResultCode.AUTH_FAILED);
+        }
+        LOG.info("用户登录成功");
+        return user;
+    }
 }

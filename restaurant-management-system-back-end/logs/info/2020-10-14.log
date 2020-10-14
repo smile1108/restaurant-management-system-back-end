@@ -1,0 +1,204 @@
+[INFO ] 2020-10-14 19:46:42,945 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 3276 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:46:42,960 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:46:44,443 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:46:44,443 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:46:44,443 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:46:44,443 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:46:44,521 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:46:44,521 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1460 ms
+[INFO ] 2020-10-14 19:46:45,043 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:46:45,106 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:46:45,231 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:46:45,246 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:46:45,246 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:46:45,262 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:46:45,293 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:46:45,387 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:46:45,403 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:46:45,403 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:46:45,418 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:46:45,418 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:46:45,418 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:46:45,450 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.78 seconds (JVM running for 4.196)
+[INFO ] 2020-10-14 19:47:26,859 [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:47:26,860 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:47:26,867 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 7 ms
+[INFO ] 2020-10-14 19:50:31,572 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 14032 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:50:31,572 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:50:32,623 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:50:32,627 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:50:32,627 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:50:32,627 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:50:32,703 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:50:32,703 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1070 ms
+[INFO ] 2020-10-14 19:50:33,078 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:50:33,137 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:50:33,242 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:50:33,266 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:50:33,266 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:50:33,276 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:50:33,293 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:50:33,378 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:50:33,387 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:50:33,397 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:50:33,397 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:50:33,397 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:50:33,401 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:50:33,413 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.082 seconds (JVM running for 2.934)
+[INFO ] 2020-10-14 19:50:44,319 [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:50:44,320 [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:50:44,330 [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 10 ms
+[INFO ] 2020-10-14 19:52:04,617 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 12156 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:52:04,617 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:52:05,593 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:52:05,598 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:52:05,598 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:52:05,598 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:52:05,662 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:52:05,662 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1005 ms
+[INFO ] 2020-10-14 19:52:06,052 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:52:06,103 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:52:06,213 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:52:06,233 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:52:06,233 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:52:06,242 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:52:06,262 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:52:06,332 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:52:06,343 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:52:06,353 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:52:06,353 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:52:06,353 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:52:06,353 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:52:06,373 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.063 seconds (JVM running for 2.912)
+[INFO ] 2020-10-14 19:52:11,632 [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:52:11,633 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:52:11,643 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 10 ms
+[INFO ] 2020-10-14 19:53:28,158 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 6388 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:53:28,163 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:53:29,292 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:53:29,302 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:53:29,302 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:53:29,302 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:53:29,372 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:53:29,372 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1150 ms
+[INFO ] 2020-10-14 19:53:29,772 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:53:29,822 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:53:29,923 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:53:29,942 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:53:29,942 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:53:29,952 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:53:29,972 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:53:30,052 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:53:30,063 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:53:30,063 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:53:30,063 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:53:30,072 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:53:30,072 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:53:30,092 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.241 seconds (JVM running for 3.122)
+[INFO ] 2020-10-14 19:53:42,379 [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:53:42,381 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:53:42,392 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 11 ms
+[INFO ] 2020-10-14 19:55:48,337 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 1304 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:55:48,337 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:55:49,244 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:55:49,244 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:55:49,244 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:55:49,244 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:55:49,342 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:55:49,342 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 970 ms
+[INFO ] 2020-10-14 19:55:49,752 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:55:49,802 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:55:49,912 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:55:49,922 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:55:49,922 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:55:49,934 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:55:49,952 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:55:50,034 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:55:50,043 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:55:50,052 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:55:50,052 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:55:50,052 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:55:50,052 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:55:50,072 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 1.973 seconds (JVM running for 2.834)
+[INFO ] 2020-10-14 19:56:05,850 [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:56:05,850 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:56:05,859 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 9 ms
+[INFO ] 2020-10-14 19:58:57,212 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 2336 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 19:58:57,212 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 19:58:58,152 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 19:58:58,162 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:58:58,162 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 19:58:58,162 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 19:58:58,222 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 19:58:58,222 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 960 ms
+[INFO ] 2020-10-14 19:58:58,647 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 19:58:58,702 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 19:58:58,817 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 19:58:58,832 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 19:58:58,833 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 19:58:58,843 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 19:58:58,860 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 19:58:58,947 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 19:58:58,958 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 19:58:58,966 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 19:58:58,968 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 19:58:58,970 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 19:58:58,972 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 19:58:58,995 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.03 seconds (JVM running for 2.915)
+[INFO ] 2020-10-14 19:59:02,622 [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:59:02,623 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 19:59:02,633 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 10 ms
+[INFO ] 2020-10-14 19:59:02,735 [http-nio-8080-exec-3] c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+[INFO ] 2020-10-14 20:05:25,447 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 16372 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 20:05:25,449 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 20:05:26,492 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 20:05:26,497 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:05:26,497 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 20:05:26,497 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 20:05:26,552 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 20:05:26,552 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1062 ms
+[INFO ] 2020-10-14 20:05:26,942 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 20:05:26,992 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 20:05:27,097 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:05:27,112 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 20:05:27,112 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 20:05:27,122 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 20:05:27,143 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 20:05:27,212 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 20:05:27,222 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 20:05:27,232 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 20:05:27,232 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 20:05:27,232 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 20:05:27,232 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 20:05:27,252 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.065 seconds (JVM running for 2.902)
+[INFO ] 2020-10-14 20:05:36,475 [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:05:36,475 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:05:36,485 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 9 ms
+[INFO ] 2020-10-14 20:05:36,572 [http-nio-8080-exec-3] c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+[INFO ] 2020-10-14 20:06:52,432 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 15732 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 20:06:52,432 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 20:06:53,362 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 20:06:53,367 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:06:53,367 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 20:06:53,367 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 20:06:53,427 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 20:06:53,427 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 955 ms
+[INFO ] 2020-10-14 20:06:53,822 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 20:06:53,876 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 20:06:53,977 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:06:53,992 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 20:06:53,992 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 20:06:54,010 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 20:06:54,027 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 20:06:54,102 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 20:06:54,107 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 20:06:54,117 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 20:06:54,117 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 20:06:54,122 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 20:06:54,122 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 20:06:54,142 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 1.939 seconds (JVM running for 2.85)
+[INFO ] 2020-10-14 20:07:05,894 [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:07:05,895 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:07:05,904 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 9 ms
+[INFO ] 2020-10-14 20:07:05,999 [http-nio-8080-exec-1] c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+[INFO ] 2020-10-14 20:07:06,332 [http-nio-8080-exec-1] c.j.r.service.impl.UserServiceImpl - 用户登录成功

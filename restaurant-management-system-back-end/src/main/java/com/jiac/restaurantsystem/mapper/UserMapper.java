@@ -1,5 +1,6 @@
 package com.jiac.restaurantsystem.mapper;
 
+import com.jiac.restaurantsystem.DO.User;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
 
-    @Select("select test from test where id = #{id}")
-    String test(int id);
+    @Select("select * from student where id = #{id}")
+    User selectUserById(String id);
 }

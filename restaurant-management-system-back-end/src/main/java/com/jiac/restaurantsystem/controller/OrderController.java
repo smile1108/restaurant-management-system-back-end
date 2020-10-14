@@ -20,7 +20,7 @@ import java.sql.Time;
  */
 @Api(value = "订单controller", description = "订单操作")
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/api/dbcourse/order")
 public class OrderController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);

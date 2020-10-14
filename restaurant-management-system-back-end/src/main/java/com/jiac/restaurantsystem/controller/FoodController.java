@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 @Api(value = "菜品controller", description = "菜品操作")
 @RestController
-@RequestMapping("/food")
+@RequestMapping("/api/dbcourse/food")
 public class FoodController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(FoodController.class);

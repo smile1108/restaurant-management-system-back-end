@@ -1,5 +1,7 @@
 package com.jiac.restaurantsystem.service;
 
+import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.error.CommonException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,4 +11,5 @@ import org.springframework.stereotype.Service;
  */
 public interface UserService {
 
+    User login(String id, String password) throws CommonException;
 }

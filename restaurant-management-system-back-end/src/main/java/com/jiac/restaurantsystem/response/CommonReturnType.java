@@ -1,5 +1,7 @@
 package com.jiac.restaurantsystem.response;
 
+import com.jiac.restaurantsystem.error.CommonError;
+
 /**
  * FileName: CommonReturnType
  * Author: Jiac
@@ -27,10 +29,10 @@ public class CommonReturnType {
         return create(ResultCode.SUCCESS, data);
     }
 
-    public static CommonReturnType create(ResultCode code, Object data) {
+    public static CommonReturnType create(CommonError code, Object data) {
         CommonReturnType type = new CommonReturnType();
-        type.setCode(code.getCode());
-        type.setMsg(code.getMsg());
+        type.setCode(code.getErrCode());
+        type.setMsg(code.getErrMsg());
         type.setData(data);
         return type;
     }

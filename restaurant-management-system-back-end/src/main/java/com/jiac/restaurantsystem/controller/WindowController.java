@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "窗口controller", description = "窗口操作")
 @RestController
-@RequestMapping("/window")
+@RequestMapping("/api/dbcourse/window")
 public class WindowController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(WindowController.class);

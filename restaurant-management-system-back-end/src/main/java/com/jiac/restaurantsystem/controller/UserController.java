@@ -1,16 +1,17 @@
 package com.jiac.restaurantsystem.controller;
 
 import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.controller.VO.UserVO;
+import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
+import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.UserService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -23,8 +24,8 @@ import java.util.Set;
  */
 @Api(value = "用户controller", description = "用户操作")
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/api/dbcourse/user")
+public class UserController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
@@ -42,8 +43,21 @@ public class UserController {
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true ),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType login(String id, String password){
-        return CommonReturnType.success();
+    @ResponseBody
+    public CommonReturnType login(String id, String password) throws CommonException {
+        // 首先验证参数是否为空
+        if(id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0){
+            LOG.error("参数校验失败, 参数为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 如果参数验证成功 就调用service查询数据库
+        User user = userService.login(id, password);
+
+        // 将DO模型转换为前端用户看的模型
+        UserVO userVO = convertFromUserDO(user);
+
+        // 没有问题 返回用户数据
+        return CommonReturnType.success(userVO);
     }
 
     @ApiOperation("用户修改密码")
@@ -65,5 +79,14 @@ public class UserController {
     })
     public CommonReturnType getbackPass(String email, String id){
         return null;
+    }
+
+    private UserVO convertFromUserDO(User user){
+        if(user == null){
+            return null;
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
     }
 }
