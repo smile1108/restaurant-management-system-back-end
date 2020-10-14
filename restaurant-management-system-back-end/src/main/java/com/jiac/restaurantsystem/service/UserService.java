@@ -9,5 +9,4 @@ import org.springframework.stereotype.Service;
  */
 public interface UserService {
 
-    public String test(int id);
 }

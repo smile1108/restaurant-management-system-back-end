@@ -1,10 +1,13 @@
 package com.jiac.restaurantsystem.controller;
 
+import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +23,9 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/food")
 public class FoodController extends BaseController{
+
+    private static final Logger LOG = LoggerFactory.getLogger(FoodController.class);
+
 
     @ApiOperation("搜索全部菜品")
     @RequestMapping(value = "/list", method = RequestMethod.GET)

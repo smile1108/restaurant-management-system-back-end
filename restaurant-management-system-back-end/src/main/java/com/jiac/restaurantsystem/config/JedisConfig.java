@@ -17,7 +17,6 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 public class JedisConfig extends CachingConfigurerSupport {
-    private static final Logger LOG = LoggerFactory.getLogger(JedisConfig.class);
 
     /**
      * SpringSession  需要注意的就是redis需要2.8以上版本，然后开启事件通知，在redis配置文件里面加上

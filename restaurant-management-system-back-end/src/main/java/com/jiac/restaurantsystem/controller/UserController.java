@@ -4,6 +4,8 @@ import com.jiac.restaurantsystem.DO.User;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.service.UserService;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +26,15 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private JedisPool jedisPool;
 
-    @GetMapping("/test")
-    public CommonReturnType test(int id){
-        Jedis jedis = jedisPool.getResource();
-        jedis.set("hello", "s1");
-        return CommonReturnType.success(null);
-    }
 
     @ApiOperation("用户登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -43,7 +42,6 @@ public class UserController {
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true ),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "body", required = true)
     })
-
     public CommonReturnType login(String id, String password){
         return CommonReturnType.success();
     }

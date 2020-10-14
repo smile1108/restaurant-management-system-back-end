@@ -20,10 +20,4 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public String test(int id) {
-        LOGGER.info("test api , parameter id" + id);
-        String test = userMapper.test(id);
-        return test;
-    }
 }
