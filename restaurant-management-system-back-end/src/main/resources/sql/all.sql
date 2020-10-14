@@ -51,3 +51,20 @@ CREATE TABLE `order_info`(
     PRIMARY KEY (`order_id`),
     FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`)
 )ENGINE=InnoDB, default charset = UTF8;
+
+DROP TABLE IF EXISTS `administrator`;
+CREATE TABLE `administrator`(
+    `administrator_id` INT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(10) NOT NULL DEFAULT '',
+    `password` VARCHAR(20) NOT NULL DEFAULT '',
+    PRIMARY KEY (`administrator_id`)
+)ENGINE=InnoDB, default charset = UTF8;
+
+DROP TABLE IF EXISTS `wicket_open`;
+CREATE TABLE `wicket_open`(
+    `administrator_id` INT NOT NULL,
+    `wicket_id` INT NOT NULL,
+    PRIMARY KEY (`administrator_id`, `wicket_id`),
+    FOREIGN KEY (`administrator_id`) REFERENCES `administrator`(`administrator_id`),
+    FOREIGN KEY (`wicket_id`) REFERENCES `wicket`(`wicket_id`)
+)ENGINE=InnoDB, default charset = UTF8;
