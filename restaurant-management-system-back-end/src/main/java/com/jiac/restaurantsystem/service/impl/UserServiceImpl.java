@@ -4,6 +4,7 @@ import com.jiac.restaurantsystem.DO.User;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.UserMapper;
 import com.jiac.restaurantsystem.response.ResultCode;
+import com.jiac.restaurantsystem.service.SendMail;
 import com.jiac.restaurantsystem.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private SendMail mailService;
 
     @Override
     public User login(String id, String password) throws CommonException {
@@ -62,5 +66,24 @@ public class UserServiceImpl implements UserService {
         }
         // 密码加密暂时不写 之后添加
         userMapper.updatePassword(id, newPass);
+    }
+
+    @Override
+    public void getbackPass(String email, String id) throws CommonException {
+        //使用UserMapper获取数据库中对应id的学生数据
+        User user = userMapper.selectUserById(id);
+        // 如果user等于空 表示用户不存在
+        if(user == null){
+            LOG.error("用户不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
+        }
+        // 学号与邮箱不对应
+        if(!user.getEmail().equals(email)){
+            LOG.error("学号与输入的邮箱不对应");
+            throw new CommonException(ResultCode.EMAIL_NOT_TRUE);
+        }
+        String text = "您好, 您学号为 " + user.getId() + " 的账号的密码为: " + user.getPassword() + " ,\n" +
+                "请您妥善保管密码, 如有盗号嫌疑请立即修改密码";
+        mailService.sendTextMail(email, "用户找回密码", text);
     }
 }

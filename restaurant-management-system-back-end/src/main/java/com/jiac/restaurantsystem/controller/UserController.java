@@ -81,7 +81,7 @@ public class UserController extends BaseController{
         }
         // 如果参数验证成功 就调用service查询数据库
         userService.modifyPass(id, oldPass, newPass, qualifyPass);
-        
+
         return CommonReturnType.success();
     }
 
@@ -91,8 +91,17 @@ public class UserController extends BaseController{
             @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType getbackPass(String email, String id){
-        return null;
+    public CommonReturnType getbackPass(String email, String id) throws CommonException {
+        //首先校验参数是否为空
+        if(email == null || email.trim().length() == 0 ||
+            id == null || id.trim().length() == 0){
+            LOG.error("参数校验失败, 参数为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+
+        userService.getbackPass(email, id);
+
+        return CommonReturnType.success();
     }
 
     private UserVO convertFromUserDO(User user){
