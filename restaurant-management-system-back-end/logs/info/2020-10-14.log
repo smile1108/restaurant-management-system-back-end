@@ -202,3 +202,30 @@
 [INFO ] 2020-10-14 20:07:05,904 [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 9 ms
 [INFO ] 2020-10-14 20:07:05,999 [http-nio-8080-exec-1] c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
 [INFO ] 2020-10-14 20:07:06,332 [http-nio-8080-exec-1] c.j.r.service.impl.UserServiceImpl - 用户登录成功
+[INFO ] 2020-10-14 20:14:47,811 [main] c.j.r.RestaurantsystemApplication - Starting RestaurantsystemApplication on LAPTOP-JT8LVH4O with PID 11884 (C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end\target\classes started by jc in C:\Users\jc\Desktop\DBCourseDesign\restaurant-management-system\restaurant-management-system-back-end)
+[INFO ] 2020-10-14 20:14:47,811 [main] c.j.r.RestaurantsystemApplication - No active profile set, falling back to default profiles: default
+[INFO ] 2020-10-14 20:14:48,781 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-10-14 20:14:48,786 [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:14:48,786 [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[INFO ] 2020-10-14 20:14:48,786 [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.38]
+[INFO ] 2020-10-14 20:14:48,871 [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-10-14 20:14:48,871 [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1010 ms
+[INFO ] 2020-10-14 20:14:49,271 [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+[INFO ] 2020-10-14 20:14:49,334 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-10-14 20:14:49,460 [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[INFO ] 2020-10-14 20:14:49,476 [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-10-14 20:14:49,477 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+[INFO ] 2020-10-14 20:14:49,487 [main] s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+[INFO ] 2020-10-14 20:14:49,505 [main] s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+[INFO ] 2020-10-14 20:14:49,586 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getByTasteUsingGET_1
+[INFO ] 2020-10-14 20:14:49,596 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+[INFO ] 2020-10-14 20:14:49,604 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: deleteUsingPOST_1
+[INFO ] 2020-10-14 20:14:49,606 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getbackPassUsingPOST_1
+[INFO ] 2020-10-14 20:14:49,608 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_2
+[INFO ] 2020-10-14 20:14:49,610 [main] s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: modifyPassUsingPOST_1
+[INFO ] 2020-10-14 20:14:49,632 [main] c.j.r.RestaurantsystemApplication - Started RestaurantsystemApplication in 2.064 seconds (JVM running for 2.914)
+[INFO ] 2020-10-14 20:14:52,541 [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:14:52,542 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-10-14 20:14:52,554 [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 12 ms
+[INFO ] 2020-10-14 20:14:52,639 [http-nio-8080-exec-3] c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+[INFO ] 2020-10-14 20:14:52,962 [http-nio-8080-exec-3] c.j.r.service.impl.UserServiceImpl - 用户登录成功
