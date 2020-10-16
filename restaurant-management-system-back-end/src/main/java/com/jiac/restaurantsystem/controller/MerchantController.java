@@ -1,12 +1,19 @@
 package com.jiac.restaurantsystem.controller;
 
+import com.jiac.restaurantsystem.DO.Merchant;
+import com.jiac.restaurantsystem.controller.VO.MerchantVO;
+import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
+import com.jiac.restaurantsystem.response.ResultCode;
+import com.jiac.restaurantsystem.service.MerchantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,15 +30,27 @@ public class MerchantController extends BaseController{
 
     private static final Logger LOG = LoggerFactory.getLogger(MerchantController.class);
 
+    @Autowired
+    private MerchantService merchantService;
 
     @ApiOperation("商家登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "商家名称", dataType = "string", paramType = "body", required = true ),
+            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true ),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType login(String name, String password){
-        return null;
+    public CommonReturnType login(String id, String password) throws CommonException {
+        // 商家使用商家id和密码进行登录
+        // 首先校验参数是否为空
+        if(id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0){
+            LOG.error("MerchantController -> 商家登录 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+
+        // 如果参数不为空 使用merchantService进行登录认证
+        Merchant merchant = merchantService.login(id, password);
+        MerchantVO merchantVO = convertFromMerchant(merchant);
+        return CommonReturnType.success(merchantVO);
     }
 
     @ApiOperation("商家修改密码")
@@ -64,5 +83,14 @@ public class MerchantController extends BaseController{
     })
     public CommonReturnType register(String name, String password, String email){
         return null;
+    }
+
+    private MerchantVO convertFromMerchant(Merchant merchant){
+        if(merchant == null){
+            return null;
+        }
+        MerchantVO merchantVO = new MerchantVO();
+        BeanUtils.copyProperties(merchant, merchantVO);
+        return merchantVO;
     }
 }

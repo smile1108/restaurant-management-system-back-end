@@ -34,17 +34,17 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectUserById(id);
         // 如果user等于空 表示用户不存在
         if(user == null){
-            LOG.error("用户不存在");
+            LOG.error("UserService -> 用户不存在");
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
 
         // 用户存在的话 判断密码是否正确
         // 表示用户名或密码错误
         if(!user.getId().equals(id) || !user.getPassword().equals(password)){
-            LOG.error("用户名或密码错误");
+            LOG.error("UserService -> 用户名或密码错误");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
-        LOG.info("用户登录成功");
+        LOG.info("UserService -> 用户登录成功");
         return user;
     }
 
@@ -55,13 +55,13 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectUserById(id);
         // 如果user等于空 表示用户不存在
         if(user == null){
-            LOG.error("用户不存在");
+            LOG.error("UserService -> 用户不存在");
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
         // 如果用户存在
         // 先验证旧密码正确与否
         if(!user.getId().equals(id) || !user.getPassword().equals(oldPass)){
-            LOG.error("用户名或密码错误");
+            LOG.error("UserService -> 用户名或密码错误");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
         // 密码加密暂时不写 之后添加
@@ -74,12 +74,12 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectUserById(id);
         // 如果user等于空 表示用户不存在
         if(user == null){
-            LOG.error("用户不存在");
+            LOG.error("UserService -> 用户不存在");
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
         // 学号与邮箱不对应
         if(!user.getEmail().equals(email)){
-            LOG.error("学号与输入的邮箱不对应");
+            LOG.error("UserService -> 学号与输入的邮箱不对应");
             throw new CommonException(ResultCode.EMAIL_NOT_TRUE);
         }
         String text = "您好, 您学号为 " + user.getId() + " 的账号的密码为: " + user.getPassword() + " ,\n" +

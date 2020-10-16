@@ -9,7 +9,7 @@ CREATE TABLE `student`(
 
 DROP TABLE IF EXISTS `merchant`;
 CREATE TABLE `merchant`(
-    `merchant_id` INT NOT NULL AUTO_INCREMENT,
+    `merchant_id` VARCHAR(15) NOT NULL,
     `name` VARCHAR(10) NOT NULL DEFAULT '',
     `password` VARCHAR(20) NOT NULL DEFAULT '',
     `email` VARCHAR(35) NOT NULL DEFAULT '',
@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `wicket`;
 CREATE TABLE `wicket`(
     `wicket_id` INT NOT NULL AUTO_INCREMENT,
     `floor` INT NOT NULL DEFAULT 0,
-    `merchant_id` INT NOT NULL DEFAULT 0,
+    `merchant_id` VARCHAR(15) NOT NULL DEFAULT 0,
     PRIMARY KEY (`wicket_id`),
     FOREIGN KEY (`merchant_id`) REFERENCES merchant (`merchant_id`)
 )ENGINE=InnoDB, default charset = UTF8;

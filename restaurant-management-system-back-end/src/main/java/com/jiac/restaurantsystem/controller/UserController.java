@@ -47,7 +47,7 @@ public class UserController extends BaseController{
     public CommonReturnType login(String id, String password) throws CommonException {
         // 首先验证参数是否为空
         if(id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0){
-            LOG.error("参数校验失败, 参数为空");
+            LOG.error("UserController -> 用户登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         // 如果参数验证成功 就调用service查询数据库
@@ -71,7 +71,7 @@ public class UserController extends BaseController{
         //首先验证参数是否为空
         if(id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
             || newPass == null || newPass.trim().length() == 0 || qualifyPass == null || qualifyPass.trim().length() == 0){
-            LOG.error("参数校验失败, 参数为空");
+            LOG.error("UserController -> 修改密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         // 验证两次输入的密码是否一致
@@ -95,7 +95,7 @@ public class UserController extends BaseController{
         //首先校验参数是否为空
         if(email == null || email.trim().length() == 0 ||
             id == null || id.trim().length() == 0){
-            LOG.error("参数校验失败, 参数为空");
+            LOG.error("UserController -> 找回密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
 

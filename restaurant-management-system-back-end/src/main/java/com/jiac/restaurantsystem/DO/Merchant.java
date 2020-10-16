@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 public class Merchant {
     //商家id
-    private Integer merchantId;
+    private String merchantId;
 
     //商家名称
     private String name;
@@ -20,11 +20,11 @@ public class Merchant {
     //商家邮箱
     private String email;
 
-    public Integer getMerchantId() {
+    public String getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(Integer merchantId) {
+    public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
     }
 
