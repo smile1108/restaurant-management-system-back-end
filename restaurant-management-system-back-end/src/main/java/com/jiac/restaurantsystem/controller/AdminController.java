@@ -26,8 +26,8 @@ public class AdminController extends BaseController{
     @ApiOperation("管理员登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "管理员账号", dataType = "string", paramType = "body", required = true ),
-            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "name", value = "管理员账号", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType login(String name, String password){
         return null;

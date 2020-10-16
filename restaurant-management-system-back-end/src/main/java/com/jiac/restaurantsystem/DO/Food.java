@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 public class Food {
     //菜id
-    private Integer id;
+    private Integer foodId;
 
     //菜名
     private String name;
@@ -21,15 +21,7 @@ public class Food {
     private String taste;
 
     //窗口号
-    private Integer windowId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Integer wicketId;
 
     public String getName() {
         return name;
@@ -55,11 +47,19 @@ public class Food {
         this.taste = taste;
     }
 
-    public Integer getWindowId() {
-        return windowId;
+    public Integer getFoodId() {
+        return foodId;
     }
 
-    public void setWindowId(Integer windowId) {
-        this.windowId = windowId;
+    public void setFoodId(Integer foodId) {
+        this.foodId = foodId;
+    }
+
+    public Integer getWicketId() {
+        return wicketId;
+    }
+
+    public void setWicketId(Integer wicketId) {
+        this.wicketId = wicketId;
     }
 }

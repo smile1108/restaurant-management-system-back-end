@@ -40,8 +40,8 @@ public class UserController extends BaseController{
     @ApiOperation("用户登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true ),
-            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)
     })
     @ResponseBody
     public CommonReturnType login(String id, String password) throws CommonException {
@@ -63,10 +63,10 @@ public class UserController extends BaseController{
     @ApiOperation("用户修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true),
-        @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "body", required = true),
-        @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "body", required = true),
-        @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "body", required = true)
+        @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
+        @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "query", required = true),
+        @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "query", required = true),
+        @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
         //首先验证参数是否为空
@@ -89,8 +89,8 @@ public class UserController extends BaseController{
     @ApiOperation("用户找回密码")
     @RequestMapping(value = "/getbackPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType getbackPass(String email, String id) throws CommonException {
         //首先校验参数是否为空

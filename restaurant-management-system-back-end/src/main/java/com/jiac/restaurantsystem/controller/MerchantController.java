@@ -36,8 +36,8 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true ),
-            @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType login(String id, String password) throws CommonException {
         // 商家使用商家id和密码进行登录
@@ -56,14 +56,14 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "newPass", value = "商家新密码", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "oldPass", value = "商家旧密码", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "qualifyPass", value = "商家确认密码", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "newPass", value = "商家新密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "oldPass", value = "商家旧密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "qualifyPass", value = "商家确认密码", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
+    public CommonReturnType modifyPass(String merchantId, String oldPass, String newPass, String qualifyPass) throws CommonException {
         // 首先校验参数是否为空
-        if(id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+        if(merchantId == null || merchantId.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
             || newPass == null || newPass.trim().length() == 0
             || qualifyPass == null || qualifyPass.trim().length() == 0){
             LOG.error("MerchantController -> 商家修改密码 -> 参数不能为空");
@@ -75,7 +75,7 @@ public class MerchantController extends BaseController{
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
 
-        merchantService.modifyPass(id, oldPass, newPass, qualifyPass);
+        merchantService.modifyPass(merchantId, oldPass, newPass, qualifyPass);
 
         return CommonReturnType.success();
     }
@@ -83,17 +83,17 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家找回密码")
     @RequestMapping(value = "/getbackPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType getbackPass(String email, String id) throws CommonException {
+    public CommonReturnType getbackPass(String email, String merchantId) throws CommonException {
         //首先校验参数是否为空
         if(email == null || email.trim().length() == 0 ||
-                id == null || id.trim().length() == 0){
+                merchantId == null || merchantId.trim().length() == 0){
             LOG.error("MerchantController -> 商家找回密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        merchantService.getbackPass(email, id);
+        merchantService.getbackPass(email, merchantId);
 
         return CommonReturnType.success();
     }
@@ -101,9 +101,9 @@ public class MerchantController extends BaseController{
     @ApiOperation("注册商家")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "商家名称", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "name", value = "商家名称", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType register(String name, String password, String email) throws CommonException {
         if(name == null || name.trim().length() == 0

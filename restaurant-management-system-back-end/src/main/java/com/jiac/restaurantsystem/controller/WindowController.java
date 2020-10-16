@@ -37,16 +37,16 @@ public class WindowController extends BaseController{
     @ApiOperation("窗口开通操作")
     @RequestMapping(value = "/open", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "windowNumber", value = "窗口号", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "floor", value = "窗口楼层", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0")
+            @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "floor", value = "窗口楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType open(Integer windowNumber, Integer floor, String merchantId) throws CommonException {
-        if(windowNumber == null || merchantId == null || merchantId.trim().length() == 0){
+    public CommonReturnType open(Integer wicketNumber, Integer floor, String merchantId) throws CommonException {
+        if(wicketNumber == null || merchantId == null || merchantId.trim().length() == 0){
             LOG.error("WindowController -> 开通窗口 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        Window window = windowService.open(windowNumber, floor, merchantId);
+        Window window = windowService.open(wicketNumber, floor, merchantId);
         WindowVO windowVO = convertFromWindow(window);
         return CommonReturnType.success(windowVO);
     }

@@ -55,21 +55,21 @@ public class FoodController extends BaseController{
     @ApiOperation("修改菜品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodPrice", value = "菜品价格", dataType = "double", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodTaste", value = "菜品口味", dataType = "string", paramType = "body", required = true),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "name", value = "菜品名称", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "price", value = "菜品价格", dataType = "double", paramType = "query", required = true),
+            @ApiImplicitParam(name = "taste", value = "菜品口味", dataType = "string", paramType = "query", required = true),
     })
-    public CommonReturnType update(Integer merchantId, Integer foodId, String foodName, Double foodPrice, String foodTaste){
+    public CommonReturnType update(Integer merchantId, Integer foodId, String name, Double price, String taste){
         return null;
     }
 
     @ApiOperation("删除菜品")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
     })
     public CommonReturnType delete(Integer merchantId, Integer foodId){
         return null;
@@ -78,25 +78,25 @@ public class FoodController extends BaseController{
     @ApiOperation("增加菜品")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家号", dataType = "string", paramType = "body", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodPrice", value = "菜品价格", dataType = "double", paramType = "body", required = true),
-            @ApiImplicitParam(name = "foodTaste", value = "菜品口味", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "windowNumber", value = "窗口号", dataType = "int", paramType = "body", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "merchantId", value = "商家号", dataType = "string", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "name", value = "菜品名称", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "price", value = "菜品价格", dataType = "double", paramType = "query", required = true),
+            @ApiImplicitParam(name = "taste", value = "菜品口味", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
     })
-    public CommonReturnType add(String merchantId, String foodName, Double foodPrice, String foodTaste, Integer floor, Integer windowNumber) throws CommonException {
+    public CommonReturnType add(String merchantId, String name, Double price, String taste, Integer floor, Integer wicketNumber) throws CommonException {
         // 先校验参数是否为空
         if(merchantId == null || merchantId.trim().length() == 0
-            || foodName == null || foodName.trim().length() == 0
-            || foodPrice == null || foodTaste == null || foodTaste.trim().length() == 0
-            || floor == null || windowNumber == null){
+            || name == null || name.trim().length() == 0
+            || price == null || taste == null || taste.trim().length() == 0
+            || floor == null || wicketNumber == null){
             LOG.error("FoodController -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         merchantService.findByMerchantId(merchantId);
         // 首先验证窗口是否已经开通
-        Window window = windowService.findWindowByNumberAndFloor(windowNumber, floor);
+        Window window = windowService.findWindowByNumberAndFloor(wicketNumber, floor);
         if(window == null){
             LOG.error("FoodController -> 该窗口还未开通");
             throw new CommonException(ResultCode.WINDOW_IS_NOT_OPEN);
@@ -107,7 +107,7 @@ public class FoodController extends BaseController{
             throw new CommonException(ResultCode.HAVE_NOT_ACCESS, "该窗口不属于该商家");
         }
         // 全部验证通过后 才能添加菜品
-        foodService.insert(foodName, foodPrice, foodTaste, window.getWicketId());
+        foodService.insert(name, price, taste, window.getWicketId());
         LOG.info("FoodController -> 菜品添加成功");
         return CommonReturnType.success();
     }
@@ -115,9 +115,10 @@ public class FoodController extends BaseController{
     @ApiOperation("按照窗口号查找菜品")
     @RequestMapping(value = "/getByWindowId", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "windowId", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
+            @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType getByWindowId(Integer windowId){
+    public CommonReturnType getByWindowId(Integer wicketNumber, Integer floor){
         return null;
     }
 
@@ -133,9 +134,9 @@ public class FoodController extends BaseController{
     @ApiOperation("按照楼层查找菜品")
     @RequestMapping(value = "/getByLevel", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "level", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
+            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType getByTaste(Integer level){
+    public CommonReturnType getByTaste(Integer floor){
         return null;
     }
 
