@@ -15,4 +15,6 @@ public interface MerchantService {
 
     void getbackPass(String email, String id) throws CommonException;
 
+    Merchant register(String name, String password, String email) throws CommonException;
+
 }

@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * FileName: MerchantServiceImpl
  * Author: Jiac
@@ -84,5 +87,29 @@ public class MerchantServiceImpl implements MerchantService {
         String text = "您好, 您商家号为 " + merchant.getMerchantId() + " 的账号的密码为: " + merchant.getPassword() + " ,\n" +
                 "请您妥善保管密码, 如有盗号嫌疑请立即修改密码";
         mailService.sendTextMail(email, "商家找回密码", text);
+    }
+
+    @Override
+    public Merchant register(String name, String password, String email) throws CommonException {
+        // 首先给商家生成一个商家号
+        String merchantId = generateMerchantId();
+        Merchant merchant1 = merchantMapper.selectById(merchantId);
+        if(merchant1 != null){
+            LOG.error("MerchantService -> 商家已经存在");
+            throw new CommonException(ResultCode.MERCHANT_HAVE_EXISTED);
+        }
+        Merchant merchant = new Merchant();
+        merchant.setMerchantId(merchantId);
+        merchant.setEmail(email);
+        merchant.setName(name);
+        merchant.setPassword(password);
+        merchantMapper.insert(merchantId, name, password, email);
+        LOG.info("MerchantService -> 商家注册成功");
+        return merchant;
+    }
+
+    private String generateMerchantId(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return dateFormat.format(new Date());
     }
 }

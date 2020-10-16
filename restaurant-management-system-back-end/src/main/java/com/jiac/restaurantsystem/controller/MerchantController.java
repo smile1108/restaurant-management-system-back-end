@@ -105,8 +105,16 @@ public class MerchantController extends BaseController{
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType register(String name, String password, String email){
-        return null;
+    public CommonReturnType register(String name, String password, String email) throws CommonException {
+        if(name == null || name.trim().length() == 0
+            || password == null || password.trim().length() == 0
+            || email == null || email.trim().length() == 0){
+            LOG.info("MerchantController -> 商家注册 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        Merchant merchant = merchantService.register(name, password, email);
+        MerchantVO merchantVO = convertFromMerchant(merchant);
+        return CommonReturnType.success(merchantVO);
     }
 
     private MerchantVO convertFromMerchant(Merchant merchant){
