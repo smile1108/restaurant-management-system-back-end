@@ -11,11 +11,14 @@ public class Window {
     //窗口id
     private Integer windowId;
 
+    // 窗口号
+    private Integer windowNumber;
+
     //窗口楼层
     private Integer floor;
 
     //对应商家id
-    private Integer merchantId;
+    private String merchantId;
 
     public Integer getWindowId() {
         return windowId;
@@ -33,11 +36,19 @@ public class Window {
         this.floor = floor;
     }
 
-    public Integer getMerchantId() {
+    public String getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(Integer merchantId) {
+    public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Integer getWindowNumber() {
+        return windowNumber;
+    }
+
+    public void setWindowNumber(Integer windowNumber) {
+        this.windowNumber = windowNumber;
     }
 }

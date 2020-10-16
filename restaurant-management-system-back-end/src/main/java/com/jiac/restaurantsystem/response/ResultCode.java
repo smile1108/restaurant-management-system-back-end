@@ -18,6 +18,7 @@ public enum ResultCode implements CommonError {
     USER_IS_NOT_EXIST("30004", "用户不存在"),
     EMAIL_NOT_TRUE("30005", "输入邮箱不正确"),
     MERCHANT_HAVE_EXISTED("30006", "商家已经存在"),
+    WINDOW_HAVE_OPENED("30007", "窗口已经开通过, 不可以再次开通"),
 
     //4开头代表认证错误
     AUTH_FAILED("40001", "用户名或密码错误"),
