@@ -84,10 +84,18 @@ public class MerchantController extends BaseController{
     @RequestMapping(value = "/getbackPass", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "body", required = true),
-            @ApiImplicitParam(name = "name", value = "商家名称  ", dataType = "string", paramType = "body", required = true)
+            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType getbackPass(String email, String id){
-        return null;
+    public CommonReturnType getbackPass(String email, String id) throws CommonException {
+        //首先校验参数是否为空
+        if(email == null || email.trim().length() == 0 ||
+                id == null || id.trim().length() == 0){
+            LOG.error("MerchantController -> 商家找回密码 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        merchantService.getbackPass(email, id);
+
+        return CommonReturnType.success();
     }
 
     @ApiOperation("注册商家")

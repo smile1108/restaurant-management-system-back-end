@@ -1,15 +1,14 @@
 package com.jiac.restaurantsystem.service.impl;
 
 import com.jiac.restaurantsystem.DO.Merchant;
-import com.jiac.restaurantsystem.DO.User;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.MerchantMapper;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.MerchantService;
+import com.jiac.restaurantsystem.service.SendMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.logging.LoggerGroup;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +24,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantMapper merchantMapper;
+
+    @Autowired
+    private SendMail mailService;
 
     @Override
     public Merchant login(String id, String password) throws CommonException {
@@ -62,5 +64,25 @@ public class MerchantServiceImpl implements MerchantService {
         }
         LOG.info("MerchantService -> 商家修改密码成功");
         merchantMapper.updatePassword(id, newPass);
+    }
+
+    @Override
+    public void getbackPass(String email, String id) throws CommonException {
+        // 首先查找对应的merchant
+        Merchant merchant = merchantMapper.selectById(id);
+        if(merchant == null){
+            LOG.error("MerchantService -> 商家不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
+        }
+
+        // 然后验证邮箱与id是否对应
+        if(!email.equals(merchant.getEmail())){
+            LOG.error("MerchantService -> 邮箱与商户不对应");
+            throw new CommonException(ResultCode.EMAIL_NOT_TRUE);
+        }
+        LOG.info("MerchantService -> 邮件已发送");
+        String text = "您好, 您商家号为 " + merchant.getMerchantId() + " 的账号的密码为: " + merchant.getPassword() + " ,\n" +
+                "请您妥善保管密码, 如有盗号嫌疑请立即修改密码";
+        mailService.sendTextMail(email, "商家找回密码", text);
     }
 }

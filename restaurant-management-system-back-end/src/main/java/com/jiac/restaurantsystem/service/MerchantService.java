@@ -12,4 +12,7 @@ public interface MerchantService {
     Merchant login(String id, String password) throws CommonException;
 
     void modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException;
+
+    void getbackPass(String email, String id) throws CommonException;
+
 }
