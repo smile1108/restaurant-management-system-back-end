@@ -65,6 +65,7 @@ public class UserController extends BaseController{
     @ApiImplicitParams({
         @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "body", required = true),
         @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "body", required = true),
+        @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "body", required = true),
         @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "body", required = true)
     })
     public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
@@ -76,7 +77,7 @@ public class UserController extends BaseController{
         }
         // 验证两次输入的密码是否一致
         if(!newPass.equals(qualifyPass)){
-            LOG.error("两次输入密码不一致");
+            LOG.error("UserController -> 两次输入密码不一致");
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
         // 如果参数验证成功 就调用service查询数据库

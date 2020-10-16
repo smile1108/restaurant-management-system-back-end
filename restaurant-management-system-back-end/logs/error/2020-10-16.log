@@ -317,3 +317,9 @@ java.sql.SQLSyntaxErrorException: Unknown column 'id' in 'where clause'
 	at java.base/java.lang.Thread.run(Thread.java:834)
 [ERROR] 2020-10-16 09:16:44,080 [http-nio-8080-exec-1] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户不存在
 [ERROR] 2020-10-16 09:16:53,758 [http-nio-8080-exec-3] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
+[ERROR] 2020-10-16 09:31:26,688 [http-nio-8080-exec-1] c.j.r.controller.MerchantController - MerchantController -> 商家修改密码 -> 参数不能为空
+[ERROR] 2020-10-16 09:31:37,975 [http-nio-8080-exec-3] c.j.r.controller.MerchantController - MerchantController -> 商家修改密码 -> 参数不能为空
+[ERROR] 2020-10-16 09:31:41,163 [http-nio-8080-exec-4] c.j.r.controller.MerchantController - MerchantController -> 商家修改密码 -> 参数不能为空
+[ERROR] 2020-10-16 09:32:12,602 [http-nio-8080-exec-5] c.j.r.controller.MerchantController - MerchantController -> 两次输入密码不一致
+[ERROR] 2020-10-16 09:32:25,222 [http-nio-8080-exec-7] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 商家不存在
+[ERROR] 2020-10-16 09:32:37,294 [http-nio-8080-exec-6] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码错误

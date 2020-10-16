@@ -56,12 +56,28 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "商家名称", dataType = "string", paramType = "body", required = true),
+            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "newPass", value = "商家新密码", dataType = "string", paramType = "body", required = true),
+            @ApiImplicitParam(name = "oldPass", value = "商家旧密码", dataType = "string", paramType = "body", required = true),
             @ApiImplicitParam(name = "qualifyPass", value = "商家确认密码", dataType = "string", paramType = "body", required = true)
     })
-    public CommonReturnType modifyPass(String id, String newPass, String qualifyPass){
-        return null;
+    public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
+        // 首先校验参数是否为空
+        if(id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+            || newPass == null || newPass.trim().length() == 0
+            || qualifyPass == null || qualifyPass.trim().length() == 0){
+            LOG.error("MerchantController -> 商家修改密码 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 验证两次输入的密码是否一致
+        if(!newPass.equals(qualifyPass)){
+            LOG.error("MerchantController -> 两次输入密码不一致");
+            throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
+        }
+
+        merchantService.modifyPass(id, oldPass, newPass, qualifyPass);
+
+        return CommonReturnType.success();
     }
 
     @ApiOperation("商家找回密码")

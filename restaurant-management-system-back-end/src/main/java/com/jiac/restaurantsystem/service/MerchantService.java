@@ -10,4 +10,6 @@ import com.jiac.restaurantsystem.error.CommonException;
  */
 public interface MerchantService {
     Merchant login(String id, String password) throws CommonException;
+
+    void modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException;
 }
