@@ -7,17 +7,17 @@ package com.jiac.restaurantsystem.controller.VO;
  */
 public class WindowVO {
     // 窗口号
-    private Integer windowNumber;
+    private Integer wicketNumber;
 
     // 楼层号
     private Integer floor;
 
-    public Integer getWindowNumber() {
-        return windowNumber;
+    public Integer getWicketNumber() {
+        return wicketNumber;
     }
 
-    public void setWindowNumber(Integer windowNumber) {
-        this.windowNumber = windowNumber;
+    public void setWicketNumber(Integer wicketNumber) {
+        this.wicketNumber = wicketNumber;
     }
 
     public Integer getFloor() {

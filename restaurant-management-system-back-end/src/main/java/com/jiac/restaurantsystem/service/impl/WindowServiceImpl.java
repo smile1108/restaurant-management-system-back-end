@@ -47,9 +47,16 @@ public class WindowServiceImpl implements WindowService {
         Window window1 = new Window();
         window1.setFloor(floor);
         window1.setMerchantId(merchantId);
-        window1.setWindowNumber(windowNumber);
+        window1.setWicketNumber(windowNumber);
         LOG.info("WindowService -> 窗口开通成功");
         windowMapper.insert(windowNumber, floor, merchantId);
         return window1;
     }
+
+    @Override
+    public Window findWindowByNumberAndFloor(Integer windowNumber, Integer floor) throws CommonException {
+        Window window = windowMapper.selectWindowByNumberAndFloor(windowNumber, floor);
+        return window;
+    }
+
 }

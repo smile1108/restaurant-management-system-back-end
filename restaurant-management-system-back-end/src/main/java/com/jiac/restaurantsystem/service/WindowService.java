@@ -10,4 +10,7 @@ import com.jiac.restaurantsystem.error.CommonException;
  */
 public interface WindowService {
     Window open(Integer windowNumber, Integer floor, String merchantId) throws CommonException;
+
+    Window findWindowByNumberAndFloor(Integer windowNumber, Integer floor) throws CommonException;
+
 }

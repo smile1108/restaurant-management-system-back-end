@@ -8,4 +8,6 @@ package com.jiac.restaurantsystem.error;
 public interface CommonError {
     String getErrCode();
     String getErrMsg();
+
+    void setErrMsg(String msg);
 }

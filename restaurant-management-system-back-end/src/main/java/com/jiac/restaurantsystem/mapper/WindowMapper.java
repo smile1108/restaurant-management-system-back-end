@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * FileName: WindowMapper
  * Author: Jiac
@@ -19,5 +21,6 @@ public interface WindowMapper {
     @Insert("insert into wicket (wicket_number, floor, merchant_id) values (#{wicketNumber}, #{floor}, #{merchantId})")
     void insert(Integer wicketNumber, Integer floor, String merchantId);
 
-
+    @Select("select * from wicket where merchant_id = #{merchantId}")
+    List<Window> selectAllWindowByMerchantId(String merchantId);
 }

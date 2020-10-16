@@ -1,8 +1,10 @@
 package com.jiac.restaurantsystem.service.impl;
 
 import com.jiac.restaurantsystem.DO.Merchant;
+import com.jiac.restaurantsystem.DO.Window;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.MerchantMapper;
+import com.jiac.restaurantsystem.mapper.WindowMapper;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.MerchantService;
 import com.jiac.restaurantsystem.service.SendMail;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * FileName: MerchantServiceImpl
@@ -27,6 +30,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantMapper merchantMapper;
+
+    @Autowired
+    private WindowMapper windowMapper;
 
     @Autowired
     private SendMail mailService;
@@ -106,6 +112,15 @@ public class MerchantServiceImpl implements MerchantService {
         merchantMapper.insert(merchantId, name, password, email);
         LOG.info("MerchantService -> 商家注册成功");
         return merchant;
+    }
+
+    @Override
+    public void findByMerchantId(String merchantId) throws CommonException {
+        Merchant merchant = merchantMapper.selectById(merchantId);
+        if(merchant == null){
+            LOG.error("MerchantService -> 商家不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST, "商家不存在");
+        }
     }
 
     private String generateMerchantId(){

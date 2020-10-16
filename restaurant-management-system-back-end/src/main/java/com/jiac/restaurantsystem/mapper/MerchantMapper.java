@@ -1,10 +1,13 @@
 package com.jiac.restaurantsystem.mapper;
 
 import com.jiac.restaurantsystem.DO.Merchant;
+import com.jiac.restaurantsystem.DO.Window;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * FileName: MerchantMapper

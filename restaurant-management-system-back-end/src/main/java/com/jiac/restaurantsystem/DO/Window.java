@@ -9,24 +9,16 @@ import org.springframework.stereotype.Repository;
  */
 public class Window {
     //窗口id
-    private Integer windowId;
+    private Integer wicketId;
 
     // 窗口号
-    private Integer windowNumber;
+    private Integer wicketNumber;
 
     //窗口楼层
     private Integer floor;
 
     //对应商家id
     private String merchantId;
-
-    public Integer getWindowId() {
-        return windowId;
-    }
-
-    public void setWindowId(Integer windowId) {
-        this.windowId = windowId;
-    }
 
     public Integer getFloor() {
         return floor;
@@ -44,11 +36,19 @@ public class Window {
         this.merchantId = merchantId;
     }
 
-    public Integer getWindowNumber() {
-        return windowNumber;
+    public Integer getWicketId() {
+        return wicketId;
     }
 
-    public void setWindowNumber(Integer windowNumber) {
-        this.windowNumber = windowNumber;
+    public void setWicketId(Integer wicketId) {
+        this.wicketId = wicketId;
+    }
+
+    public Integer getWicketNumber() {
+        return wicketNumber;
+    }
+
+    public void setWicketNumber(Integer wicketNumber) {
+        this.wicketNumber = wicketNumber;
     }
 }

@@ -17,4 +17,5 @@ public interface MerchantService {
 
     Merchant register(String name, String password, String email) throws CommonException;
 
+    void findByMerchantId(String merchantId) throws CommonException;
 }

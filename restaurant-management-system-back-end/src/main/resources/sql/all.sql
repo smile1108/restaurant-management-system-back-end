@@ -33,7 +33,6 @@ CREATE TABLE `food`(
     `price` DOUBLE NOT NULL DEFAULT 0,
     `taste` VARCHAR(5) NOT NULL DEFAULT '',
     `wicket_id` INT NOT NULL DEFAULT 0,
-    `floor` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`food_id`),
     FOREIGN KEY (`wicket_id`) REFERENCES wicket (`wicket_id`)
 )ENGINE=InnoDB, default charset = UTF8;
