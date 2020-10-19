@@ -1,0 +1,1 @@
+[WARN ] 2020-10-19 20:43:29,530 [http-nio-8080-exec-2] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]

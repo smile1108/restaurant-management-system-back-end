@@ -8,6 +8,7 @@ import com.jiac.restaurantsystem.mapper.WindowMapper;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.MerchantService;
 import com.jiac.restaurantsystem.service.SendMail;
+import com.jiac.restaurantsystem.utils.SHA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * FileName: MerchantServiceImpl
@@ -47,7 +49,7 @@ public class MerchantServiceImpl implements MerchantService {
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
         // 如果用户存在 然后验证密码是否正确
-        if(!password.equals(merchant.getPassword())){
+        if(!SHA.getResult(password).equals(merchant.getPassword())){
             LOG.error("MerchantService -> 用户名或密码不对");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
@@ -67,7 +69,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
         // 如果用户存在
         // 先验证旧密码正确与否
-        if(!merchant.getMerchantId().equals(id) || !merchant.getPassword().equals(oldPass)){
+        if(!merchant.getMerchantId().equals(id) || !merchant.getPassword().equals(SHA.getResult(oldPass))){
             LOG.error("MerchantService -> 用户名或密码错误");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
@@ -121,6 +123,26 @@ public class MerchantServiceImpl implements MerchantService {
             LOG.error("MerchantService -> 商家不存在");
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST, "商家不存在");
         }
+    }
+
+    @Override
+    public String getCode(String email) throws CommonException {
+        // 获取一个随机类
+        Random random = new Random(System.currentTimeMillis());
+        int code = random.nextInt(10000);
+        int length = (code + "").length();
+        StringBuilder stringBuilder = new StringBuilder();
+        if(length < 4){
+            for(int i = 0; i < 4 - length; i ++){
+                stringBuilder.append("0");
+            }
+            stringBuilder.append(code);
+        }else{
+            stringBuilder.append(code);
+        }
+        String text = "您好, 欢迎您注册餐厅点餐系统, 您本次的验证码为 " + stringBuilder.toString() + ", 验证码有效时间为3分分钟";
+        mailService.sendTextMail(email, "商家注册", text);
+        return stringBuilder.toString();
     }
 
     private String generateMerchantId(){

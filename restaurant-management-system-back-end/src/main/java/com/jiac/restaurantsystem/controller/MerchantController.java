@@ -6,6 +6,7 @@ import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.MerchantService;
+import com.jiac.restaurantsystem.utils.SHA;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,7 +17,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * FileName: MerchantController
@@ -32,6 +36,10 @@ public class MerchantController extends BaseController{
 
     @Autowired
     private MerchantService merchantService;
+
+
+    @Autowired
+    private Jedis jedis;
 
     @ApiOperation("商家登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -103,18 +111,41 @@ public class MerchantController extends BaseController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "商家名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "qualifyPass", value = "确认密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "code", value = "验证码", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType register(String name, String password, String email) throws CommonException {
+    public CommonReturnType register(String name, String password, String qualifyPass, String code, String email) throws CommonException {
+        if(!password.equals(qualifyPass)){
+            LOG.error("MerchantController ->  商家注册 -> 两次输入密码不一致");
+            throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
+        }
         if(name == null || name.trim().length() == 0
             || password == null || password.trim().length() == 0
             || email == null || email.trim().length() == 0){
-            LOG.info("MerchantController -> 商家注册 -> 参数不能为空");
+            LOG.error("MerchantController -> 商家注册 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        Merchant merchant = merchantService.register(name, password, email);
+        String s = jedis.get(email);
+        if(s == null){
+            LOG.error("MerchantController -> 商家注册 -> 验证码过期");
+            throw new CommonException(ResultCode.CODE_IS_EXPIRED);
+        }
+        if(!s.equals(code)){
+            LOG.error("MerchantController -> 商家注册 -> 验证码不正确");
+            throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
+        }
+        Merchant merchant = merchantService.register(name, SHA.getResult(password), email);
         MerchantVO merchantVO = convertFromMerchant(merchant);
         return CommonReturnType.success(merchantVO);
+    }
+
+    @RequestMapping(value = "/getCode", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonReturnType getCode(String email) throws CommonException {
+        String code = merchantService.getCode(email);
+        jedis.setex(email, 180, code);
+        return CommonReturnType.success();
     }
 
     private MerchantVO convertFromMerchant(Merchant merchant){

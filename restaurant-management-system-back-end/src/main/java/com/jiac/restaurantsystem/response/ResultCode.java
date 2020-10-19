@@ -12,20 +12,22 @@ public enum ResultCode implements CommonError {
     SUCCESS("200", "成功"),
 
     //3开头代表参数有问题
-    PARAMETER_IS_BLANK("30001", "参数不能为空"),
-    PASSWORD_NOT_EQUAL("30002", "两次密码输入不一致"),
-    HAVE_NOT_THIS_WINDOW("30003", "没有这个窗口"),
-    USER_IS_NOT_EXIST("30004", "用户不存在"),
-    EMAIL_NOT_TRUE("30005", "输入邮箱不正确"),
-    MERCHANT_HAVE_EXISTED("30006", "商家已经存在"),
-    WINDOW_HAVE_OPENED("30007", "窗口已经开通过, 不可以再次开通"),
-    WINDOW_IS_NOT_OPEN("30008", "窗口还未开通"),
+    PARAMETER_IS_BLANK("301", "参数不能为空"),
+    PASSWORD_NOT_EQUAL("302", "两次密码输入不一致"),
+    HAVE_NOT_THIS_WINDOW("303", "没有这个窗口"),
+    USER_IS_NOT_EXIST("304", "用户不存在"),
+    EMAIL_NOT_TRUE("305", "输入邮箱不正确"),
+    MERCHANT_HAVE_EXISTED("306", "商家已经存在"),
+    WINDOW_HAVE_OPENED("307", "窗口已经开通过, 不可以再次开通"),
+    WINDOW_IS_NOT_OPEN("308", "窗口还未开通"),
+    CODE_IS_EXPIRED("309", "验证码过期"),
+    CODE_IS_NOT_RIGHT("310", "验证码不正确"),
 
     //4开头代表认证错误
-    AUTH_FAILED("40001", "用户名或密码错误"),
+    AUTH_FAILED("401", "用户名或密码错误"),
 
     //5开头权限错误
-    HAVE_NOT_ACCESS("50001", "没有权限"),
+    HAVE_NOT_ACCESS("501", "没有权限"),
 
     //60001未知错误
     UNKNOWN_ERROR("60001", "未知错误");

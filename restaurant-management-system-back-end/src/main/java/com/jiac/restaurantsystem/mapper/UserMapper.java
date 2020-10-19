@@ -1,6 +1,7 @@
 package com.jiac.restaurantsystem.mapper;
 
 import com.jiac.restaurantsystem.DO.User;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface UserMapper {
 
     @Update("update student set password = #{newPass} where id = #{id}")
     void updatePassword(String id, String newPass);
+
+    @Insert("insert into student values (#{userId}, #{email }, #{name}, #{password})")
+    void insert(String userId, String name, String password, String email);
 }

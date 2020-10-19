@@ -16,4 +16,8 @@ public interface UserService {
     void modifyPass(String id, String oldPass, String newPass, String modifyPass) throws CommonException;
 
     void getbackPass(String email, String id) throws CommonException;
+
+    String getCode(String email) throws CommonException;
+
+    User register(String name, String password, String email) throws CommonException;
 }
