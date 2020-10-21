@@ -9,6 +9,7 @@ import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.UserService;
 import com.jiac.restaurantsystem.utils.SHA;
+import com.jiac.restaurantsystem.utils.UserNameGenerator;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,39 @@ public class UserController extends BaseController{
         return CommonReturnType.success(userVO);
     }
 
+    @ApiOperation("注册用户")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "qualifyPass", value = "确认密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "code", value = "验证码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
+    })
+    public CommonReturnType register(String password, String qualifyPass, String code, String email) throws CommonException {
+        if(!password.equals(qualifyPass)){
+            LOG.error("UserController ->  用户注册 -> 两次输入密码不一致");
+            throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
+        }
+        if(password == null || password.trim().length() == 0
+                || email == null || email.trim().length()    == 0){
+            LOG.error("UserController -> 用户注册 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String s = jedis.get(email);
+        if(s == null){
+            LOG.error("UserController -> 用户注册 -> 验证码过期");
+            throw new CommonException(ResultCode.CODE_IS_EXPIRED);
+        }
+        if(!s.equals(code)){
+            LOG.error("UserController -> 用户注册 -> 验证码不正确");
+            throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
+        }
+        String randomName = UserNameGenerator.getRandomName();
+        User user = userService.register(randomName, SHA.getResult(password), email);
+        UserVO userVO = convertFromUserDO(user);
+        return CommonReturnType.success(userVO);
+    }
+
     @ApiOperation("用户修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
@@ -106,40 +140,6 @@ public class UserController extends BaseController{
         userService.getbackPass(email, id);
 
         return CommonReturnType.success();
-    }
-
-    @ApiOperation("注册用户")
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "用户名字", dataType = "string", paramType = "query", required = true),
-            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true),
-            @ApiImplicitParam(name = "qualifyPass", value = "确认密码", dataType = "string", paramType = "query", required = true),
-            @ApiImplicitParam(name = "code", value = "验证码", dataType = "string", paramType = "query", required = true),
-            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
-    })
-    public CommonReturnType register(String name, String password, String qualifyPass, String code, String email) throws CommonException {
-        if(!password.equals(qualifyPass)){
-            LOG.error("UserController ->  用户注册 -> 两次输入密码不一致");
-            throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
-        }
-        if(name == null || name.trim().length() == 0
-                || password == null || password.trim().length() == 0
-                || email == null || email.trim().length()    == 0){
-            LOG.error("UserController -> 用户注册 -> 参数不能为空");
-            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
-        }
-        String s = jedis.get(email);
-        if(s == null){
-            LOG.error("UserController -> 用户注册 -> 验证码过期");
-            throw new CommonException(ResultCode.CODE_IS_EXPIRED);
-        }
-        if(!s.equals(code)){
-            LOG.error("UserController -> 用户注册 -> 验证码不正确");
-            throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
-        }
-        User user = userService.register(name, SHA.getResult(password), email);
-        UserVO userVO = convertFromUserDO(user);
-        return CommonReturnType.success(userVO);
     }
 
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)

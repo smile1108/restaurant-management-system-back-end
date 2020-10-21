@@ -123,11 +123,10 @@ public class UserServiceImpl implements UserService {
             throw new CommonException(ResultCode.MERCHANT_HAVE_EXISTED);
         }
         User user1 = new User();
-        user1.setName(name);
         user1.setPassword(password);
         user1.setEmail(email);
         user1.setId(userId);
-        userMapper.insert(userId, name, password, email);
+        userMapper.insert(name, password, email);
         LOG.info("UserService -> 用户注册成功");
         return user1;
     }

@@ -20,6 +20,6 @@ public interface UserMapper {
     @Update("update student set password = #{newPass} where id = #{id}")
     void updatePassword(String id, String newPass);
 
-    @Insert("insert into student values (#{userId}, #{email }, #{name}, #{password})")
-    void insert(String userId, String name, String password, String email);
+    @Insert("insert into student (name, email, password) values (#{name}, #{email}, #{password})")
+    void insert(String name, String password, String email);
 }
