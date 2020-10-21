@@ -18,19 +18,8 @@ public class MerchantVO {
         this.merchantId = merchantId;
     }
 
-    // 商家名称
-    private String name;
-
     // 商家邮箱
     private String email;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getEmail() {
         return email;

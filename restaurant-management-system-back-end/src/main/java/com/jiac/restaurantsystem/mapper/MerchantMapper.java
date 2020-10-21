@@ -17,12 +17,15 @@ import java.util.List;
 @Repository
 public interface MerchantMapper {
 
+    @Select("select * from merchant where email = #{email}")
+    Merchant selectByEmail(String email);
+
     @Select("select * from merchant where merchant_id = #{id}")
     Merchant selectById(String id);
 
     @Update("update merchant set password = #{newPass} where merchant_id = #{id}")
     void updatePassword(String id, String newPass);
 
-    @Insert("insert into merchant values (#{merchantId}, #{name}, #{password}, #{email})")
-    void insert(String merchantId, String name, String password, String email);
+    @Insert("insert into merchant (password, email) values (#{password}, #{email})")
+    void insert(String password, String email);
 }

@@ -11,9 +11,6 @@ public class Merchant {
     //商家id
     private String merchantId;
 
-    //商家名称
-    private String name;
-
     //商家密码
     private String password;
 
@@ -26,14 +23,6 @@ public class Merchant {
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {

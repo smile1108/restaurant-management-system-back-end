@@ -98,20 +98,16 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Merchant register(String name, String password, String email) throws CommonException {
-        // 首先给商家生成一个商家号
-        String merchantId = generateMerchantId();
-        Merchant merchant1 = merchantMapper.selectById(merchantId);
+    public Merchant register(String password, String email) throws CommonException {
+        Merchant merchant1 = merchantMapper.selectByEmail(email);
         if(merchant1 != null){
             LOG.error("MerchantService -> 商家已经存在");
             throw new CommonException(ResultCode.MERCHANT_HAVE_EXISTED);
         }
         Merchant merchant = new Merchant();
-        merchant.setMerchantId(merchantId);
         merchant.setEmail(email);
-        merchant.setName(name);
         merchant.setPassword(password);
-        merchantMapper.insert(merchantId, name, password, email);
+        merchantMapper.insert(password, email);
         LOG.info("MerchantService -> 商家注册成功");
         return merchant;
     }
