@@ -41,4 +41,14 @@ public class UserVO {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "UserVO{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private SendMail mailService;
 
     @Override
-    public User login(String id, String password) throws CommonException {
+    public User loginById(String id, String password) throws CommonException {
         //使用UserMapper获取数据库中对应id的学生数据
         User user = userMapper.selectUserById(id);
         // 如果user等于空 表示用户不存在
@@ -53,6 +53,28 @@ public class UserServiceImpl implements UserService {
         LOG.info("UserService -> 用户登录成功");
         return user;
     }
+
+    @Override
+    public User loginByEmail(String email, String password) throws CommonException {
+        //使用UserMapper获取数据库中对应id的学生数据
+        User user = userMapper.selectUserByEmail(email);
+        // 如果user等于空 表示用户不存在
+        if(user == null){
+            LOG.error("UserService -> 用户不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
+        }
+
+        // 用户存在的话 判断密码是否正确
+        // 表示用户名或密码错误
+        if(!user.getEmail().equals(email) || !user.getPassword().equals(SHA.getResult(password))){
+            LOG.error("UserService -> 用户名或密码错误");
+            throw new CommonException(ResultCode.AUTH_FAILED);
+        }
+        LOG.info("UserService -> 用户登录成功");
+        return user;
+    }
+
+
 
     @Override
     @Transactional

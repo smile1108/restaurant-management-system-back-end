@@ -17,6 +17,9 @@ public interface UserMapper {
     @Select("select * from student where id = #{id}")
     User selectUserById(String id);
 
+    @Select("select * from student where email = #{email}")
+    User selectUserByEmail(String email);
+
     @Update("update student set password = #{newPass} where id = #{id}")
     void updatePassword(String id, String newPass);
 

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
  */
 public interface UserService {
 
-    User login(String id, String password) throws CommonException;
+    User loginById(String id, String password) throws CommonException;
+
+    User loginByEmail(String email, String password) throws CommonException;
 
     void modifyPass(String id, String oldPass, String newPass, String modifyPass) throws CommonException;
 

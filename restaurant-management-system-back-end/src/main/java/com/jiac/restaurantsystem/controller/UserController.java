@@ -15,11 +15,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * FileName: UserController
@@ -29,7 +35,7 @@ import java.util.Set;
 @Api(value = "用户controller", description = "用户操作")
 @RestController
 @RequestMapping("/api/dbcourse/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
@@ -38,30 +44,51 @@ public class UserController extends BaseController{
     private UserService userService;
 
     @Autowired
+    private HttpServletRequest httpServletRequest;
+
+    private Pattern pattern = Pattern.compile("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$");
+
+    @Autowired
+    private HttpServletResponse httpServletResponse;
+
+    @Autowired
     private Jedis jedis;
 
 
     @ApiOperation("用户登录验证")
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)
     })
     @ResponseBody
     public CommonReturnType login(String id, String password) throws CommonException {
         // 首先验证参数是否为空
-        if(id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0){
+        if (id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0) {
             LOG.error("UserController -> 用户登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        // 如果参数验证成功 就调用service查询数据库
-        User user = userService.login(id, password);
-
-        // 将DO模型转换为前端用户看的模型
+        System.out.println("====================");
+        User user = null;
+        // 检验输入的是邮箱还是学号
+        if (pattern.matcher(id).matches()) {
+            LOG.info("用户使用邮箱登录");
+            // 表示输入的是邮箱
+            user = userService.loginByEmail(id, password);
+        } else {
+            LOG.info("用户使用学号登录");
+            // 表示用学号登录
+            user = userService.loginById(id, password);
+        }
         UserVO userVO = convertFromUserDO(user);
+        httpServletRequest.getSession().setAttribute(httpServletRequest.getSession().getId(), userVO);
+        httpServletRequest.getSession().setMaxInactiveInterval(60);
+        Cookie cookie = new Cookie("u_id", httpServletRequest.getSession().getId());
+        cookie.setMaxAge(60);
+        httpServletResponse.addCookie(cookie);
 
-        // 没有问题 返回用户数据
-        return CommonReturnType.success(userVO);
+        // 没有问题 返回响应
+        return CommonReturnType.success();
     }
 
     @ApiOperation("注册用户")
@@ -73,21 +100,21 @@ public class UserController extends BaseController{
             @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType register(String password, String qualifyPass, String code, String email) throws CommonException {
-        if(!password.equals(qualifyPass)){
+        if (!password.equals(qualifyPass)) {
             LOG.error("UserController ->  用户注册 -> 两次输入密码不一致");
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
-        if(password == null || password.trim().length() == 0
-                || email == null || email.trim().length()    == 0){
+        if (password == null || password.trim().length() == 0
+                || email == null || email.trim().length() == 0) {
             LOG.error("UserController -> 用户注册 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         String s = jedis.get(email);
-        if(s == null){
+        if (s == null) {
             LOG.error("UserController -> 用户注册 -> 验证码过期");
             throw new CommonException(ResultCode.CODE_IS_EXPIRED);
         }
-        if(!s.equals(code)){
+        if (!s.equals(code)) {
             LOG.error("UserController -> 用户注册 -> 验证码不正确");
             throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
         }
@@ -100,20 +127,20 @@ public class UserController extends BaseController{
     @ApiOperation("用户修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
-        @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "query", required = true),
-        @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "query", required = true),
-        @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "query", required = true)
+            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
         //首先验证参数是否为空
-        if(id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
-            || newPass == null || newPass.trim().length() == 0 || qualifyPass == null || qualifyPass.trim().length() == 0){
+        if (id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+                || newPass == null || newPass.trim().length() == 0 || qualifyPass == null || qualifyPass.trim().length() == 0) {
             LOG.error("UserController -> 修改密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         // 验证两次输入的密码是否一致
-        if(!newPass.equals(qualifyPass)){
+        if (!newPass.equals(qualifyPass)) {
             LOG.error("UserController -> 两次输入密码不一致");
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
@@ -131,8 +158,8 @@ public class UserController extends BaseController{
     })
     public CommonReturnType getbackPass(String email, String id) throws CommonException {
         //首先校验参数是否为空
-        if(email == null || email.trim().length() == 0 ||
-            id == null || id.trim().length() == 0){
+        if (email == null || email.trim().length() == 0 ||
+                id == null || id.trim().length() == 0) {
             LOG.error("UserController -> 找回密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
@@ -150,8 +177,8 @@ public class UserController extends BaseController{
         return CommonReturnType.success();
     }
 
-    private UserVO convertFromUserDO(User user){
-        if(user == null){
+    private UserVO convertFromUserDO(User user) {
+        if (user == null) {
             return null;
         }
         UserVO userVO = new UserVO();

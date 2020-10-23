@@ -14,7 +14,6 @@ public class SHA {
     private static final String SHA = "SHA";
 
     public static String getResult(String inputStr){
-        System.out.println("加密前  " + inputStr);
         BigInteger bigInteger = null;
         try {
             MessageDigest sha = MessageDigest.getInstance(SHA);
@@ -23,7 +22,6 @@ public class SHA {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("加密后 " + bigInteger.toString());
         return bigInteger.toString();
     }
 }
