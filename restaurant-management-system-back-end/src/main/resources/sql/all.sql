@@ -1,18 +1,18 @@
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student`(
-    `id` VARCHAR(15) NOT NULL DEFAULT '',
+    `id` VARCHAR(15) NOT NULL DEFAULT '' UNIQUE,
     `email` VARCHAR(35) NOT NULL DEFAULT '',
-    `name` VARCHAR(10) NOT NULL DEFAULT '',
-    `password` VARCHAR(20) NOT NULL DEFAULT '',
-    PRIMARY KEY (`id`)
+    `name` VARCHAR(15) NOT NULL DEFAULT '',
+    `password` VARCHAR(50) NOT NULL DEFAULT '',
+    PRIMARY KEY (`email`)
 )ENGINE=InnoDB, default charset = UTF8;
 
 DROP TABLE IF EXISTS `merchant`;
 CREATE TABLE `merchant`(
     `merchant_id` int NOT NULL auto_increment,
     `name` VARCHAR(10) NOT NULL DEFAULT '',
-    `password` VARCHAR(20) NOT NULL DEFAULT '',
-    `email` VARCHAR(35) NOT NULL DEFAULT '',
+    `password` VARCHAR(50) NOT NULL DEFAULT '',
+    `email` VARCHAR(35) NOT NULL DEFAULT '' UNIQUE,
     PRIMARY KEY (`merchant_id`)
 )ENGINE=InnoDB, default charset = UTF8;
 
@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `administrator`;
 CREATE TABLE `administrator`(
     `administrator_id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(10) NOT NULL DEFAULT '',
-    `password` VARCHAR(20) NOT NULL DEFAULT '',
+    `password` VARCHAR(50) NOT NULL DEFAULT '',
     PRIMARY KEY (`administrator_id`)
 )ENGINE=InnoDB, default charset = UTF8;
 
