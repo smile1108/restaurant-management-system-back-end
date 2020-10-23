@@ -10,6 +10,12 @@ public class MerchantVO {
     // 商家id
     private String merchantId;
 
+    // 商家邮箱
+    private String email;
+
+    // 角色
+    private Integer role = 1;
+
     public String getMerchantId() {
         return merchantId;
     }
@@ -17,9 +23,6 @@ public class MerchantVO {
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
     }
-
-    // 商家邮箱
-    private String email;
 
     public String getEmail() {
         return email;

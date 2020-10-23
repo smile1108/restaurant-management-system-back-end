@@ -17,6 +17,9 @@ public class Merchant {
     //商家邮箱
     private String email;
 
+    //商家昵称
+    private String name;
+
     public String getMerchantId() {
         return merchantId;
     }
@@ -39,5 +42,13 @@ public class Merchant {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

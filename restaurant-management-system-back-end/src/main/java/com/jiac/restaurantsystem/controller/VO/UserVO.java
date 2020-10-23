@@ -15,6 +15,9 @@ public class UserVO {
     //姓名
     private String name;
 
+    // 角色
+    private Integer role = 0;
+
     public String getId() {
         return id;
     }
