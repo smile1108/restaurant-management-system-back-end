@@ -40,9 +40,9 @@ public class MerchantServiceImpl implements MerchantService {
     private SendMail mailService;
 
     @Override
-    public Merchant login(String id, String password) throws CommonException {
+    public Merchant login(String email, String password) throws CommonException {
         // 通过id在数据库中查找数据
-        Merchant merchant = merchantMapper.selectById(id);
+        Merchant merchant = merchantMapper.selectByEmail(email);
         // 如果查找到的merchant为null 表示不存在这个merchant
         if(merchant == null){
             LOG.error("MerchantService -> 用户不存在");

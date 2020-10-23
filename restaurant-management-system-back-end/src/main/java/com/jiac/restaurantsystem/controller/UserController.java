@@ -56,7 +56,7 @@ public class UserController extends BaseController {
 
 
     @ApiOperation("用户登录验证")
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)
@@ -68,7 +68,6 @@ public class UserController extends BaseController {
             LOG.error("UserController -> 用户登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        System.out.println("====================");
         User user = null;
         // 检验输入的是邮箱还是学号
         if (pattern.matcher(id).matches()) {

@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * FileName: MerchantController
  * Author: Jiac
@@ -37,6 +41,12 @@ public class MerchantController extends BaseController{
     @Autowired
     private MerchantService merchantService;
 
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+
+    @Autowired
+    private HttpServletResponse httpServletResponse;
+
 
     @Autowired
     private Jedis jedis;
@@ -44,21 +54,27 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家登录验证")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "商家id", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "邮箱", value = "商家邮箱", dataType = "string", paramType = "query", required = true ),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType login(String id, String password) throws CommonException {
+    public CommonReturnType login(String email, String password) throws CommonException {
         // 商家使用商家id和密码进行登录
         // 首先校验参数是否为空
-        if(id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0){
+        if(email == null || email.trim().length() == 0 || password == null || password.trim().length() == 0){
             LOG.error("MerchantController -> 商家登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
 
         // 如果参数不为空 使用merchantService进行登录认证
-        Merchant merchant = merchantService.login(id, password);
+        Merchant merchant = merchantService.login(email, password);
         MerchantVO merchantVO = convertFromMerchant(merchant);
-        return CommonReturnType.success(merchantVO);
+        httpServletRequest.getSession().setAttribute(httpServletRequest.getSession().getId(), merchantVO);
+        httpServletRequest.getSession().setMaxInactiveInterval(60);
+        Cookie cookie = new Cookie("m_id", httpServletRequest.getSession().getId());
+        cookie.setMaxAge(60);
+        httpServletResponse.addCookie(cookie);
+
+        return CommonReturnType.success();
     }
 
     @ApiOperation("商家修改密码")
