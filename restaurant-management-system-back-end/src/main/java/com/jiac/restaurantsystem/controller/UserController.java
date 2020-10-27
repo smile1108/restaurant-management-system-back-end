@@ -58,9 +58,27 @@ public class UserController extends BaseController {
     @Autowired
     private Jedis jedis;
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test() throws IOException, ClassNotFoundException {
+        Cookie[] cookies = httpServletRequest.getCookies();
+        String s = null;
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                s = jedis.get(cookie.getValue());
+                break;
+            }
+        }
+        if(s == null){
+            return "null";
+        }
+        Object o = SerializeUtil.serializeToObject(s);
+        System.out.println(o);
+        return "test";
+    }
+
 
     @ApiOperation("用户登录验证")
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)

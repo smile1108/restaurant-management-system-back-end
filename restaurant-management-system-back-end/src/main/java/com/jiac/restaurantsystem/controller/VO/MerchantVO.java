@@ -1,11 +1,13 @@
 package com.jiac.restaurantsystem.controller.VO;
 
+import java.io.Serializable;
+
 /**
  * FileName: MerchantVO
  * Author: Jiac
  * Date: 2020/10/16 8:40
  */
-public class MerchantVO {
+public class MerchantVO implements Serializable {
 
     // 商家id
     private String merchantId;
@@ -30,5 +32,14 @@ public class MerchantVO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "MerchantVO{" +
+                "merchantId='" + merchantId + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

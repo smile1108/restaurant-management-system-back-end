@@ -2,11 +2,13 @@ package com.jiac.restaurantsystem.controller;
 
 import com.jiac.restaurantsystem.DO.Merchant;
 import com.jiac.restaurantsystem.controller.VO.MerchantVO;
+import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.MerchantService;
 import com.jiac.restaurantsystem.utils.SHA;
+import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,6 +27,7 @@ import redis.clients.jedis.JedisPool;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * FileName: MerchantController
@@ -51,13 +54,31 @@ public class MerchantController extends BaseController{
     @Autowired
     private Jedis jedis;
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test() throws IOException, ClassNotFoundException {
+        Cookie[] cookies = httpServletRequest.getCookies();
+        String s = null;
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                s = jedis.get(cookie.getValue());
+                break;
+            }
+        }
+        if(s == null){
+            return "null";
+        }
+        Object o = SerializeUtil.serializeToObject(s);
+        System.out.println(o);
+        return "test";
+    }
+
     @ApiOperation("商家登录验证")
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+        @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "邮箱", value = "商家邮箱", dataType = "string", paramType = "query", required = true ),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType login(String email, String password) throws CommonException {
+    public CommonReturnType login(String email, String password) throws CommonException, IOException {
         // 商家使用商家id和密码进行登录
         // 首先校验参数是否为空
         if(email == null || email.trim().length() == 0 || password == null || password.trim().length() == 0){
@@ -67,12 +88,27 @@ public class MerchantController extends BaseController{
 
         // 如果参数不为空 使用merchantService进行登录认证
         Merchant merchant = merchantService.login(email, password);
-        MerchantVO merchantVO = convertFromMerchant(merchant);
-        httpServletRequest.getSession().setAttribute(httpServletRequest.getSession().getId(), merchantVO);
-        httpServletRequest.getSession().setMaxInactiveInterval(60);
-        Cookie cookie = new Cookie("m_id", httpServletRequest.getSession().getId());
-        cookie.setMaxAge(60);
-        httpServletResponse.addCookie(cookie);
+        Cookie[] cookies = httpServletRequest.getCookies();
+        boolean hasSessionId = false;
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("JSESSIONID")){
+                    hasSessionId = true;
+                    break;
+                }
+            }
+        }
+        // 如果没有sessionId才创建cookie 否则不创建cookie
+        if(!hasSessionId){
+            LOG.info("商家登录，创建cookie");
+            MerchantVO merchantVO = convertFromMerchant(merchant);
+            jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(merchantVO));
+            Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
+            cookie.setMaxAge(60);
+            httpServletResponse.addCookie(cookie);
+        }else{
+            LOG.info("商家已有认证信息，不创建cookie");
+        }
 
         return CommonReturnType.success();
     }
