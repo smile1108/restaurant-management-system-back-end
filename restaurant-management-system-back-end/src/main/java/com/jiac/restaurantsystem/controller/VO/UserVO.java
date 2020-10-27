@@ -1,11 +1,16 @@
 package com.jiac.restaurantsystem.controller.VO;
 
+import java.io.Serializable;
+
 /**
  * FileName: UserVO
  * Author: Jiac
  * Date: 2020/10/14 19:59
  */
-public class UserVO {
+public class UserVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     //学号
     private String id;
 

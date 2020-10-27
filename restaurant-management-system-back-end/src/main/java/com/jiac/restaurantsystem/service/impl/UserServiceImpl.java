@@ -68,6 +68,8 @@ public class UserServiceImpl implements UserService {
         // 表示用户名或密码错误
         if(!user.getEmail().equals(email) || !user.getPassword().equals(SHA.getResult(password))){
             LOG.error("UserService -> 用户名或密码错误");
+            System.out.println(SHA.getResult(password));
+            System.out.println(user.getPassword());
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
         LOG.info("UserService -> 用户登录成功");

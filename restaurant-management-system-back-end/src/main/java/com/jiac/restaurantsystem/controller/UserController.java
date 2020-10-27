@@ -9,6 +9,7 @@ import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.UserService;
 import com.jiac.restaurantsystem.utils.SHA;
+import com.jiac.restaurantsystem.utils.SerializeUtil;
 import com.jiac.restaurantsystem.utils.UserNameGenerator;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -24,6 +26,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -56,13 +60,13 @@ public class UserController extends BaseController {
 
 
     @ApiOperation("用户登录验证")
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true)
     })
     @ResponseBody
-    public CommonReturnType login(String id, String password) throws CommonException {
+    public CommonReturnType login(String id, String password) throws CommonException, IOException {
         // 首先验证参数是否为空
         if (id == null || id.trim().length() == 0 || password == null || password.trim().length() == 0) {
             LOG.error("UserController -> 用户登录 -> 参数不能为空");
@@ -79,12 +83,27 @@ public class UserController extends BaseController {
             // 表示用学号登录
             user = userService.loginById(id, password);
         }
-        UserVO userVO = convertFromUserDO(user);
-        httpServletRequest.getSession().setAttribute(httpServletRequest.getSession().getId(), userVO);
-        httpServletRequest.getSession().setMaxInactiveInterval(60);
-        Cookie cookie = new Cookie("u_id", httpServletRequest.getSession().getId());
-        cookie.setMaxAge(60);
-        httpServletResponse.addCookie(cookie);
+        Cookie[] cookies = httpServletRequest.getCookies();
+        boolean hasSessionId = false;
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("JSESSIONID")){
+                    hasSessionId = true;
+                    break;
+                }
+            }
+        }
+        // 如果没有sessionId才创建cookie 否则不创建cookie
+        if(!hasSessionId){
+            LOG.info("用户登录，创建cookie");
+            UserVO userVO = convertFromUserDO(user);
+            jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(userVO));
+            Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
+            cookie.setMaxAge(60);
+            httpServletResponse.addCookie(cookie);
+        }else{
+            LOG.info("用户已有认证信息，不创建cookie");
+        }
 
         // 没有问题 返回响应
         return CommonReturnType.success();
