@@ -166,3 +166,6 @@ java.io.EOFException: null
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:834)
+[ERROR] 2020-10-27 16:13:33,624 [http-nio-8080-exec-1] c.j.r.controller.MerchantController - 不可以重复登录
+[ERROR] 2020-10-27 16:14:28,393 [http-nio-8080-exec-4] c.j.r.controller.UserController - UserController -> 用户登录 -> 参数不能为空
+[ERROR] 2020-10-27 16:14:33,148 [http-nio-8080-exec-8] c.j.r.controller.UserController - 不可以重复登录

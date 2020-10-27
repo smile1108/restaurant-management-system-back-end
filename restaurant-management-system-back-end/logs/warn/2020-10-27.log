@@ -9,3 +9,5 @@
 [WARN ] 2020-10-27 15:54:14,023 [http-nio-8080-exec-9] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]
 [WARN ] 2020-10-27 15:55:02,044 [http-nio-8080-exec-2] o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported]
 [WARN ] 2020-10-27 15:57:19,822 [http-nio-8080-exec-3] o.a.c.util.SessionIdGeneratorBase - Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [255] milliseconds.
+[WARN ] 2020-10-27 16:09:04,966 [http-nio-8080-exec-2] o.a.c.util.SessionIdGeneratorBase - Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [246] milliseconds.
+[WARN ] 2020-10-27 16:14:08,445 [http-nio-8080-exec-9] o.a.c.util.SessionIdGeneratorBase - Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [278] milliseconds.

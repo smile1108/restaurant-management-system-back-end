@@ -107,7 +107,8 @@ public class MerchantController extends BaseController{
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);
         }else{
-            LOG.info("商家已有认证信息，不创建cookie");
+            LOG.error("不可以重复登录");
+            throw new CommonException(ResultCode.IS_LOGINED);
         }
 
         return CommonReturnType.success();

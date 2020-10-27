@@ -120,7 +120,8 @@ public class UserController extends BaseController {
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);
         }else{
-            LOG.info("用户已有认证信息，不创建cookie");
+            LOG.error("不可以重复登录");
+            throw new CommonException(ResultCode.IS_LOGINED);
         }
 
         // 没有问题 返回响应
