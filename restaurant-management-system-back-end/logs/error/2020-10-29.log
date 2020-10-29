@@ -1,0 +1,9 @@
+[ERROR] 2020-10-29 06:46:39,706 [http-nio-8080-exec-2] c.j.r.controller.UserController - 不可以重复登录
+[ERROR] 2020-10-29 06:46:52,495 [http-nio-8080-exec-6] c.j.r.controller.MerchantController - MerchantController -> 商家登录 -> 参数不能为空
+[ERROR] 2020-10-29 06:47:03,485 [http-nio-8080-exec-5] c.j.r.controller.MerchantController - 不可以重复登录
+[ERROR] 2020-10-29 06:48:47,340 [http-nio-8080-exec-4] c.j.r.controller.MerchantController - 不可以重复登录
+[ERROR] 2020-10-29 06:58:41,064 [http-nio-8080-exec-1] c.j.r.controller.MerchantController - 不可以重复登录
+[ERROR] 2020-10-29 06:59:10,819 [http-nio-8080-exec-3] c.j.r.controller.MerchantController - 不可以重复登录
+[ERROR] 2020-10-29 07:00:15,515 [http-nio-8080-exec-10] c.j.r.controller.UserController - 不可以重复登录
+[ERROR] 2020-10-29 15:58:56,268 [http-nio-8080-exec-2] c.j.r.controller.UserController - 不可以重复登录
+[ERROR] 2020-10-29 16:13:19,641 [http-nio-8080-exec-3] c.j.r.controller.MerchantController - 不可以重复登录

@@ -88,20 +88,23 @@ public class MerchantController extends BaseController{
 
         // 如果参数不为空 使用merchantService进行登录认证
         Merchant merchant = merchantService.login(email, password);
-        Cookie[] cookies = httpServletRequest.getCookies();
-        boolean hasSessionId = false;
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("JSESSIONID")){
-                    hasSessionId = true;
-                    break;
-                }
-            }
-        }
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        boolean hasSessionId = false;
+//        if(cookies != null){
+//            for(Cookie cookie : cookies){
+//                if(cookie.getName().equals("JSESSIONID")){
+//                    hasSessionId = true;
+//                    break;
+//                }
+//            }
+//        }
+        String key = "merchant:" + merchant.getEmail();
+        String s = jedis.get(key);
         // 如果没有sessionId才创建cookie 否则不创建cookie
-        if(!hasSessionId){
+        if(s == null){
             LOG.info("商家登录，创建cookie");
             MerchantVO merchantVO = convertFromMerchant(merchant);
+            jedis.setex(key, 60, httpServletRequest.getSession().getId());
             jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(merchantVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);

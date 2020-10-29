@@ -101,20 +101,25 @@ public class UserController extends BaseController {
             // 表示用学号登录
             user = userService.loginById(id, password);
         }
-        Cookie[] cookies = httpServletRequest.getCookies();
-        boolean hasSessionId = false;
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("JSESSIONID")){
-                    hasSessionId = true;
-                    break;
-                }
-            }
-        }
+        String userEmail = user.getEmail();
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        boolean hasSessionId = false;
+//        if(cookies != null){
+//            for(Cookie cookie : cookies){
+//                if(cookie.getName().equals("JSESSIONID")){
+//                    hasSessionId = true;
+//                    break;
+//                }
+//            }
+//        }
+        String key = "user:" + userEmail;
+        String s = jedis.get(key);
+
         // 如果没有sessionId才创建cookie 否则不创建cookie
-        if(!hasSessionId){
+        if(s == null){
             LOG.info("用户登录，创建cookie");
             UserVO userVO = convertFromUserDO(user);
+            jedis.setex(key, 60, httpServletRequest.getSession().getId());
             jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(userVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);
