@@ -58,23 +58,23 @@ public class UserController extends BaseController {
     @Autowired
     private Jedis jedis;
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test() throws IOException, ClassNotFoundException {
-        Cookie[] cookies = httpServletRequest.getCookies();
-        String s = null;
-        for(Cookie cookie : cookies){
-            if(cookie.getName().equals("JSESSIONID")){
-                s = jedis.get(cookie.getValue());
-                break;
-            }
-        }
-        if(s == null){
-            return "null";
-        }
-        Object o = SerializeUtil.serializeToObject(s);
-        System.out.println(o);
-        return "test";
-    }
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public String test() throws IOException, ClassNotFoundException {
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        String s = null;
+//        for(Cookie cookie : cookies){
+//            if(cookie.getName().equals("JSESSIONID")){
+//                s = jedis.get(cookie.getValue());
+//                break;
+//            }
+//        }
+//        if(s == null){
+//            return "null";
+//        }
+//        Object o = SerializeUtil.serializeToObject(s);
+//        System.out.println(o);
+//        return "test";
+//    }
 
 
     @ApiOperation("用户登录验证")
@@ -211,11 +211,38 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @ApiOperation("用户获取验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
     @ResponseBody
     public CommonReturnType getCode(String email) throws CommonException {
         String code = userService.getCode(email);
         jedis.setex(email, 180, code);
+        return CommonReturnType.success();
+    }
+
+    @ApiOperation("用户退出登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
+    })
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonReturnType logout(String email) throws CommonException{
+        if(email == null || email.trim().length() == 0){
+            LOG.error("UserController -> 用户退出登录 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String key = "user:" + email;
+        String s = jedis.get(key);
+        if(s == null){
+            LOG.info("UserController -> 用户退出登录 -> 用户身份已经失效,退出成功");
+            return CommonReturnType.success();
+        }
+        // 如果用户身份还没有失效 退出登录后 删除对应的sessionId
+        LOG.info("UserController -> 用户退出登录 -> 退出登录成功");
+        jedis.del(key);
         return CommonReturnType.success();
     }
 

@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 public class BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
+
 
     //定义exceptionHandler解决未被controller层吸收的exception
     @ExceptionHandler(CommonException.class)

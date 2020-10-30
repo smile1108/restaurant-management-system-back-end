@@ -54,23 +54,23 @@ public class MerchantController extends BaseController{
     @Autowired
     private Jedis jedis;
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test() throws IOException, ClassNotFoundException {
-        Cookie[] cookies = httpServletRequest.getCookies();
-        String s = null;
-        for(Cookie cookie : cookies){
-            if(cookie.getName().equals("JSESSIONID")){
-                s = jedis.get(cookie.getValue());
-                break;
-            }
-        }
-        if(s == null){
-            return "null";
-        }
-        Object o = SerializeUtil.serializeToObject(s);
-        System.out.println(o);
-        return "test";
-    }
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public String test() throws IOException, ClassNotFoundException {
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        String s = null;
+//        for(Cookie cookie : cookies){
+//            if(cookie.getName().equals("JSESSIONID")){
+//                s = jedis.get(cookie.getValue());
+//                break;
+//            }
+//        }
+//        if(s == null){
+//            return "null";
+//        }
+//        Object o = SerializeUtil.serializeToObject(s);
+//        System.out.println(o);
+//        return "test";
+//    }
 
     @ApiOperation("商家登录验证")
         @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -194,11 +194,38 @@ public class MerchantController extends BaseController{
         return CommonReturnType.success(merchantVO);
     }
 
+    @ApiOperation("商家获取验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
     @ResponseBody
     public CommonReturnType getCode(String email) throws CommonException {
         String code = merchantService.getCode(email);
         jedis.setex(email, 180, code);
+        return CommonReturnType.success();
+    }
+
+    @ApiOperation("商家退出登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
+    })
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonReturnType logout(String email) throws CommonException{
+        if(email == null || email.trim().length() == 0){
+            LOG.error("MerchantController -> 商家退出登录 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String key = "merchant:" + email;
+        String s = jedis.get(key);
+        if(s == null){
+            LOG.info("MerchantController -> 商家退出登录 -> 用户身份已经失效,退出成功");
+            return CommonReturnType.success();
+        }
+        // 如果用户身份还没有失效 退出登录后 删除对应的sessionId
+        LOG.info("MerchantController -> 商家退出登录 -> 退出登录成功");
+        jedis.del(key);
         return CommonReturnType.success();
     }
 

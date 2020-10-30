@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
@@ -92,6 +93,29 @@ public class AdminController extends BaseController{
             throw new CommonException(ResultCode.IS_LOGINED);
         }
 
+        return CommonReturnType.success();
+    }
+
+    @ApiOperation("管理员退出登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "管理员用户名", dataType = "string", paramType = "query", required = true)
+    })
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonReturnType logout(String name) throws CommonException{
+        if(name == null || name.trim().length() == 0){
+            LOG.error("AdminController -> 管理员退出登录 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String key = "admin:" + name;
+        String s = jedis.get(key);
+        if(s == null){
+            LOG.info("AdminController -> 管理员退出登录 -> 用户身份已经失效,退出成功");
+            return CommonReturnType.success();
+        }
+        // 如果用户身份还没有失效 退出登录后 删除对应的sessionId
+        LOG.info("AdminController -> 管理员退出登录 -> 退出登录成功");
+        jedis.del(key);
         return CommonReturnType.success();
     }
 
