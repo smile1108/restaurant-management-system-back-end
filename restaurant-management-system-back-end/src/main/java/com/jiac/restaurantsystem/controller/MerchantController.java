@@ -98,7 +98,7 @@ public class MerchantController extends BaseController{
 //                }
 //            }
 //        }
-        String key = "merchant:" + merchant.getEmail();
+        String key = "session:merchant:" + merchant.getEmail();
         String s = jedis.get(key);
         // 如果没有sessionId才创建cookie 否则不创建cookie
         if(s == null){
@@ -217,7 +217,7 @@ public class MerchantController extends BaseController{
             LOG.error("MerchantController -> 商家退出登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        String key = "merchant:" + email;
+        String key = "session:merchant:" + email;
         String s = jedis.get(key);
         if(s == null){
             LOG.info("MerchantController -> 商家退出登录 -> 用户身份已经失效,退出成功");

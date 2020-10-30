@@ -77,7 +77,7 @@ public class AdminController extends BaseController{
 //                }
 //            }
 //        }
-        String key = "admin:" + admin.getName();
+        String key = "session:admin:" + admin.getName();
         String s = jedis.get(key);
         // 如果没有sessionId才创建cookie 否则不创建cookie
         if(s == null){
@@ -107,7 +107,7 @@ public class AdminController extends BaseController{
             LOG.error("AdminController -> 管理员退出登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        String key = "admin:" + name;
+        String key = "session:admin:" + name;
         String s = jedis.get(key);
         if(s == null){
             LOG.info("AdminController -> 管理员退出登录 -> 用户身份已经失效,退出成功");

@@ -112,7 +112,7 @@ public class UserController extends BaseController {
 //                }
 //            }
 //        }
-        String key = "user:" + userEmail;
+        String key = "session:user:" + userEmail;
         String s = jedis.get(key);
 
         // 如果没有sessionId才创建cookie 否则不创建cookie
@@ -234,7 +234,7 @@ public class UserController extends BaseController {
             LOG.error("UserController -> 用户退出登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        String key = "user:" + email;
+        String key = "session:user:" + email;
         String s = jedis.get(key);
         if(s == null){
             LOG.info("UserController -> 用户退出登录 -> 用户身份已经失效,退出成功");
