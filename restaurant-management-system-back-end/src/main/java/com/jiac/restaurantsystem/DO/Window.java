@@ -14,9 +14,6 @@ public class Window {
     // 窗口号
     private Integer wicketNumber;
 
-    // 窗口名称
-    private String name;
-
     //窗口楼层
     private Integer floor;
 
@@ -53,13 +50,5 @@ public class Window {
 
     public void setWicketNumber(Integer wicketNumber) {
         this.wicketNumber = wicketNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

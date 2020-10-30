@@ -8,26 +8,19 @@ import org.springframework.stereotype.Repository;
  * Date: 2020/10/9 22:25
  */
 public class Admin {
-    private Integer id;
 
-    private String accountNumber;
+    private Integer administratorId;
+
+    private String name;
 
     private String password;
 
-    public Integer getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -36,5 +29,13 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getAdministratorId() {
+        return administratorId;
+    }
+
+    public void setAdministratorId(Integer administratorId) {
+        this.administratorId = administratorId;
     }
 }

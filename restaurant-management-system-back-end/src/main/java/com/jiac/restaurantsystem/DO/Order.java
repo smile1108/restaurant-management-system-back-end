@@ -36,4 +36,76 @@ public class Order {
 
     //用户评价
     private Integer grade;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(Integer foodId) {
+        this.foodId = foodId;
+    }
+
+    public Time getTakeTime() {
+        return takeTime;
+    }
+
+    public void setTakeTime(Time takeTime) {
+        this.takeTime = takeTime;
+    }
+
+    public Integer getIsPackage() {
+        return isPackage;
+    }
+
+    public void setIsPackage(Integer isPackage) {
+        this.isPackage = isPackage;
+    }
+
+    public Integer getIsComplete() {
+        return isComplete;
+    }
+
+    public void setIsComplete(Integer isComplete) {
+        this.isComplete = isComplete;
+    }
+
+    public Time getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Time orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
 }
