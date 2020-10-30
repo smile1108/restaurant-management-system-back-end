@@ -65,8 +65,31 @@ public class AdminController extends BaseController{
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
 
+        boolean redisLoginSuccess = false;
+
+        // 使用登录用户名作为redis的key的一部分
+        String infoKey = "admin:info:" + name;
+        if(jedis.exists(infoKey)){
+            // 表示redis缓存中有对应的用户的信息 直接使用缓存 不需要查询数据库
+            LOG.info("AdminController -> 使用redis缓存获取到信息");
+            if(!jedis.hget(infoKey, "username").equals(name) || !jedis.hget(infoKey, "password").equals(password)){
+                LOG.error("AdminController -> 用户名或密码不正确");
+                throw new CommonException(ResultCode.AUTH_FAILED);
+            }
+            // 登录成功
+            LOG.info("AdminController -> 使用缓存登录成功");
+            redisLoginSuccess = true;
+        }
+
         // 如果参数不为空 使用adminService进行登录认证
-        Admin admin = adminService.login(name, password);
+        Admin admin = null;
+        if(!redisLoginSuccess){
+            admin = adminService.login(name, password);
+            // 用户密码验证正确 加入redis缓存
+            jedis.hset(infoKey, "administratorId", admin.getAdministratorId().toString());
+            jedis.hset(infoKey, "username", admin.getUsername());
+            jedis.hset(infoKey, "password", admin.getPassword());
+        }
 //        Cookie[] cookies = httpServletRequest.getCookies();
 //        boolean hasSessionId = false;
 //        if(cookies != null){
@@ -77,7 +100,8 @@ public class AdminController extends BaseController{
 //                }
 //            }
 //        }
-        String key = "session:admin:" + admin.getName();
+
+        String key = "session:admin:" + name;
         String s = jedis.get(key);
         // 如果没有sessionId才创建cookie 否则不创建cookie
         if(s == null){
