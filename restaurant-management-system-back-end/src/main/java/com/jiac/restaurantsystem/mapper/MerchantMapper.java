@@ -23,8 +23,8 @@ public interface MerchantMapper {
     @Select("select * from merchant where merchant_id = #{id}")
     Merchant selectById(String id);
 
-    @Update("update merchant set password = #{newPass} where merchant_id = #{id}")
-    void updatePassword(String id, String newPass);
+    @Update("update merchant set password = #{newPass} where email = #{email}")
+    void updatePassword(String email, String newPass);
 
     @Insert("insert into merchant (password, email) values (#{password}, #{email})")
     void insert(String password, String email);

@@ -118,3 +118,6 @@ java.lang.NullPointerException: null
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:834)
+[ERROR] 2020-10-31 12:33:04,602 [http-nio-8080-exec-8] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
+[ERROR] 2020-10-31 12:33:08,892 [http-nio-8080-exec-9] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
+[ERROR] 2020-10-31 12:33:16,209 [http-nio-8080-exec-10] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对

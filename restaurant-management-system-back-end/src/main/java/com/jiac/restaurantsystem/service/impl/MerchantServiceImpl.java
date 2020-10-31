@@ -59,9 +59,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     @Transactional
-    public void modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
+    public void modifyPass(String email, String oldPass, String newPass, String qualifyPass) throws CommonException {
         //使用UserMapper获取数据库中对应id的学生数据
-        Merchant merchant = merchantMapper.selectById(id);
+        Merchant merchant = merchantMapper.selectByEmail(email);
         // 如果user等于空 表示用户不存在
         if(merchant == null){
             LOG.error("MerchantService -> 商家不存在");
@@ -69,12 +69,12 @@ public class MerchantServiceImpl implements MerchantService {
         }
         // 如果用户存在
         // 先验证旧密码正确与否
-        if(!merchant.getMerchantId().equals(id) || !merchant.getPassword().equals(SHA.getResult(oldPass))){
+        if(!merchant.getEmail().equals(email) || !merchant.getPassword().equals(SHA.getResult(oldPass))){
             LOG.error("MerchantService -> 用户名或密码错误");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
         LOG.info("MerchantService -> 商家修改密码成功");
-        merchantMapper.updatePassword(id, newPass);
+        merchantMapper.updatePassword(email, SHA.getResult(newPass));
     }
 
     @Override

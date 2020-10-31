@@ -75,7 +75,7 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家登录验证")
         @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "邮箱", value = "商家邮箱", dataType = "string", paramType = "query", required = true ),
+            @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true ),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true)
     })
     public CommonReturnType login(String email, String password) throws CommonException, IOException {
@@ -144,14 +144,14 @@ public class MerchantController extends BaseController{
     @ApiOperation("商家修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "email", value = "商家email", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "newPass", value = "商家新密码", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "oldPass", value = "商家旧密码", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "qualifyPass", value = "商家确认密码", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType modifyPass(String merchantId, String oldPass, String newPass, String qualifyPass) throws CommonException {
+    public CommonReturnType modifyPass(String email, String oldPass, String newPass, String qualifyPass) throws CommonException {
         // 首先校验参数是否为空
-        if(merchantId == null || merchantId.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+        if(email == null || email.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
             || newPass == null || newPass.trim().length() == 0
             || qualifyPass == null || qualifyPass.trim().length() == 0){
             LOG.error("MerchantController -> 商家修改密码 -> 参数不能为空");
@@ -163,7 +163,10 @@ public class MerchantController extends BaseController{
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
 
-        merchantService.modifyPass(merchantId, oldPass, newPass, qualifyPass);
+        merchantService.modifyPass(email, oldPass, newPass, qualifyPass);
+
+        // 修改密码后 商家信息更改 所以缓存中的信息 已经不同步 需要删除redis中对应的键值
+        jedis.del("merchant:info:" + email);
 
         return CommonReturnType.success();
     }
