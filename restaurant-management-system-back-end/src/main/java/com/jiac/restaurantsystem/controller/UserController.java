@@ -114,7 +114,7 @@ public class UserController extends BaseController {
                 }
             }
             // 登录成功
-            LOG.info("AdminController -> 使用缓存登录成功");
+            LOG.info("UserController -> 使用缓存登录成功");
             redisLoginSuccess = true;
         }
         User user = null;

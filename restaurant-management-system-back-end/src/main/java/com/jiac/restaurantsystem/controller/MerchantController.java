@@ -86,8 +86,32 @@ public class MerchantController extends BaseController{
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
 
-        // 如果参数不为空 使用merchantService进行登录认证
-        Merchant merchant = merchantService.login(email, password);
+        boolean redisLoginSuccess = false;
+
+        // 商家使用邮箱登录 使用邮箱作为redis键的一部分
+        String infoKey = "merchant:info:" + email;
+        if(jedis.exists(infoKey)){
+            // 表示redis缓存中有对应的用户的信息 直接使用缓存 不需要查询数据库
+            LOG.info("MerchantController -> 使用redis缓存获取到信息");
+            if(!jedis.hget(infoKey, "email").equals(email) || !jedis.hget(infoKey, "password").equals(SHA.getResult(password))){
+                LOG.error("MerchantController -> 用户名或密码不正确");
+                throw new CommonException(ResultCode.AUTH_FAILED);
+            }
+            // 登录成功
+            LOG.info("MerchantController -> 使用缓存登录成功");
+            redisLoginSuccess = true;
+        }
+
+        Merchant merchant = null;
+        if(!redisLoginSuccess){
+            // 如果没有使用redis登录 表示缓存中还没有数据 所以使用数据库进行查询登录
+            // 如果参数不为空 使用merchantService进行登录认证
+            merchant = merchantService.login(email, password);
+            jedis.hset(infoKey, "email", merchant.getEmail());
+            jedis.hset(infoKey, "password", merchant.getPassword());
+            jedis.hset(infoKey, "name", merchant.getName());
+            jedis.hset(infoKey, "merchantId", merchant.getMerchantId());
+        }
 //        Cookie[] cookies = httpServletRequest.getCookies();
 //        boolean hasSessionId = false;
 //        if(cookies != null){
@@ -98,7 +122,7 @@ public class MerchantController extends BaseController{
 //                }
 //            }
 //        }
-        String key = "session:merchant:" + merchant.getEmail();
+        String key = "session:merchant:" + email;
         String s = jedis.get(key);
         // 如果没有sessionId才创建cookie 否则不创建cookie
         if(s == null){
