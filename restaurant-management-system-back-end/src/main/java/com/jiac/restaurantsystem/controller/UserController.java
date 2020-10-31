@@ -90,18 +90,53 @@ public class UserController extends BaseController {
             LOG.error("UserController -> 用户登录 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
-        User user = null;
-        // 检验输入的是邮箱还是学号
-        if (pattern.matcher(id).matches()) {
-            LOG.info("用户使用邮箱登录");
-            // 表示输入的是邮箱
-            user = userService.loginByEmail(id, password);
-        } else {
-            LOG.info("用户使用学号登录");
-            // 表示用学号登录
-            user = userService.loginById(id, password);
+
+        boolean useEmailLogin = pattern.matcher(id).matches();
+        boolean redisLoginSuccess = false;
+
+        // 用户可能使用两种登录方式  这里对每种方式都进行存入 所以直接使用id
+        String infoKey = "user:info:" + id;
+        if(jedis.exists(infoKey)){
+            // 表示redis缓存中有对应的用户的信息 直接使用缓存 不需要查询数据库
+            LOG.info("UserController -> 使用redis缓存获取到信息");
+            // 这里注意 用户密码 和 商家密码都是经过加密的 所以要加密后进行比对
+            if(useEmailLogin){
+                // 如果使用邮箱登录  就检查对应邮箱 和 密码 否则 检查学号 和 密码
+                if(!jedis.hget(infoKey, "email").equals(id) || !jedis.hget(infoKey, "password").equals(SHA.getResult(password))){
+                    LOG.error("UserController -> 用户名或密码不正确");
+                    throw new CommonException(ResultCode.AUTH_FAILED);
+                }
+            }else{
+                // 校验 学号 和 密码
+                if(!jedis.hget(infoKey, "id").equals(id) || !jedis.hget(infoKey, "password").equals(SHA.getResult(password))){
+                    LOG.error("UserController -> 用户名或密码不正确");
+                    throw new CommonException(ResultCode.AUTH_FAILED);
+                }
+            }
+            // 登录成功
+            LOG.info("AdminController -> 使用缓存登录成功");
+            redisLoginSuccess = true;
         }
-        String userEmail = user.getEmail();
+        User user = null;
+        if(!redisLoginSuccess){
+            // 如果没有使用redis验证 说明还没有对应的键 需要查询数据库进行登录 并将用户对应信息存入redis
+            // 检验输入的是邮箱还是学号
+            if (useEmailLogin) {
+                LOG.info("用户使用邮箱登录");
+                // 表示输入的是邮箱
+                user = userService.loginByEmail(id, password);
+            } else {
+                LOG.info("用户使用学号登录");
+                // 表示用学号登录
+                user = userService.loginById(id, password);
+            }
+            jedis.hset(infoKey, "email", user.getEmail());
+            jedis.hset(infoKey, "name", user.getName());
+            jedis.hset(infoKey, "password", user.getPassword());
+            jedis.hset(infoKey, "id", user.getId());
+        }
+        // 这里注意 如果使用了redis登录成功  user不会赋值 所以会空指针 所以要做一个判断
+        String userEmail = redisLoginSuccess ? jedis.hget(infoKey, "email") : user.getEmail();
 //        Cookie[] cookies = httpServletRequest.getCookies();
 //        boolean hasSessionId = false;
 //        if(cookies != null){
