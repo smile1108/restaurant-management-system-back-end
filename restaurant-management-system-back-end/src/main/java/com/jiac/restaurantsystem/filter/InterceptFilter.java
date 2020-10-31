@@ -46,6 +46,7 @@ public class InterceptFilter implements Filter {
                     if(cookie.getName().equals("JSESSIONID")){
                         // 有sessionId 表示登录了 所以可以放行
                         filterChain.doFilter(servletRequest, servletResponse);
+                        break;
                     }
                 }
             }

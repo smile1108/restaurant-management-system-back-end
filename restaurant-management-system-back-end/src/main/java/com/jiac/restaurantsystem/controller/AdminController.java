@@ -140,6 +140,8 @@ public class AdminController extends BaseController{
         // 如果用户身份还没有失效 退出登录后 删除对应的sessionId
         LOG.info("AdminController -> 管理员退出登录 -> 退出登录成功");
         jedis.del(key);
+        // 还要删除sessionId对应的序列化的用户信息
+        jedis.del(s);
         return CommonReturnType.success();
     }
 

@@ -226,6 +226,8 @@ public class MerchantController extends BaseController{
         // 如果用户身份还没有失效 退出登录后 删除对应的sessionId
         LOG.info("MerchantController -> 商家退出登录 -> 退出登录成功");
         jedis.del(key);
+        // 还要删除商家序列化的信息
+        jedis.del(s);
         return CommonReturnType.success();
     }
 
