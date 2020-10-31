@@ -80,9 +80,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void modifyPass(String id, String oldPass, String newPass, String modifyPass) throws CommonException {
+    public User modifyPass(String email, String oldPass, String newPass, String modifyPass) throws CommonException {
         //使用UserMapper获取数据库中对应id的学生数据
-        User user = userMapper.selectUserById(id);
+        User user = userMapper.selectUserByEmail(email);
         // 如果user等于空 表示用户不存在
         if(user == null){
             LOG.error("UserService -> 用户不存在");
@@ -90,12 +90,17 @@ public class UserServiceImpl implements UserService {
         }
         // 如果用户存在
         // 先验证旧密码正确与否
-        if(!user.getId().equals(id) || !user.getPassword().equals(SHA.getResult(oldPass))){
+        if(!user.getEmail().equals(email) || !user.getPassword().equals(SHA.getResult(oldPass))){
             LOG.error("UserService -> 用户名或密码错误");
             throw new CommonException(ResultCode.AUTH_FAILED);
         }
-        // 密码加密暂时不写 之后添加
-        userMapper.updatePassword(id, newPass);
+
+        userMapper.updatePassword(email, SHA.getResult(newPass));
+
+        // 因为我们要在更改密码后删除redis中对应的键
+        // 对于用户我们需要删除邮箱和学号对应的两个键(学号对应的键也可能没有)
+        // 这个user对象为修改了信息之前的user 我们只需要用到邮箱和学号 这两项信息是没有改动的
+        return user;
     }
 
     @Override

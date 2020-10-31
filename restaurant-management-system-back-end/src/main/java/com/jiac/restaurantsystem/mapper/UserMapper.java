@@ -20,8 +20,8 @@ public interface UserMapper {
     @Select("select * from student where email = #{email}")
     User selectUserByEmail(String email);
 
-    @Update("update student set password = #{newPass} where id = #{id}")
-    void updatePassword(String id, String newPass);
+    @Update("update student set password = #{newPass} where email = #{email}")
+    void updatePassword(String email, String newPass);
 
     @Insert("insert into student (name, email, password) values (#{name}, #{email}, #{password})")
     void insert(String name, String password, String email);

@@ -204,14 +204,14 @@ public class UserController extends BaseController {
     @ApiOperation("用户修改密码")
     @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "newPass", value = "用户新密码", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "oldPass", value = "用户旧密码", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "qualifyPass", value = "用户确认密码", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType modifyPass(String id, String oldPass, String newPass, String qualifyPass) throws CommonException {
+    public CommonReturnType modifyPass(String email, String oldPass, String newPass, String qualifyPass) throws CommonException {
         //首先验证参数是否为空
-        if (id == null || id.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
+        if (email == null || email.trim().length() == 0 || oldPass == null || oldPass.trim().length() == 0
                 || newPass == null || newPass.trim().length() == 0 || qualifyPass == null || qualifyPass.trim().length() == 0) {
             LOG.error("UserController -> 修改密码 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
@@ -222,7 +222,15 @@ public class UserController extends BaseController {
             throw new CommonException(ResultCode.PASSWORD_NOT_EQUAL);
         }
         // 如果参数验证成功 就调用service查询数据库
-        userService.modifyPass(id, oldPass, newPass, qualifyPass);
+        User user = userService.modifyPass(email, oldPass, newPass, qualifyPass);
+        String key1 = "user:info:" + user.getEmail();
+        String key2 = "user:info:" + user.getId();
+        if(jedis.exists(key1)){
+            jedis.del(key1);
+        }
+        if(jedis.exists(key2)){
+            jedis.del(key2);
+        }
 
         return CommonReturnType.success();
     }

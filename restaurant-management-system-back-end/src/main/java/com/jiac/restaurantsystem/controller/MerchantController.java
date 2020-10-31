@@ -166,7 +166,12 @@ public class MerchantController extends BaseController{
         merchantService.modifyPass(email, oldPass, newPass, qualifyPass);
 
         // 修改密码后 商家信息更改 所以缓存中的信息 已经不同步 需要删除redis中对应的键值
-        jedis.del("merchant:info:" + email);
+        // 需要先判断这个键是否存在
+        String key = "merchant:info:" + email;
+        if(jedis.exists(key)){
+            // 如果存在 再删除
+            jedis.del(key);
+        }
 
         return CommonReturnType.success();
     }

@@ -121,3 +121,4 @@ java.lang.NullPointerException: null
 [ERROR] 2020-10-31 12:33:04,602 [http-nio-8080-exec-8] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
 [ERROR] 2020-10-31 12:33:08,892 [http-nio-8080-exec-9] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
 [ERROR] 2020-10-31 12:33:16,209 [http-nio-8080-exec-10] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 用户名或密码不对
+[ERROR] 2020-10-31 12:57:09,087 [http-nio-8080-exec-8] c.j.r.controller.UserController - 不可以重复登录
