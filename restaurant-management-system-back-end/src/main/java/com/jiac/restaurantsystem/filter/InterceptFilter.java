@@ -24,7 +24,7 @@ public class InterceptFilter implements Filter {
     // 不需要登录就可以访问的路径
     String[] includeUrls = new String[]{"/user/login", "/user/register", "/user/getbackPass",
                                         "/merchant/login", "/merchant/register", "/merchant/getbackPass",
-                                        "/admin/login"};
+                                        "/admin/login", "/user/getCode", "/merchant/getCode"};
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
