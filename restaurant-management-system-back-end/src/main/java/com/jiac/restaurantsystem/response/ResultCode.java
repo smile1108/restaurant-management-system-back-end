@@ -68,9 +68,9 @@ public enum ResultCode implements CommonError {
 
     @Override
     public String toString() {
-        return "ResultCode{" +
-                "code='" + code + '\'' +
-                ", msg='" + msg + '\'' +
+        return "{\n" +
+                "\'code\'='" + code + '\'' +
+                ", \n\'msg\'='" + msg + '\'' + '\n' +
                 '}';
     }
 }
