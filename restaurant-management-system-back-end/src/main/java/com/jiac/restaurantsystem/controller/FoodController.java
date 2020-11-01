@@ -20,9 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * FileName: FoodController
@@ -46,10 +49,44 @@ public class FoodController extends BaseController{
     @Autowired
     private FoodService foodService;
 
+    @Autowired
+    private Jedis jedis;
+
     @ApiOperation("搜索全部菜品")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonReturnType list(){
-        return null;
+    public CommonReturnType list() throws CommonException {
+        String listKey = "food:list";
+        Boolean listExist = jedis.exists(listKey);
+        List<Food> foods = new ArrayList<>();
+        if(listExist){
+            LOG.info("FoodController -> 缓存中存在菜品列表,不需要查询数据库");
+            // 表示菜品的列表存在 这时就不需要查询数据库
+            Set<String> smembers = jedis.smembers(listKey);
+            for(String member : smembers){
+                Food food = new Food();
+                // 从列表中拿出所有菜品的id 然后构造出对应的菜品
+                food.setFoodId(Integer.valueOf(member));
+                food.setName(jedis.hget("food:info:" + member, "name"));
+                food.setPrice(Double.valueOf(jedis.hget("food:info:" + member, "price")));
+                food.setTaste(jedis.hget("food:info:" + member, "taste"));
+                food.setWicketId(Integer.valueOf(jedis.hget("food:info:" + member, "wicketId")));
+                foods.add(food);
+            }
+        }else{
+            LOG.info("FoodController -> 进入/food/list接口");
+            foods = foodService.list();
+            String foodInfoKey = null;
+            for(Food food : foods){
+                foodInfoKey = "food:info:" + food.getFoodId();
+                jedis.sadd(listKey, food.getFoodId().toString());
+                jedis.hset(foodInfoKey, "name", food.getName());
+                jedis.hset(foodInfoKey, "price", food.getPrice().toString());
+                jedis.hset(foodInfoKey, "taste", food.getTaste());
+                jedis.hset(foodInfoKey, "wicketId", food.getWicketId().toString());
+            }
+        }
+
+        return CommonReturnType.success(foods);
     }
 
     @ApiOperation("修改菜品")

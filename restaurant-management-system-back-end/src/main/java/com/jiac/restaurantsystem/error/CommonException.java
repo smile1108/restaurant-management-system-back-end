@@ -15,21 +15,21 @@ public class CommonException extends Exception implements CommonError {
 
     public CommonException(CommonError error, String errorMsg){
         this.error = error;
-        this.error.setErrMsg(errorMsg);
+        this.error.setMsg(errorMsg);
     }
 
     @Override
-    public String getErrCode() {
-        return this.error.getErrCode();
+    public String getCode() {
+        return this.error.getCode();
     }
 
     @Override
-    public String getErrMsg() {
-        return this.error.getErrMsg();
+    public String getMsg() {
+        return this.error.getMsg();
     }
 
     @Override
-    public void setErrMsg(String msg) {
-        this.error.setErrMsg(msg);
+    public void setMsg(String msg) {
+        this.error.setMsg(msg);
     }
 }

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * FileName: FoodServiceImpl
  * Author: Jiac
@@ -32,5 +34,12 @@ public class FoodServiceImpl implements FoodService {
             throw new CommonException(ResultCode.FOOD_IS_EXISTED);
         }
         foodMapper.insert(name, price, taste, wicketId);
+    }
+
+    @Override
+    public List<Food> list() throws CommonException {
+        LOG.info("FoodServiceImpl -> 查找所有菜品");
+        List<Food> foods = foodMapper.selectAllFood();
+        return foods;
     }
 }

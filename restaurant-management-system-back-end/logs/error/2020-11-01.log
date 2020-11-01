@@ -83,3 +83,7 @@ Caused by: java.net.SocketTimeoutException: connect timed out
 [ERROR] 2020-11-01 14:42:02,488 [http-nio-8080-exec-5] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 商家不存在
 [ERROR] 2020-11-01 14:42:22,078 [http-nio-8080-exec-4] c.j.r.s.impl.MerchantServiceImpl - MerchantService -> 商家不存在
 [ERROR] 2020-11-01 14:42:26,841 [http-nio-8080-exec-3] c.j.r.controller.FoodController - FoodController -> 该窗口还未开通
+[ERROR] 2020-11-01 15:06:51,042 [http-nio-8080-exec-2] c.j.r.service.impl.UserServiceImpl - UserService -> 用户不存在
+[ERROR] 2020-11-01 15:08:30,569 [http-nio-8080-exec-6] c.j.r.controller.UserController - UserController -> 用户名或密码不正确
+[ERROR] 2020-11-01 15:15:49,090 [http-nio-8080-exec-2] c.j.r.controller.UserController - UserController -> 用户名或密码不正确
+[ERROR] 2020-11-01 15:16:46,537 [http-nio-8080-exec-5] c.j.r.controller.FoodController - FoodController -> 参数不能为空

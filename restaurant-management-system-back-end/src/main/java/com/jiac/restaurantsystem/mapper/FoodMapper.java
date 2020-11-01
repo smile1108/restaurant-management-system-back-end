@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * FileName: FoodMapper
  * Author: Jiac
@@ -18,4 +20,7 @@ public interface FoodMapper {
 
     @Select("select * from food where name = #{name}")
     Food selectFoodByName(String name);
+
+    @Select("select * from food")
+    List<Food> selectAllFood();
 }

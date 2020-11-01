@@ -31,8 +31,8 @@ public class CommonReturnType {
 
     public static CommonReturnType create(CommonError code, Object data) {
         CommonReturnType type = new CommonReturnType();
-        type.setCode(code.getErrCode());
-        type.setMsg(code.getErrMsg());
+        type.setCode(code.getCode());
+        type.setMsg(code.getMsg());
         type.setData(data);
         return type;
     }

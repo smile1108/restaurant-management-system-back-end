@@ -6,8 +6,8 @@ package com.jiac.restaurantsystem.error;
  * Date: 2020/10/14 19:10
  */
 public interface CommonError {
-    String getErrCode();
-    String getErrMsg();
+    String getCode();
+    String getMsg();
 
-    void setErrMsg(String msg);
+    void setMsg(String msg);
 }

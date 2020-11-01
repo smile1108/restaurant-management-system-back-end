@@ -1,6 +1,9 @@
 package com.jiac.restaurantsystem.service;
 
+import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.error.CommonException;
+
+import java.util.List;
 
 /**
  * FileName: FoodService
@@ -10,4 +13,6 @@ import com.jiac.restaurantsystem.error.CommonException;
 public interface FoodService {
 
     void insert(String name, Double price, String taste, Integer wicketId) throws CommonException;
+
+    List<Food> list() throws CommonException;
 }

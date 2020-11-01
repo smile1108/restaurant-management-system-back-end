@@ -1,5 +1,6 @@
 package com.jiac.restaurantsystem.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jiac.restaurantsystem.error.CommonError;
 
 /**
@@ -7,6 +8,7 @@ import com.jiac.restaurantsystem.error.CommonError;
  * Author: Jiac
  * Date: 2020/10/9 14:27
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ResultCode implements CommonError {
     // 200代表成功
     SUCCESS("200", "成功"),
@@ -48,30 +50,35 @@ public enum ResultCode implements CommonError {
         this.code = code;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
     @Override
-    public String getErrCode() {
+    public String getCode() {
         return code;
     }
 
     @Override
-    public String getErrMsg() {
+    public String getMsg() {
         return msg;
     }
 
     @Override
-    public void setErrMsg(String msg) {
+    public void setMsg(String msg) {
         this.msg = msg;
     }
 
+//    @Override
+//    public String toString() {
+//        return "{\n" +
+//                "\'code\'='" + code + '\'' +
+//                ", \n\'msg\'='" + msg + '\'' + '\n' +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "{\n" +
-                "\'code\'='" + code + '\'' +
-                ", \n\'msg\'='" + msg + '\'' + '\n' +
+        return "ResultCode{" +
+                "code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
                 '}';
     }
 }

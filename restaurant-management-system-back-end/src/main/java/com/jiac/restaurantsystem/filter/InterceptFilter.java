@@ -26,6 +26,8 @@ public class InterceptFilter implements Filter {
                                         "/merchant/login", "/merchant/register", "/merchant/getbackPass",
                                         "/admin/login"};
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -53,7 +55,7 @@ public class InterceptFilter implements Filter {
             }
             // 如果没有sessionId 表示还没有登录 不能访问对应资源
             if(intercept){
-                httpServletResponse.getWriter().write(ResultCode.IS_NOT_LOGIN.toString());
+                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(ResultCode.IS_NOT_LOGIN));
             }
         }
     }
