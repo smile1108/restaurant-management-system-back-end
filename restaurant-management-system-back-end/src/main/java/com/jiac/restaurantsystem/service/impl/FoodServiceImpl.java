@@ -1,7 +1,12 @@
 package com.jiac.restaurantsystem.service.impl;
 
+import com.jiac.restaurantsystem.DO.Food;
+import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.FoodMapper;
+import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +18,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class FoodServiceImpl implements FoodService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FoodServiceImpl.class);
+
     @Autowired
     private FoodMapper foodMapper;
 
     @Override
-    public void insert(String name, Double price, String taste, Integer wicketId) {
+    public void insert(String name, Double price, String taste, Integer wicketId) throws CommonException {
+        Food food = foodMapper.selectFoodByName(name);
+        if(food != null){
+            LOG.error("FoodServiceImpl -> 添加菜品 -> 菜品已经存在");
+            // 如果可以使用菜品名字查出来菜品 说明菜品已经存在 不可以再添加
+            throw new CommonException(ResultCode.FOOD_IS_EXISTED);
+        }
         foodMapper.insert(name, price, taste, wicketId);
     }
 }

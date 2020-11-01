@@ -16,7 +16,6 @@ import java.util.TimeZone;
 public class RestaurantsystemApplication {
 
     public static void main(String[] args) {
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
         SpringApplication.run(RestaurantsystemApplication.class, args);
     }
 

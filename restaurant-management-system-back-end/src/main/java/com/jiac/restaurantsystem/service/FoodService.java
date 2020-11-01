@@ -1,5 +1,7 @@
 package com.jiac.restaurantsystem.service;
 
+import com.jiac.restaurantsystem.error.CommonException;
+
 /**
  * FileName: FoodService
  * Author: Jiac
@@ -7,5 +9,5 @@ package com.jiac.restaurantsystem.service;
  */
 public interface FoodService {
 
-    void insert(String name, Double price, String taste, Integer wicketId);
+    void insert(String name, Double price, String taste, Integer wicketId) throws CommonException;
 }
