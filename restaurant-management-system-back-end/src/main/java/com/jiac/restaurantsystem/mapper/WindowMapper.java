@@ -19,7 +19,7 @@ public interface WindowMapper {
     Window selectWindowByNumberAndFloor(Integer windowNumber, Integer floor);
 
     @Insert("insert into wicket (wicket_number, floor, merchant_id) values (#{wicketNumber}, #{floor}, #{merchantId})")
-    void insert(Integer wicketNumber, Integer floor, String merchantId);
+    void insert(Integer wicketNumber, Integer floor, Integer merchantId);
 
     @Select("select * from wicket where merchant_id = #{merchantId}")
     List<Window> selectAllWindowByMerchantId(String merchantId);

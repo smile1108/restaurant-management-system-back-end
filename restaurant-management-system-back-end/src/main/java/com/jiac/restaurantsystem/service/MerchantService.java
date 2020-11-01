@@ -13,11 +13,11 @@ public interface MerchantService {
 
     void modifyPass(String email, String oldPass, String newPass, String qualifyPass) throws CommonException;
 
-    void getbackPass(String email, String id) throws CommonException;
+    void getbackPass(String email, Integer id) throws CommonException;
 
     Merchant register(String password, String email) throws CommonException;
 
-    void findByMerchantId(String merchantId) throws CommonException;
+    void findByMerchantId(Integer merchantId) throws CommonException;
 
     String getCode(String email) throws CommonException;
 }

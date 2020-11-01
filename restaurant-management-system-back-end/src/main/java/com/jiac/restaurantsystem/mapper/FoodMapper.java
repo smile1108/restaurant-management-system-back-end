@@ -23,4 +23,7 @@ public interface FoodMapper {
 
     @Select("select * from food")
     List<Food> selectAllFood();
+
+    @Select("select * from food where wicket_id = #{windowId}")
+    List<Food> selectFoodsByWindowId(Integer windowId);
 }

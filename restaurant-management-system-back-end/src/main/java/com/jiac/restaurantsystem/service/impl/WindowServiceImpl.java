@@ -29,7 +29,7 @@ public class WindowServiceImpl implements WindowService {
     private MerchantMapper merchantMapper;
 
     @Override
-    public Window open(Integer windowNumber, Integer floor, String merchantId) throws CommonException {
+    public Window open(Integer windowNumber, Integer floor, Integer merchantId) throws CommonException {
         // 首先检查窗口是否已经被开通过
         Window window = windowMapper.selectWindowByNumberAndFloor(windowNumber, floor);
         if(window != null){
@@ -56,6 +56,11 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public Window findWindowByNumberAndFloor(Integer windowNumber, Integer floor) throws CommonException {
         Window window = windowMapper.selectWindowByNumberAndFloor(windowNumber, floor);
+        if(window == null){
+            // 表示该窗口不存在 抛出异常
+            LOG.error("WindowServiceImpl -> 根据窗口号和楼层查询对应的窗口 -> 窗口不存在");
+            throw new CommonException(ResultCode.WINDOW_IS_NOT_OPEN);
+        }
         return window;
     }
 

@@ -1,11 +1,13 @@
 package com.jiac.restaurantsystem.controller.VO;
 
+import java.io.Serializable;
+
 /**
  * FileName: FoodVO
  * Author: Jiac
  * Date: 2020/10/16 10:29
  */
-public class FoodVO {
+public class FoodVO implements Serializable {
     //菜名
     private String name;
 

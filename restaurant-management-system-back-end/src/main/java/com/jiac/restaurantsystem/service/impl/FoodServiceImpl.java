@@ -42,4 +42,10 @@ public class FoodServiceImpl implements FoodService {
         List<Food> foods = foodMapper.selectAllFood();
         return foods;
     }
+
+    @Override
+    public List<Food> selectFoodsByWindowId(Integer windowId) throws CommonException {
+        List<Food> foods = foodMapper.selectFoodsByWindowId(windowId);
+        return foods;
+    }
 }

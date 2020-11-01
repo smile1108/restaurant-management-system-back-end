@@ -2,6 +2,7 @@ package com.jiac.restaurantsystem.controller;
 
 import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.DO.Window;
+import com.jiac.restaurantsystem.controller.VO.FoodVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.FoodMapper;
 import com.jiac.restaurantsystem.mapper.WindowMapper;
@@ -10,12 +11,14 @@ import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.MerchantService;
 import com.jiac.restaurantsystem.service.WindowService;
+import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanResult;
 
+import javax.xml.transform.Result;
+import java.io.IOException;
+import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -54,52 +60,55 @@ public class FoodController extends BaseController{
 
     @ApiOperation("搜索全部菜品")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonReturnType list() throws CommonException {
+    public CommonReturnType list() throws CommonException, IOException, ClassNotFoundException {
+        LOG.info("FoodController -> 进入/food/list接口");
         String listKey = "food:list";
         Boolean listExist = jedis.exists(listKey);
-        List<Food> foods = new ArrayList<>();
+        List<FoodVO> foodVOS = new ArrayList<>();
         if(listExist){
             LOG.info("FoodController -> 缓存中存在菜品列表,不需要查询数据库");
             // 表示菜品的列表存在 这时就不需要查询数据库
             Set<String> smembers = jedis.smembers(listKey);
             for(String member : smembers){
-                Food food = new Food();
                 // 从列表中拿出所有菜品的id 然后构造出对应的菜品
-                food.setFoodId(Integer.valueOf(member));
-                food.setName(jedis.hget("food:info:" + member, "name"));
-                food.setPrice(Double.valueOf(jedis.hget("food:info:" + member, "price")));
-                food.setTaste(jedis.hget("food:info:" + member, "taste"));
-                food.setWicketId(Integer.valueOf(jedis.hget("food:info:" + member, "wicketId")));
-                foods.add(food);
+                String foodInfoKey = "food:info:" + member;
+                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
+                foodVOS.add(foodVO);
             }
         }else{
-            LOG.info("FoodController -> 进入/food/list接口");
-            foods = foodService.list();
+            LOG.info("FoodController -> 缓存中没有数据,要查询数据库");
+            List<Food> foods = foodService.list();
             String foodInfoKey = null;
             for(Food food : foods){
                 foodInfoKey = "food:info:" + food.getFoodId();
+                FoodVO foodVO = convertFromFood(food);
                 jedis.sadd(listKey, food.getFoodId().toString());
-                jedis.hset(foodInfoKey, "name", food.getName());
-                jedis.hset(foodInfoKey, "price", food.getPrice().toString());
-                jedis.hset(foodInfoKey, "taste", food.getTaste());
-                jedis.hset(foodInfoKey, "wicketId", food.getWicketId().toString());
+                jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
             }
+            foodVOS = convertFromFoodList(foods);
         }
 
-        return CommonReturnType.success(foods);
+        return CommonReturnType.success(foodVOS);
     }
 
     @ApiOperation("修改菜品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "name", value = "菜品名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "price", value = "菜品价格", dataType = "double", paramType = "query", required = true),
             @ApiImplicitParam(name = "taste", value = "菜品口味", dataType = "string", paramType = "query", required = true),
     })
-    public CommonReturnType update(Integer merchantId, Integer foodId, String name, Double price, String taste){
-        return null;
+    public CommonReturnType update(Integer merchantId, String name, Double price, String taste) throws CommonException {
+        // 先校验参数不能为空
+        if(merchantId == null || name == null || name.trim().length() == 0
+            || price == null || taste == null || taste.trim().length() == 0){
+            LOG.error("FoodController -> 修改菜品 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 然后根据这个名字查看这个菜品是否属于这个商家 如果不属于 没有权限修改
+
+        return CommonReturnType.success();
     }
 
     @ApiOperation("删除菜品")
@@ -115,16 +124,16 @@ public class FoodController extends BaseController{
     @ApiOperation("增加菜品")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "merchantId", value = "商家号", dataType = "string", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "merchantId", value = "商家号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "name", value = "菜品名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "price", value = "菜品价格", dataType = "double", paramType = "query", required = true),
             @ApiImplicitParam(name = "taste", value = "菜品口味", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "floor", value = "楼层", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
     })
-    public CommonReturnType add(String merchantId, String name, Double price, String taste, Integer floor, Integer wicketNumber) throws CommonException {
+    public CommonReturnType add(Integer merchantId, String name, Double price, String taste, Integer floor, Integer wicketNumber) throws CommonException {
         // 先校验参数是否为空
-        if(merchantId == null || merchantId.trim().length() == 0
+        if(merchantId == null
             || name == null || name.trim().length() == 0
             || price == null || taste == null || taste.trim().length() == 0
             || floor == null || wicketNumber == null){
@@ -155,8 +164,50 @@ public class FoodController extends BaseController{
             @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType getByWindowId(Integer wicketNumber, Integer floor){
-        return null;
+    public CommonReturnType getByWindowId(Integer wicketNumber, Integer floor) throws CommonException, IOException, ClassNotFoundException {
+        // 先校验参数是否为空
+        if(wicketNumber == null || floor == null){
+            LOG.error("FoodController -> 按照窗口查找菜品 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 根据窗口号和楼层查找对应的窗口 看看是否存在
+        Window window = windowService.findWindowByNumberAndFloor(wicketNumber, floor);
+        // findWindowByNumberAndFloor方法内部如果窗口不存在 会抛出异常 所以如果执行到下边 表示窗口存在
+        Integer windowId = window.getWicketId();
+        String windowKey = "food:window:" + windowId;
+        List<FoodVO> foodVOS = new ArrayList<>();
+        if(jedis.exists(windowKey)){
+            LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中有对应窗口的菜品缓存,不需要查找数据库");
+            // 如果对应窗口id 存在缓存的数据 直接从缓存中拿取
+            Set<String> smembers = jedis.smembers(windowKey);
+            for(String member : smembers){
+                // 从列表中拿出所有菜品的id 然后构造出对应的菜品
+                String foodInfoKey = "food:info:" + member;
+                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
+                foodVOS.add(foodVO);
+            }
+        }else{
+            LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中没有对应窗口的菜品,需要查询数据库");
+            // 如果缓存中不存在对应的数据 应该从数据库进行查找 并写入缓存中
+            List<Food> foods = foodService.selectFoodsByWindowId(windowId);
+            // 从数据库中获取数据之后 写入缓存中 以便之后从缓存中获取数据 不需要通过数据库
+            String foodInfoKey = null;
+            for(Food food : foods){
+                // 遍历所有的food 进行操作
+                // 先将foodId放入对应该窗口id的缓存键中
+                LOG.info("FoodController -> 将foodId放入该窗口id对应的缓存键中");
+                jedis.sadd(windowKey, food.getFoodId().toString());
+                foodInfoKey = "food:info:" + food.getFoodId();
+                FoodVO foodVO = convertFromFood(food);
+                // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
+                // 不存在的话才添加对应的数据
+                if(!jedis.exists(foodInfoKey)){
+                    jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
+                }
+            }
+            foodVOS = convertFromFoodList(foods);
+        }
+        return CommonReturnType.success(foodVOS);
     }
 
     @ApiOperation("按照口味查找菜品")
@@ -175,6 +226,28 @@ public class FoodController extends BaseController{
     })
     public CommonReturnType getByTaste(Integer floor){
         return null;
+    }
+
+    private FoodVO convertFromFood(Food food){
+        if(food == null){
+            return null;
+        }
+        FoodVO foodVO = new FoodVO();
+        BeanUtils.copyProperties(food, foodVO);
+        return foodVO;
+    }
+
+    private List<FoodVO> convertFromFoodList(List<Food> foods){
+        if(foods == null){
+            return null;
+        }
+        List<FoodVO> foodVOS = new ArrayList<>();
+        for(Food food : foods){
+            FoodVO foodVO = new FoodVO();
+            BeanUtils.copyProperties(food, foodVO);
+            foodVOS.add(foodVO);
+        }
+        return foodVOS;
     }
 
 }

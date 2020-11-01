@@ -78,7 +78,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public void getbackPass(String email, String id) throws CommonException {
+    public void getbackPass(String email, Integer id) throws CommonException {
         // 首先查找对应的merchant
         Merchant merchant = merchantMapper.selectById(id);
         if(merchant == null){
@@ -113,7 +113,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public void findByMerchantId(String merchantId) throws CommonException {
+    public void findByMerchantId(Integer merchantId) throws CommonException {
         Merchant merchant = merchantMapper.selectById(merchantId);
         if(merchant == null){
             LOG.error("MerchantService -> 商家不存在");

@@ -18,7 +18,7 @@ public class Window {
     private Integer floor;
 
     //对应商家id
-    private String merchantId;
+    private Integer merchantId;
 
     public Integer getFloor() {
         return floor;
@@ -28,11 +28,11 @@ public class Window {
         this.floor = floor;
     }
 
-    public String getMerchantId() {
+    public Integer getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
     }
 

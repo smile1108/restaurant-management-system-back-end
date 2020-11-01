@@ -21,7 +21,7 @@ public interface MerchantMapper {
     Merchant selectByEmail(String email);
 
     @Select("select * from merchant where merchant_id = #{id}")
-    Merchant selectById(String id);
+    Merchant selectById(Integer id);
 
     @Update("update merchant set password = #{newPass} where email = #{email}")
     void updatePassword(String email, String newPass);

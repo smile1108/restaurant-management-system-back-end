@@ -41,8 +41,8 @@ public class WindowController extends BaseController{
             @ApiImplicitParam(name = "floor", value = "窗口楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType open(Integer wicketNumber, Integer floor, String merchantId) throws CommonException {
-        if(wicketNumber == null || merchantId == null || merchantId.trim().length() == 0){
+    public CommonReturnType open(Integer wicketNumber, Integer floor, Integer merchantId) throws CommonException {
+        if(wicketNumber == null || merchantId == null){
             LOG.error("WindowController -> 开通窗口 -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }

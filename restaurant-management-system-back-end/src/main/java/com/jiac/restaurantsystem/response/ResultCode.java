@@ -21,7 +21,7 @@ public enum ResultCode implements CommonError {
     EMAIL_NOT_TRUE("305", "输入邮箱不正确"),
     MERCHANT_HAVE_EXISTED("306", "商家已经存在"),
     WINDOW_HAVE_OPENED("307", "窗口已经开通过, 不可以再次开通"),
-    WINDOW_IS_NOT_OPEN("308", "窗口还未开通"),
+    WINDOW_IS_NOT_OPEN("308", "窗口还未开通或不存在"),
     CODE_IS_EXPIRED("309", "验证码过期"),
     CODE_IS_NOT_RIGHT("310", "验证码不正确"),
     IS_NOT_LOGIN("311", "还未登录,不能访问对应资源"),
