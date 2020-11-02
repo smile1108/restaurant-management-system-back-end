@@ -176,13 +176,14 @@ public class FoodController extends BaseController{
         Integer windowId = window.getWicketId();
         String windowKey = "food:window:" + windowId;
         List<FoodVO> foodVOS = new ArrayList<>();
+        String foodInfoKey = null;
         if(jedis.exists(windowKey)){
             LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中有对应窗口的菜品缓存,不需要查找数据库");
             // 如果对应窗口id 存在缓存的数据 直接从缓存中拿取
             Set<String> smembers = jedis.smembers(windowKey);
             for(String member : smembers){
                 // 从列表中拿出所有菜品的id 然后构造出对应的菜品
-                String foodInfoKey = "food:info:" + member;
+                foodInfoKey = "food:info:" + member;
                 FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
                 foodVOS.add(foodVO);
             }
@@ -191,17 +192,16 @@ public class FoodController extends BaseController{
             // 如果缓存中不存在对应的数据 应该从数据库进行查找 并写入缓存中
             List<Food> foods = foodService.selectFoodsByWindowId(windowId);
             // 从数据库中获取数据之后 写入缓存中 以便之后从缓存中获取数据 不需要通过数据库
-            String foodInfoKey = null;
             for(Food food : foods){
                 // 遍历所有的food 进行操作
                 // 先将foodId放入对应该窗口id的缓存键中
                 LOG.info("FoodController -> 将foodId放入该窗口id对应的缓存键中");
                 jedis.sadd(windowKey, food.getFoodId().toString());
                 foodInfoKey = "food:info:" + food.getFoodId();
-                FoodVO foodVO = convertFromFood(food);
                 // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
                 // 不存在的话才添加对应的数据
                 if(!jedis.exists(foodInfoKey)){
+                    FoodVO foodVO = convertFromFood(food);
                     jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
                 }
             }
@@ -215,8 +215,47 @@ public class FoodController extends BaseController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "taste", value = "口味", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType getByTaste(String taste){
-        return null;
+    public CommonReturnType getByTaste(String taste) throws CommonException, IOException, ClassNotFoundException {
+        // 先判断对应参数是否为空
+        if(taste == null || taste.trim().length() == 0){
+            LOG.error("FoodController -> getByTaste -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 构建taste对用的键
+        String tasteKey = "food:taste:" + taste;
+        // 构建FoodVO的集合
+        List<FoodVO> foodVOS = new ArrayList<>();
+        // 然后先看redis缓存中是否有这个键 如果有的话直接使用缓存
+        String foodInfoKey = null;
+        if(jedis.exists(tasteKey)){
+            LOG.info("FoodController -> 根据口味查找菜品 -> 缓存中有对应口味的菜品");
+            // 查找到缓存中tasteKey中所有的foodId
+            Set<String> smembers = jedis.smembers(tasteKey);
+            for(String member : smembers){
+                // 拿出id 构建对应food的key food:info:#{id}
+                foodInfoKey = "food:info:" + member;
+                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
+                foodVOS.add(foodVO);
+            }
+        }else{
+            LOG.info("FoodController -> 根据口味查找菜品 -> 缓存中没有对应口味的菜品");
+            // 从数据库中获取数据
+            List<Food> foods = foodService.selectFoodsByTaste(taste);
+            for(Food food : foods){
+                // 遍历查询到的food数组 将其加入缓存中
+                LOG.info("FoodController -> 将查找到的taste的菜品加入缓存");
+                jedis.sadd(tasteKey, food.getFoodId().toString());
+                foodInfoKey = "food:info:" + food.getFoodId();
+                // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
+                // 不存在的话才添加对应的数据
+                if(!jedis.exists(foodInfoKey)){
+                    FoodVO foodVO = convertFromFood(food);
+                    jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
+                }
+            }
+            foodVOS = convertFromFoodList(foods);
+        }
+        return CommonReturnType.success(foodVOS);
     }
 
     @ApiOperation("按照楼层查找菜品")
@@ -224,7 +263,7 @@ public class FoodController extends BaseController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType getByTaste(Integer floor){
+    public CommonReturnType getByLevel(Integer floor){
         return null;
     }
 

@@ -45,7 +45,15 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<Food> selectFoodsByWindowId(Integer windowId) throws CommonException {
+        LOG.info("FoodServiceImpl -> 根据窗口查找菜品");
         List<Food> foods = foodMapper.selectFoodsByWindowId(windowId);
+        return foods;
+    }
+
+    @Override
+    public List<Food> selectFoodsByTaste(String taste) throws CommonException {
+        LOG.info("FoodServiceImpl -> 根据口味查找菜品 -> " + taste);
+        List<Food> foods = foodMapper.selectFoodsByTaste(taste);
         return foods;
     }
 }

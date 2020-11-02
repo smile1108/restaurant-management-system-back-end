@@ -26,4 +26,7 @@ public interface FoodMapper {
 
     @Select("select * from food where wicket_id = #{windowId}")
     List<Food> selectFoodsByWindowId(Integer windowId);
+
+    @Select("select * from food where taste like '%${taste}%'")
+    List<Food> selectFoodsByTaste(String taste);
 }
