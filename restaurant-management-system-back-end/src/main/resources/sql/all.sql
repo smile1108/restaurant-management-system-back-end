@@ -23,13 +23,14 @@ CREATE TABLE `wicket`(
     `floor` INT NOT NULL DEFAULT 0,
     `merchant_id` int NOT NULL DEFAULT 0,
     PRIMARY KEY (`wicket_id`),
-    FOREIGN KEY (`merchant_id`) REFERENCES merchant (`merchant_id`)
+    FOREIGN KEY (`merchant_id`) REFERENCES merchant (`merchant_id`),
+    UNIQUE (`wicket_number`, `floor`)
 )ENGINE=InnoDB, default charset = UTF8;
 
 DROP TABLE IF EXISTS `food`;
 CREATE TABLE `food`(
     `food_id` INT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(10) NOT NULL DEFAULT '',
+    `name` VARCHAR(10) NOT NULL DEFAULT '' UNIQUE,
     `price` DOUBLE NOT NULL DEFAULT 0,
     `taste` VARCHAR(5) NOT NULL DEFAULT '',
     `wicket_id` INT NOT NULL DEFAULT 0,
@@ -56,7 +57,7 @@ CREATE TABLE `order_info`(
 DROP TABLE IF EXISTS `administrator`;
 CREATE TABLE `administrator`(
     `administrator_id` INT NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(10) NOT NULL DEFAULT '',
+    `username` VARCHAR(10) NOT NULL DEFAULT '' UNIQUE,
     `password` VARCHAR(50) NOT NULL DEFAULT '',
     PRIMARY KEY (`administrator_id`)
 )ENGINE=InnoDB, default charset = UTF8;
