@@ -56,4 +56,11 @@ public class FoodServiceImpl implements FoodService {
         List<Food> foods = foodMapper.selectFoodsByTaste(taste);
         return foods;
     }
+
+    @Override
+    public List<Food> selectFoodsByFloor(Integer floor) throws CommonException {
+        LOG.info("FoodServiceImpl -> 根据楼层查找菜品 -> " + floor);
+        List<Food> foods = foodMapper.selectFoodsByFloor(floor);
+        return foods;
+    }
 }

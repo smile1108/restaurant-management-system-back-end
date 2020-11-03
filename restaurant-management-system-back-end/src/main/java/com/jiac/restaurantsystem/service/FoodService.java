@@ -19,4 +19,6 @@ public interface FoodService {
     List<Food> selectFoodsByWindowId(Integer windowId) throws CommonException;
 
     List<Food> selectFoodsByTaste(String taste) throws CommonException;
+
+    List<Food> selectFoodsByFloor(Integer floor) throws CommonException;
 }

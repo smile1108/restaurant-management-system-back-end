@@ -27,6 +27,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanResult;
 
 import javax.xml.transform.Result;
+import java.awt.*;
 import java.io.IOException;
 import java.text.FieldPosition;
 import java.util.ArrayList;
@@ -68,23 +69,12 @@ public class FoodController extends BaseController{
         if(listExist){
             LOG.info("FoodController -> 缓存中存在菜品列表,不需要查询数据库");
             // 表示菜品的列表存在 这时就不需要查询数据库
-            Set<String> smembers = jedis.smembers(listKey);
-            for(String member : smembers){
-                // 从列表中拿出所有菜品的id 然后构造出对应的菜品
-                String foodInfoKey = "food:info:" + member;
-                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
-                foodVOS.add(foodVO);
-            }
+            convertRedisToFoodList(listKey, foodVOS);
         }else{
             LOG.info("FoodController -> 缓存中没有数据,要查询数据库");
             List<Food> foods = foodService.list();
             String foodInfoKey = null;
-            for(Food food : foods){
-                foodInfoKey = "food:info:" + food.getFoodId();
-                FoodVO foodVO = convertFromFood(food);
-                jedis.sadd(listKey, food.getFoodId().toString());
-                jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
-            }
+            addRecordToRedis(listKey, foods);
             foodVOS = convertFromFoodList(foods);
         }
 
@@ -180,31 +170,13 @@ public class FoodController extends BaseController{
         if(jedis.exists(windowKey)){
             LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中有对应窗口的菜品缓存,不需要查找数据库");
             // 如果对应窗口id 存在缓存的数据 直接从缓存中拿取
-            Set<String> smembers = jedis.smembers(windowKey);
-            for(String member : smembers){
-                // 从列表中拿出所有菜品的id 然后构造出对应的菜品
-                foodInfoKey = "food:info:" + member;
-                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
-                foodVOS.add(foodVO);
-            }
+            convertRedisToFoodList(windowKey, foodVOS);
         }else{
             LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中没有对应窗口的菜品,需要查询数据库");
             // 如果缓存中不存在对应的数据 应该从数据库进行查找 并写入缓存中
             List<Food> foods = foodService.selectFoodsByWindowId(windowId);
             // 从数据库中获取数据之后 写入缓存中 以便之后从缓存中获取数据 不需要通过数据库
-            for(Food food : foods){
-                // 遍历所有的food 进行操作
-                // 先将foodId放入对应该窗口id的缓存键中
-                LOG.info("FoodController -> 将foodId放入该窗口id对应的缓存键中");
-                jedis.sadd(windowKey, food.getFoodId().toString());
-                foodInfoKey = "food:info:" + food.getFoodId();
-                // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
-                // 不存在的话才添加对应的数据
-                if(!jedis.exists(foodInfoKey)){
-                    FoodVO foodVO = convertFromFood(food);
-                    jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
-                }
-            }
+            addRecordToRedis(windowKey, foods);
             foodVOS = convertFromFoodList(foods);
         }
         return CommonReturnType.success(foodVOS);
@@ -230,41 +202,53 @@ public class FoodController extends BaseController{
         if(jedis.exists(tasteKey)){
             LOG.info("FoodController -> 根据口味查找菜品 -> 缓存中有对应口味的菜品");
             // 查找到缓存中tasteKey中所有的foodId
-            Set<String> smembers = jedis.smembers(tasteKey);
-            for(String member : smembers){
-                // 拿出id 构建对应food的key food:info:#{id}
-                foodInfoKey = "food:info:" + member;
-                FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
-                foodVOS.add(foodVO);
-            }
+            convertRedisToFoodList(tasteKey, foodVOS);
         }else{
             LOG.info("FoodController -> 根据口味查找菜品 -> 缓存中没有对应口味的菜品");
             // 从数据库中获取数据
             List<Food> foods = foodService.selectFoodsByTaste(taste);
-            for(Food food : foods){
-                // 遍历查询到的food数组 将其加入缓存中
-                LOG.info("FoodController -> 将查找到的taste的菜品加入缓存");
-                jedis.sadd(tasteKey, food.getFoodId().toString());
-                foodInfoKey = "food:info:" + food.getFoodId();
-                // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
-                // 不存在的话才添加对应的数据
-                if(!jedis.exists(foodInfoKey)){
-                    FoodVO foodVO = convertFromFood(food);
-                    jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
-                }
-            }
+            addRecordToRedis(tasteKey, foods);
             foodVOS = convertFromFoodList(foods);
         }
         return CommonReturnType.success(foodVOS);
     }
 
     @ApiOperation("按照楼层查找菜品")
-    @RequestMapping(value = "/getByLevel", method = RequestMethod.GET)
+    @RequestMapping(value = "/getByFloor", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
     })
-    public CommonReturnType getByLevel(Integer floor){
-        return null;
+    public CommonReturnType getByFloor(Integer floor) throws CommonException, IOException, ClassNotFoundException {
+        // 先检查参数是否为空
+        if(floor == null){
+            LOG.error("FoodController -> 根据楼层查找菜品 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 然后看看楼层是否存在
+        // 使用WicketService 查找对应的表 根据楼层查找对应窗口, 如果返回的窗口列表为空 表示没有对应楼层的窗口
+        boolean isExist = windowService.judgeFloorIsExist(floor);
+        if(!isExist){
+            // 表示对应楼层不存在或者对应楼层没有开通的窗口
+            LOG.error("FoodController -> getByFloor -> 对应楼层不存在或者没有开通的窗口");
+            throw new CommonException(ResultCode.FLOOR_HAS_NOT_WINDOW);
+        }
+        // 表示对应的楼层存在或者有开通的窗口
+        // 然后先判断redis缓存中是否有对应楼层的缓存记录
+        String floorKey = "food:floor:" + floor;
+        // 构建FoodVO的集合
+        List<FoodVO> foodVOS = new ArrayList<>();
+        // 然后先看redis缓存中是否有这个键 如果有的话直接使用缓存
+        String foodInfoKey = null;
+        if(jedis.exists(floorKey)){
+            LOG.info("FoodController -> getByFloor -> redis缓存中有对应楼层的菜品缓存记录");
+            convertRedisToFoodList(floorKey, foodVOS);
+        }else{
+            LOG.info("FoodController -> 根据楼层查找菜品 -> 缓存中没有对应楼层的菜品");
+            List<Food> foods = foodService.selectFoodsByFloor(floor);
+            addRecordToRedis(floorKey, foods);
+            foodVOS = convertFromFoodList(foods);
+        }
+        return CommonReturnType.success(foodVOS);
     }
 
     private FoodVO convertFromFood(Food food){
@@ -287,6 +271,44 @@ public class FoodController extends BaseController{
             foodVOS.add(foodVO);
         }
         return foodVOS;
+    }
+
+    /**
+     * 封装一个工具方法用来将redis缓存中的存放对应需求的菜品的id的set 转化为对应的菜品后存入resultList中
+     * @param key 需求的键 (redis中存在的键)
+     * @param resultList (将对应的菜品全部解析为FoodVO对象后, 存入resultList集合中)
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void convertRedisToFoodList(String key, List<FoodVO> resultList) throws IOException, ClassNotFoundException {
+        Set<String> smembers = jedis.smembers(key);
+        for(String member : smembers){
+            // 从列表中拿出所有菜品的id 然后构造出对应的菜品
+            String foodInfoKey = "food:info:" + member;
+            FoodVO foodVO = (FoodVO)SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
+            resultList.add(foodVO);
+        }
+    }
+
+    /**
+     * 将冗余代码封装为一个方法
+     * @param key 需求的键 (要存入redis中的键)
+     * @param allFoods 将从数据库中查询到的所有的记录封装为一个List
+     * @throws IOException
+     */
+    private void addRecordToRedis(String key, List<Food> allFoods) throws IOException {
+        for(Food food : allFoods){
+            // 遍历查询到的food数组 将其加入缓存中
+            LOG.info("FoodController -> 将查找到的taste的菜品加入缓存");
+            jedis.sadd(key, food.getFoodId().toString());
+            String foodInfoKey = "food:info:" + food.getFoodId();
+            // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
+            // 不存在的话才添加对应的数据
+            if(!jedis.exists(foodInfoKey)){
+                FoodVO foodVO = convertFromFood(food);
+                jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
+            }
+        }
     }
 
 }

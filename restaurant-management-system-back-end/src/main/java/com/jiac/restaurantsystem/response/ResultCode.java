@@ -26,6 +26,7 @@ public enum ResultCode implements CommonError {
     CODE_IS_NOT_RIGHT("310", "验证码不正确"),
     IS_NOT_LOGIN("311", "还未登录,不能访问对应资源"),
     FOOD_IS_EXISTED("312", "菜品已经存在"),
+    FLOOR_HAS_NOT_WINDOW("313", "对应楼层没有开通的窗口"),
 
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),

@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * FileName: WindowServiceImpl
  * Author: Jiac
@@ -62,6 +64,15 @@ public class WindowServiceImpl implements WindowService {
             throw new CommonException(ResultCode.WINDOW_IS_NOT_OPEN);
         }
         return window;
+    }
+
+    @Override
+    public boolean judgeFloorIsExist(Integer floor) throws CommonException {
+        List<Window> windows = windowMapper.selectAllWindowByFloor(floor);
+        if(windows.size() == 0){
+            return false;
+        }
+        return true;
     }
 
 }
