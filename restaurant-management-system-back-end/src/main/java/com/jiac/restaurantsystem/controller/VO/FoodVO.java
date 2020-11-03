@@ -18,7 +18,7 @@ public class FoodVO implements Serializable {
     private String taste;
 
     //窗口号
-    private Integer windowId;
+    private Integer wicketId;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class FoodVO implements Serializable {
         this.taste = taste;
     }
 
-    public Integer getWindowId() {
-        return windowId;
+    public Integer getWicketId() {
+        return wicketId;
     }
 
-    public void setWindowId(Integer windowId) {
-        this.windowId = windowId;
+    public void setWicketId(Integer wicketId) {
+        this.wicketId = wicketId;
     }
 }
