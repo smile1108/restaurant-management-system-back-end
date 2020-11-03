@@ -85,11 +85,12 @@ public class FoodController extends BaseController{
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "name", value = "菜品名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "price", value = "菜品价格", dataType = "double", paramType = "query", required = true),
             @ApiImplicitParam(name = "taste", value = "菜品口味", dataType = "string", paramType = "query", required = true),
     })
-    public CommonReturnType update(Integer merchantId, String name, Double price, String taste) throws CommonException {
+    public CommonReturnType update(Integer merchantId, Integer foodId, String name, Double price, String taste) throws CommonException {
         // 先校验参数不能为空
         if(merchantId == null || name == null || name.trim().length() == 0
             || price == null || taste == null || taste.trim().length() == 0){
@@ -97,7 +98,33 @@ public class FoodController extends BaseController{
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         // 然后根据这个名字查看这个菜品是否属于这个商家 如果不属于 没有权限修改
+        // 先判断菜品是否存在
+        Integer wicketId = foodService.judgeFoodIsExist(foodId);
+        if(wicketId == -1){
+            // 表示对应菜品不存在 抛出异常
+            LOG.error("FoodController -> update -> 不存在名为" + name + "的菜品");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
+        }
+        boolean belongMerchant = foodService.judgeFoodIsBelongMerchant(merchantId, wicketId);
+        if(!belongMerchant){
+            // 表示对应的菜品不属于该商家
+            LOG.error("FoodController -> update -> 该菜品不属于对应的商家, 无权修改");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_BELONG_MERCHANT);
+        }
+        // 确认完毕后 可以进行修改
+        foodService.updateFood(foodId, name, price, taste);
+        // 更新完成之后一定要记得删掉redis缓存中对应的数据 否则会导致数据不一致
+        String foodInfoKey = "food:info:" + foodId;
+        // 删除对应菜品的键
+        jedis.del(foodInfoKey);
 
+        // 还要删除对应taste键的值
+        Set<String> keys = jedis.keys("*" + taste + "*");
+        for(String key : keys){
+            if(jedis.exists(key)){
+                jedis.del(key);
+            }
+        }
         return CommonReturnType.success();
     }
 

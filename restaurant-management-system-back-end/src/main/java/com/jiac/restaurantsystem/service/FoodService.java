@@ -21,4 +21,10 @@ public interface FoodService {
     List<Food> selectFoodsByTaste(String taste) throws CommonException;
 
     List<Food> selectFoodsByFloor(Integer floor) throws CommonException;
+
+    boolean judgeFoodIsBelongMerchant(Integer merchantId, Integer wicketId) throws CommonException;
+
+    Integer judgeFoodIsExist(Integer foodId) throws CommonException;
+
+    void updateFood(Integer foodId, String name, Double price, String taste) throws CommonException;
 }

@@ -26,4 +26,7 @@ public interface WindowMapper {
 
     @Select("select * from wicket where floor = #{floor}")
     List<Window> selectAllWindowByFloor(Integer floor);
+
+    @Select("select merchant_id from wicket where wicket_id = #{wicketId}")
+    Integer selectMerchantByWicket(Integer wicketId);
 }

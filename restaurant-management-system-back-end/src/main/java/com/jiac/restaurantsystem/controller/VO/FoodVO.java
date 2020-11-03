@@ -8,6 +8,8 @@ import java.io.Serializable;
  * Date: 2020/10/16 10:29
  */
 public class FoodVO implements Serializable {
+
+    private Integer foodId;
     //菜名
     private String name;
 
@@ -50,5 +52,13 @@ public class FoodVO implements Serializable {
 
     public void setWicketId(Integer wicketId) {
         this.wicketId = wicketId;
+    }
+
+    public Integer getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(Integer foodId) {
+        this.foodId = foodId;
     }
 }

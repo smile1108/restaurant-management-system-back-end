@@ -3,6 +3,7 @@ package com.jiac.restaurantsystem.service.impl;
 import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.FoodMapper;
+import com.jiac.restaurantsystem.mapper.WindowMapper;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class FoodServiceImpl implements FoodService {
 
     @Autowired
     private FoodMapper foodMapper;
+
+    @Autowired
+    private WindowMapper windowMapper;
 
     @Override
     public void insert(String name, Double price, String taste, Integer wicketId) throws CommonException {
@@ -62,5 +66,29 @@ public class FoodServiceImpl implements FoodService {
         LOG.info("FoodServiceImpl -> 根据楼层查找菜品 -> " + floor);
         List<Food> foods = foodMapper.selectFoodsByFloor(floor);
         return foods;
+    }
+
+    @Override
+    public boolean judgeFoodIsBelongMerchant(Integer merchantId, Integer wicketId) throws CommonException {
+        Integer id = windowMapper.selectMerchantByWicket(wicketId);
+        if(id.equals(merchantId)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Integer judgeFoodIsExist(Integer foodId) {
+        // 根据name查找对应的菜品 找对对应的wicket_id
+        Integer wicketId = foodMapper.selectWicketIdByFoodId(foodId);
+        if(wicketId == null){
+            return -1;
+        }
+        return wicketId;
+    }
+
+    @Override
+    public void updateFood(Integer foodId, String name, Double price, String taste) throws CommonException {
+        foodMapper.updateFood(foodId, name, price, taste);
     }
 }

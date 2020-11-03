@@ -111,3 +111,6 @@ java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check th
 	at java.base/java.lang.Thread.run(Thread.java:834)
 [ERROR] 2020-11-03 15:18:08,354 [http-nio-8080-exec-2] c.j.r.controller.FoodController - FoodController -> 根据楼层查找菜品 -> 参数不能为空
 [ERROR] 2020-11-03 15:20:17,437 [http-nio-8080-exec-1] c.j.r.controller.FoodController - FoodController -> getByFloor -> 对应楼层不存在或者没有开通的窗口
+[ERROR] 2020-11-03 16:11:39,052 [http-nio-8080-exec-8] c.j.r.controller.FoodController - FoodController -> 修改菜品 -> 参数不能为空
+[ERROR] 2020-11-03 16:11:58,071 [http-nio-8080-exec-6] c.j.r.controller.FoodController - FoodController -> update -> 该菜品不属于对应的商家, 无权修改
+[ERROR] 2020-11-03 16:12:23,191 [http-nio-8080-exec-4] c.j.r.controller.FoodController - FoodController -> update -> 不存在名为重庆小面1的菜品

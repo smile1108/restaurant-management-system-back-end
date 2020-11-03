@@ -27,6 +27,8 @@ public enum ResultCode implements CommonError {
     IS_NOT_LOGIN("311", "还未登录,不能访问对应资源"),
     FOOD_IS_EXISTED("312", "菜品已经存在"),
     FLOOR_HAS_NOT_WINDOW("313", "对应楼层没有开通的窗口"),
+    FOOD_IS_NOT_EXIST("314", "菜品不存在"),
+    FOOD_IS_NOT_BELONG_MERCHANT("315", "菜品不属于对应商家,该商家没有权限修改"),
 
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),

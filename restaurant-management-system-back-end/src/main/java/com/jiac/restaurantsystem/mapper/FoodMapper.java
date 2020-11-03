@@ -3,6 +3,7 @@ package com.jiac.restaurantsystem.mapper;
 import com.jiac.restaurantsystem.DO.Food;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +33,10 @@ public interface FoodMapper {
 
     @Select("select * from food where wicket_id in (select wicket_id from wicket where floor = #{floor})")
     List<Food> selectFoodsByFloor(Integer floor);
+
+    @Select("select wicket_id from food where food_id = #{foodId}")
+    Integer selectWicketIdByFoodId(Integer foodId);
+
+    @Update("update food set name = #{name}, price = #{price}, taste = #{taste} where food_id = #{foodId}")
+    void updateFood(Integer foodId, String name, Double price, String taste);
 }
