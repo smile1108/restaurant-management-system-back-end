@@ -96,4 +96,14 @@ public class FoodServiceImpl implements FoodService {
     public void deleteFood(Integer foodId) throws CommonException {
         foodMapper.deleteFoodByFoodId(foodId);
     }
+
+    @Override
+    public Double selectFoodPriceByFoodName(String foodName) throws CommonException {
+        Food food = foodMapper.selectFoodByName(foodName);
+        if(food == null){
+            LOG.error("FoodServiceImpl -> selectFoodPriceByFoodName -> 没有对应菜品");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
+        }
+        return food.getPrice();
+    }
 }

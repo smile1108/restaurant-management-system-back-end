@@ -14,7 +14,7 @@ public class Order {
     private String orderId;
 
     //订单中菜的id
-    private Integer foodId;
+    private String foodName;
 
     //预取时间
     private Time takeTime;
@@ -45,12 +45,12 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public Integer getFoodId() {
-        return foodId;
+    public String getFoodName() {
+        return foodName;
     }
 
-    public void setFoodId(Integer foodId) {
-        this.foodId = foodId;
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
     }
 
     public Time getTakeTime() {

@@ -42,10 +42,10 @@ DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(
     `order_id` INT NOT NULL AUTO_INCREMENT,
     `food_name` VARCHAR(10) NOT NULL DEFAULT '',
-    `take_time` TIME NOT NULL,
-    `package` TINYINT NOT NULL DEFAULT 0,
+    `take_time` DATETIME NOT NULL,
+    `is_package` TINYINT NOT NULL DEFAULT 0,
     `is_complete` TINYINT NOT NULL DEFAULT 0,
-    `order_time` TIME NOT NULL ,
+    `order_time` DATETIME NOT NULL ,
     `number` INT NOT NULL DEFAULT 0,
     `total_price` DOUBLE NOT NULL DEFAULT 0,
     `grade` TINYINT NOT NULL DEFAULT 0,
