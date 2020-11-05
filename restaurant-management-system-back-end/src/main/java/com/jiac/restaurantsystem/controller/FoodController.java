@@ -117,14 +117,7 @@ public class FoodController extends BaseController{
         String foodInfoKey = "food:info:" + foodId;
         // 删除对应菜品的键
         jedis.del(foodInfoKey);
-
-        // 还要删除对应taste键的值
-        Set<String> keys = jedis.keys("*" + taste + "*");
-        for(String key : keys){
-            if(jedis.exists(key)){
-                jedis.del(key);
-            }
-        }
+        
         return CommonReturnType.success();
     }
 
@@ -328,6 +321,7 @@ public class FoodController extends BaseController{
             // 遍历查询到的food数组 将其加入缓存中
             LOG.info("FoodController -> 将查找到的taste的菜品加入缓存");
             jedis.sadd(key, food.getFoodId().toString());
+            jedis.expire(key, 30);
             String foodInfoKey = "food:info:" + food.getFoodId();
             // 先判断这个菜品在redis缓存中是否已经有了这条数据 如果有的话就不需要再添加了
             // 不存在的话才添加对应的数据
