@@ -41,7 +41,7 @@ CREATE TABLE `food`(
 DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(
     `order_id` INT NOT NULL AUTO_INCREMENT,
-    `food_id` INT NOT NULL,
+    `food_name` VARCHAR(10) NOT NULL DEFAULT '',
     `take_time` TIME NOT NULL,
     `package` TINYINT NOT NULL DEFAULT 0,
     `is_complete` TINYINT NOT NULL DEFAULT 0,
@@ -50,8 +50,7 @@ CREATE TABLE `order_info`(
     `total_price` DOUBLE NOT NULL DEFAULT 0,
     `grade` TINYINT NOT NULL DEFAULT 0,
     CHECK ( `number` > 0 AND `number` < 20 ),
-    PRIMARY KEY (`order_id`),
-    FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`)
+    PRIMARY KEY (`order_id`)
 )ENGINE=InnoDB, default charset = UTF8;
 
 DROP TABLE IF EXISTS `administrator`;

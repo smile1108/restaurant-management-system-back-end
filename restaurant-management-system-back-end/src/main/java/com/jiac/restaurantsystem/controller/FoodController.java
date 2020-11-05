@@ -117,7 +117,7 @@ public class FoodController extends BaseController{
         String foodInfoKey = "food:info:" + foodId;
         // 删除对应菜品的键
         jedis.del(foodInfoKey);
-        
+
         return CommonReturnType.success();
     }
 
@@ -127,8 +127,38 @@ public class FoodController extends BaseController{
             @ApiImplicitParam(name = "merchantId", value = "商家id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
     })
-    public CommonReturnType delete(Integer merchantId, Integer foodId){
-        return null;
+    public CommonReturnType delete(Integer merchantId, Integer foodId) throws CommonException {
+        // 先校验参数不能为空
+        if(merchantId == null || foodId == null){
+            LOG.error("FoodController -> 删除菜品 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 然后根据这个名字查看这个菜品是否属于这个商家 如果不属于 没有权限修改
+        // 先判断菜品是否存在
+        Integer wicketId = foodService.judgeFoodIsExist(foodId);
+        if(wicketId == -1){
+            // 表示对应菜品不存在 抛出异常
+            LOG.error("FoodController -> delete -> 不存在该菜品");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
+        }
+        boolean belongMerchant = foodService.judgeFoodIsBelongMerchant(merchantId, wicketId);
+        if(!belongMerchant){
+            // 表示对应的菜品不属于该商家
+            LOG.error("FoodController -> update -> 该菜品不属于对应的商家, 无权修改");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_BELONG_MERCHANT);
+        }
+        // 全部验证完成才可以删除对应菜品
+        foodService.deleteFood(foodId);
+
+        // 删除了数据之后要将缓存中对应菜品的信息删掉
+        // 构建该菜品对应在缓存中的键
+        String foodInfoKey = "food:info:" + foodId;
+        if(jedis.exists(foodInfoKey)){
+            jedis.del(foodInfoKey);
+        }
+
+        // 响应成功
+        return CommonReturnType.success();
     }
 
     @ApiOperation("增加菜品")

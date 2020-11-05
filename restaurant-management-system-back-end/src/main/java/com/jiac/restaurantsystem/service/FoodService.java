@@ -27,4 +27,6 @@ public interface FoodService {
     Integer judgeFoodIsExist(Integer foodId) throws CommonException;
 
     void updateFood(Integer foodId, String name, Double price, String taste) throws CommonException;
+
+    void deleteFood(Integer foodId) throws CommonException;
 }

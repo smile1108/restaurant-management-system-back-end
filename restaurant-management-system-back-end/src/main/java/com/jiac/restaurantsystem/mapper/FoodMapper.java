@@ -1,6 +1,7 @@
 package com.jiac.restaurantsystem.mapper;
 
 import com.jiac.restaurantsystem.DO.Food;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -39,4 +40,7 @@ public interface FoodMapper {
 
     @Update("update food set name = #{name}, price = #{price}, taste = #{taste} where food_id = #{foodId}")
     void updateFood(Integer foodId, String name, Double price, String taste);
+
+    @Delete("delete from food where food_id = #{foodId}")
+    void deleteFoodByFoodId(Integer foodId);
 }

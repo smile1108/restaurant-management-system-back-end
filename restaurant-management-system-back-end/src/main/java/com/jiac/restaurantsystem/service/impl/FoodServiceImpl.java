@@ -91,4 +91,9 @@ public class FoodServiceImpl implements FoodService {
     public void updateFood(Integer foodId, String name, Double price, String taste) throws CommonException {
         foodMapper.updateFood(foodId, name, price, taste);
     }
+
+    @Override
+    public void deleteFood(Integer foodId) throws CommonException {
+        foodMapper.deleteFoodByFoodId(foodId);
+    }
 }
