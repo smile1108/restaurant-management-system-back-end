@@ -47,6 +47,14 @@ public class UserVO implements Serializable {
         this.name = name;
     }
 
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "UserVO{" +

@@ -64,16 +64,40 @@ public class OrderController extends BaseController{
     @ApiOperation("创建订单操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userEmail", value = "用户邮箱", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "number", value = "预定菜品的数量", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "isPackage", value = "是否打包", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "takeTime", value = "用户预取时间", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType create(String userEmail, String foodName, Integer number, Integer isPackage, String takeTime) throws CommonException {
+    public CommonReturnType create(String foodName, Integer number, Integer isPackage, String takeTime) throws CommonException {
+        Cookie[] cookies = httpServletRequest.getCookies();
+        String userEmail = null;
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                String sessionId = cookie.getValue();
+                if(jedis.exists(sessionId)){
+                    // redis缓存中存在对应sessionId的键
+                    String objectStr = jedis.get(sessionId);
+                    try {
+                        Object object = SerializeUtil.serializeToObject(objectStr);
+                        if(object instanceof UserVO){
+                            UserVO userVO = (UserVO)object;
+                            LOG.info("OrderFilter -> 反序列化的对象为UserVO对象");
+                            userEmail = userVO.getEmail();
+                            break;
+                        }
+                    } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    // 没有对应的键 表示身份认证过期
+                    LOG.error("OrderFilter -> 身份认证过期");
+                    throw new CommonException(ResultCode.AUTH_EXPIRED);
+                }
+            }
+        }
         // 先校验参数是否为空
-        if(userEmail == null || userEmail.trim().length() == 0
-                || foodName == null || foodName.trim().length() == 0 ||
+        if(foodName == null || foodName.trim().length() == 0 ||
                 number == null || isPackage == null || takeTime == null
                 || takeTime.trim().length() == 0){
             LOG.error("OrderController -> createOrder -> 参数不能为空");

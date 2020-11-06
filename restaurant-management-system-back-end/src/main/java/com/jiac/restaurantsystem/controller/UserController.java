@@ -134,6 +134,12 @@ public class UserController extends BaseController {
             jedis.hset(infoKey, "name", user.getName());
             jedis.hset(infoKey, "password", user.getPassword());
             jedis.hset(infoKey, "id", user.getId());
+        }else{
+            user = new User();
+            user.setId(jedis.hget(infoKey, "id"));
+            user.setEmail(jedis.hget(infoKey, "email"));
+            user.setName(jedis.hget(infoKey, "name"));
+            user.setPassword(jedis.hget(infoKey, "password"));
         }
         // 这里注意 如果使用了redis登录成功  user不会赋值 所以会空指针 所以要做一个判断
         String userEmail = redisLoginSuccess ? jedis.hget(infoKey, "email") : user.getEmail();
