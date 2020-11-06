@@ -1,10 +1,14 @@
 package com.jiac.restaurantsystem.controller;
 
+import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.OrderService;
+import com.jiac.restaurantsystem.service.UserService;
+import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,8 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
+import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.DateTimeException;
@@ -42,22 +50,32 @@ public class OrderController extends BaseController{
     private OrderService orderService;
 
     @Autowired
+    private Jedis jedis;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     private FoodService foodService;
 
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @ApiOperation("创建订单操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "userEmail", value = "用户邮箱", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "query", required = true),
             @ApiImplicitParam(name = "number", value = "预定菜品的数量", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "isPackage", value = "是否打包", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "takeTime", value = "用户预取时间", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType create(String foodName, Integer number, Integer isPackage, String takeTime) throws CommonException {
+    public CommonReturnType create(String userEmail, String foodName, Integer number, Integer isPackage, String takeTime) throws CommonException {
         // 先校验参数是否为空
-        if(foodName == null || foodName.trim().length() == 0 ||
-            number == null || isPackage == null || takeTime == null
-            || takeTime.trim().length() == 0){
+        if(userEmail == null || userEmail.trim().length() == 0
+                || foodName == null || foodName.trim().length() == 0 ||
+                number == null || isPackage == null || takeTime == null
+                || takeTime.trim().length() == 0){
             LOG.error("OrderController -> createOrder -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
@@ -68,6 +86,12 @@ public class OrderController extends BaseController{
         if(number.intValue() > 20 || number.intValue() < 0){
             LOG.error("OrderController -> createOrder -> 订餐数量异常(数量不能超过20,也不能为负数)");
             throw new CommonException(ResultCode.ORDER_NUMBER_ERROR);
+        }
+        // 查找该用户是否存在
+        boolean exist = userService.judgeUserIsExistByEmail(userEmail);
+        if(!exist){
+            LOG.error("OrderController -> createOrder -> 用户不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
         // 获取对应菜品的单价
         Double foodPrice = foodService.selectFoodPriceByFoodName(foodName);
@@ -84,10 +108,11 @@ public class OrderController extends BaseController{
             throw new CommonException(ResultCode.TIME_ERROR);
         }
         // 全部校验完成之后进行数据的写入
-        orderService.addOrder(foodName, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
+        orderService.addOrder(userEmail, foodName, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
 
         return CommonReturnType.success();
     }
+
 
 
     @ApiOperation("取消订单操作")

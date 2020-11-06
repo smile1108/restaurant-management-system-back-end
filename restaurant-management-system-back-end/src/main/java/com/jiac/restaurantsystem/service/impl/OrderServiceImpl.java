@@ -24,8 +24,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Override
-    public void addOrder(String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete,
+    public void addOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete,
                          Timestamp orderTime, Integer number, Double totalPrice) throws CommonException {
-        orderMapper.insertOrder(foodName, takeTime, isPackage, isComplete, orderTime, number, totalPrice);
+        orderMapper.insertOrder(email, foodName, takeTime, isPackage, isComplete, orderTime, number, totalPrice);
     }
 }

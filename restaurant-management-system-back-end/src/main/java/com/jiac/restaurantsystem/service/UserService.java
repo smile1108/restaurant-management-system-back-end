@@ -22,4 +22,6 @@ public interface UserService {
     String getCode(String email) throws CommonException;
 
     User register(String name, String password, String email) throws CommonException;
+
+    boolean judgeUserIsExistByEmail(String email) throws CommonException;
 }

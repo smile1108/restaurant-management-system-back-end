@@ -144,24 +144,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String name, String password, String email) throws CommonException {
-        // 首先给商家生成一个商家号
-        String userId = generateMerchantId();
-        User user = userMapper.selectUserById(userId);
-        if(user != null){
-            LOG.error("UserService -> 用户已经存在");
-            throw new CommonException(ResultCode.MERCHANT_HAVE_EXISTED);
-        }
         User user1 = new User();
         user1.setPassword(password);
         user1.setEmail(email);
-        user1.setId(userId);
         userMapper.insert(name, password, email);
         LOG.info("UserService -> 用户注册成功");
         return user1;
     }
 
-    private String generateMerchantId(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        return dateFormat.format(new Date());
+    @Override
+    public boolean judgeUserIsExistByEmail(String userEmail) throws CommonException {
+        User user = userMapper.selectUserByEmail(userEmail);
+        if(user == null){
+            return false;
+        }
+        return true;
     }
 }

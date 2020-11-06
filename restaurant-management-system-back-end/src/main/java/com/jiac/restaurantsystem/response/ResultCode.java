@@ -36,6 +36,7 @@ public enum ResultCode implements CommonError {
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),
     IS_LOGINED("402", "已经登录,不能重复登录"),
+    AUTH_EXPIRED("403", "身份认证过期,请重新登录"),
 
     //5开头权限错误
     HAVE_NOT_ACCESS("501", "没有权限"),

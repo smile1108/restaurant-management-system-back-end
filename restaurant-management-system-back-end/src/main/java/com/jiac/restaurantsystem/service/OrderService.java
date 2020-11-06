@@ -12,6 +12,6 @@ import java.sql.Timestamp;
  */
 public interface OrderService {
 
-    void addOrder(String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete
+    void addOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete
             , Timestamp orderTime, Integer number, Double totalPrice) throws CommonException;
 }
