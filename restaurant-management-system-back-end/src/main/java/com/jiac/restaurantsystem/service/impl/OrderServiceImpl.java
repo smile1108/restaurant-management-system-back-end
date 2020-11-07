@@ -61,4 +61,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllOrderByUserEmail(String userEmail) throws CommonException {
         return orderMapper.selectAllOrderByUserEmail(userEmail);
     }
+
+    @Override
+    public List<Order> getAllOrderByMerchantId(Integer merchantId) throws CommonException {
+        return orderMapper.selectAllOrderByMerchantId(merchantId);
+    }
+
 }

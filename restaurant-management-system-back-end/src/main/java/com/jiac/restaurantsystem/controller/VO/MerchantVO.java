@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class MerchantVO implements Serializable {
 
     // 商家id
-    private String merchantId;
+    private Integer merchantId;
 
     // 商家邮箱
     private String email;
@@ -18,11 +18,11 @@ public class MerchantVO implements Serializable {
     // 角色
     private Integer role = 1;
 
-    public String getMerchantId() {
+    public Integer getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
     }
 

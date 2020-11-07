@@ -24,4 +24,6 @@ public interface OrderService {
     void deleteOrder(Integer orderId) throws CommonException;
 
     List<Order> getAllOrderByUserEmail(String userEmail) throws CommonException;
+
+    List<Order> getAllOrderByMerchantId(Integer merchantId) throws CommonException;
 }

@@ -31,4 +31,5 @@ public interface FoodService {
     void deleteFood(Integer foodId) throws CommonException;
 
     Double selectFoodPriceByFoodName(String foodName) throws CommonException;
+
 }

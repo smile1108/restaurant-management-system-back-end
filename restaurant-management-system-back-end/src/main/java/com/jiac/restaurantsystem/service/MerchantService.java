@@ -3,6 +3,8 @@ package com.jiac.restaurantsystem.service;
 import com.jiac.restaurantsystem.DO.Merchant;
 import com.jiac.restaurantsystem.error.CommonException;
 
+import java.util.List;
+
 /**
  * FileName: MerchantService
  * Author: Jiac
@@ -20,4 +22,5 @@ public interface MerchantService {
     void findByMerchantId(Integer merchantId) throws CommonException;
 
     String getCode(String email) throws CommonException;
+
 }

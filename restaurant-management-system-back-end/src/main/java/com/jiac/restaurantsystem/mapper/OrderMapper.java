@@ -31,4 +31,9 @@ public interface OrderMapper {
 
     @Select("select * from order_info where user_email = #{userEmail}")
     List<Order> selectAllOrderByUserEmail(String userEmail);
+
+    @Select("select * from order_info where food_name in" +
+            "(select name from food where wicket_id in" +
+            "(select wicket_id from wicket where merchant_id = #{merchantId}))")
+    List<Order> selectAllOrderByMerchantId(Integer merchantId);
 }

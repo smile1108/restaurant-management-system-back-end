@@ -29,4 +29,5 @@ public interface WindowMapper {
 
     @Select("select merchant_id from wicket where wicket_id = #{wicketId}")
     Integer selectMerchantByWicket(Integer wicketId);
+
 }

@@ -140,4 +140,5 @@ public class MerchantServiceImpl implements MerchantService {
         mailService.sendTextMail(email, "商家注册", text);
         return stringBuilder.toString();
     }
+
 }

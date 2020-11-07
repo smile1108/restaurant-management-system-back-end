@@ -1,12 +1,17 @@
 package com.jiac.restaurantsystem.controller;
 
 import com.jiac.restaurantsystem.DO.Merchant;
+import com.jiac.restaurantsystem.DO.Order;
+import com.jiac.restaurantsystem.DO.User;
 import com.jiac.restaurantsystem.controller.VO.MerchantVO;
+import com.jiac.restaurantsystem.controller.VO.OrderVO;
 import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
+import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.MerchantService;
+import com.jiac.restaurantsystem.service.OrderService;
 import com.jiac.restaurantsystem.utils.SHA;
 import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
@@ -17,10 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -28,6 +30,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * FileName: MerchantController
@@ -43,6 +47,12 @@ public class MerchantController extends BaseController{
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private FoodService foodService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -110,7 +120,13 @@ public class MerchantController extends BaseController{
             jedis.hset(infoKey, "email", merchant.getEmail());
             jedis.hset(infoKey, "password", merchant.getPassword());
             jedis.hset(infoKey, "name", merchant.getName());
-            jedis.hset(infoKey, "merchantId", merchant.getMerchantId());
+            jedis.hset(infoKey, "merchantId", merchant.getMerchantId().toString());
+        }else{
+            merchant = new Merchant();
+            merchant.setMerchantId(Integer.valueOf(jedis.hget(infoKey, "merchantId")));
+            merchant.setEmail(jedis.hget(infoKey, "email"));
+            merchant.setName(jedis.hget(infoKey, "name"));
+            merchant.setPassword(jedis.hget(infoKey, "password"));
         }
 //        Cookie[] cookies = httpServletRequest.getCookies();
 //        boolean hasSessionId = false;
@@ -263,6 +279,33 @@ public class MerchantController extends BaseController{
         return CommonReturnType.success();
     }
 
+    @ApiOperation("商家获取自己所有订单")
+    @GetMapping("/getAllOrders")
+    @ResponseBody
+    public CommonReturnType getAllOrders() throws CommonException, IOException, ClassNotFoundException {
+        Integer merchantId = null;
+        try{
+            // 先通过sessionId获取对应的用户邮箱
+            merchantId = searchMerchantIdBySessionId();
+        }catch (CommonException e){
+            throw new CommonException(e);
+        }
+        List<Order> orderList = orderService.getAllOrderByMerchantId(merchantId);
+        List<OrderVO> orderVOS = convertFromOrderList(orderList);
+        // 直接返回结果
+        return CommonReturnType.success(orderVOS);
+    }
+
+    @ApiOperation("商家完成订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
+    })
+    @GetMapping("/completeOrder")
+    @ResponseBody
+    public CommonReturnType completeOrder(Integer orderId){
+        return CommonReturnType.success();
+    }
+
     private MerchantVO convertFromMerchant(Merchant merchant){
         if(merchant == null){
             return null;
@@ -270,5 +313,52 @@ public class MerchantController extends BaseController{
         MerchantVO merchantVO = new MerchantVO();
         BeanUtils.copyProperties(merchant, merchantVO);
         return merchantVO;
+    }
+
+    private Integer searchMerchantIdBySessionId() throws CommonException {
+        Integer merchantId = null;
+        Cookie[] cookies = httpServletRequest.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                String sessionId = cookie.getValue();
+                if(jedis.exists(sessionId)){
+                    // redis缓存中存在对应sessionId的键
+                    String objectStr = jedis.get(sessionId);
+                    try {
+                        Object object = SerializeUtil.serializeToObject(objectStr);
+                        if(object instanceof MerchantVO){
+                            MerchantVO merchantVO = (MerchantVO)object;
+                            LOG.info("MerchantController -> 反序列化的对象为MerchantVO对象");
+                            merchantId = merchantVO.getMerchantId();
+                            break;
+                        }else{
+                            // 表示不是商家 所以没有权限
+                            LOG.error("MerchantController -> 反序列化对象不是MerchantVO对象,没有权限执行此操作");
+                            throw new CommonException(ResultCode.HAVE_NOT_ACCESS);
+                        }
+                    } catch (ClassNotFoundException | IOException | CommonException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    // 没有对应的键 表示身份认证过期
+                    LOG.error("MerchantController -> 身份认证过期");
+                    throw new CommonException(ResultCode.AUTH_EXPIRED);
+                }
+            }
+        }
+        return merchantId;
+    }
+
+    private List<OrderVO> convertFromOrderList(List<Order> orders){
+        if(orders == null){
+            return null;
+        }
+        List<OrderVO> orderVOS = new ArrayList<>();
+        for(Order order : orders){
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(order, orderVO);
+            orderVOS.add(orderVO);
+        }
+        return orderVOS;
     }
 }

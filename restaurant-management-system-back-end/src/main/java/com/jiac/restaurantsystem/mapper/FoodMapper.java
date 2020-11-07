@@ -43,4 +43,5 @@ public interface FoodMapper {
 
     @Delete("delete from food where food_id = #{foodId}")
     void deleteFoodByFoodId(Integer foodId);
+
 }
