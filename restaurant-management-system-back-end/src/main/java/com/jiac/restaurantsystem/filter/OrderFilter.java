@@ -23,7 +23,7 @@ import java.io.IOException;
  * Date: 2020/11/6 11:24
  */
 @Order(3)
-@WebFilter(urlPatterns = {"/api/dbcourse/order/*", "/api/dbcourse/user/getAllOrders"})
+@WebFilter(urlPatterns = {"/api/dbcourse/order/*", "/api/dbcourse/user/getAllOrders", "/api/dbcourse/user/gradeOrder"})
 public class OrderFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderFilter.class);

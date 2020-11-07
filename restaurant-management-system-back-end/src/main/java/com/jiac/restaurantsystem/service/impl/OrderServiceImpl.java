@@ -88,4 +88,18 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateOrderCompleteByOrderId(orderId);
     }
 
+    @Override
+    public boolean judgeOrderIsCompleted(Integer orderId) throws CommonException {
+        Order order = orderMapper.selectOrderById(orderId);
+        if(order.getIsComplete().intValue() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void gradeOrder(Integer orderId, Integer grade) throws CommonException {
+        orderMapper.updateOrderGradeByOrderId(orderId, grade);
+    }
+
 }

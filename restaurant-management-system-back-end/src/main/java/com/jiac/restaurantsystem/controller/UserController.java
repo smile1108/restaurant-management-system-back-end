@@ -343,6 +343,38 @@ public class UserController extends BaseController {
         return CommonReturnType.success(userOrderVos);
     }
 
+    @ApiOperation("用户评分订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId", value = "订单号", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "grade", value = "用户评分", dataType = "int", paramType = "query", required = true)
+    })
+    @PostMapping("/gradeOrder")
+    @ResponseBody
+    public CommonReturnType gradeOrder(Integer orderId, Integer grade) throws CommonException {
+        // 先判断参数是否为空
+        if(orderId == null){
+            LOG.error("UserController -> gradeOrder -> 参数为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        boolean orderIsExist = orderService.judgeOrderIsExist(orderId);
+        if(!orderIsExist){
+            // 表示订单不存在
+            LOG.error("UserController -> gradeOrder -> 订单不存在");
+            throw new CommonException(ResultCode.ORDER_IS_NOT_EXIST);
+        }
+        boolean orderIsCompleted = orderService.judgeOrderIsExist(orderId);
+        if(!orderIsCompleted){
+            // 表示订单未完成 此时不能评分
+            LOG.error("UserController -> gradeOrder -> 订单尚未完成,不能评分");
+            throw new CommonException(ResultCode.ORDER_HAVE_NOT_COMPLETED);
+        }
+        // 都判断完成之后 才能进行评分
+        orderService.gradeOrder(orderId, grade);
+
+        // 返回结果
+        return CommonReturnType.success();
+    }
+
     private UserVO convertFromUserDO(User user) {
         if (user == null) {
             return null;

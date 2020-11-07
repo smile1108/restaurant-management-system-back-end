@@ -298,7 +298,7 @@ public class MerchantController extends BaseController{
 
     @ApiOperation("商家完成订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
+            @ApiImplicitParam(name = "orderId", value = "订单号", dataType = "int", paramType = "query", required = true)
     })
     @GetMapping("/completeOrder")
     @ResponseBody

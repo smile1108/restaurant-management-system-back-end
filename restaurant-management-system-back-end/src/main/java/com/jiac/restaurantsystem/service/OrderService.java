@@ -30,4 +30,8 @@ public interface OrderService {
     void judgeOrderCompleted(Integer orderId) throws CommonException;
 
     void completeOrder(Integer orderId) throws CommonException;
+
+    boolean judgeOrderIsCompleted(Integer orderId) throws CommonException;
+
+    void gradeOrder(Integer orderId, Integer grade) throws CommonException;
 }

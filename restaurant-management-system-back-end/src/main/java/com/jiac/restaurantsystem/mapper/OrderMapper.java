@@ -40,4 +40,7 @@ public interface OrderMapper {
 
     @Update("update order_info set is_complete = 1 where order_id = #{orderId}")
     void updateOrderCompleteByOrderId(Integer orderId);
+
+    @Update("update order_info set grade = #{grade} where order_id = #{orderId}")
+    void updateOrderGradeByOrderId(Integer orderId, Integer grade);
 }
