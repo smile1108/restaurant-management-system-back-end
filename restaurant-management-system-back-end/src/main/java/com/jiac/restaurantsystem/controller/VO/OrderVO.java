@@ -1,7 +1,6 @@
-package com.jiac.restaurantsystem.DO;
+package com.jiac.restaurantsystem.controller.VO;
 
-import org.springframework.stereotype.Repository;
-
+import java.io.Serializable;
 import java.sql.Time;
 
 /**
@@ -9,7 +8,7 @@ import java.sql.Time;
  * Author: Jiac
  * Date: 2020/10/9 22:31
  */
-public class Order {
+public class OrderVO implements Serializable {
     //订单id
     private Integer orderId;
 

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * FileName: OrderMapper
@@ -27,4 +28,7 @@ public interface OrderMapper {
 
     @Delete("delete from order_info where order_id = #{orderId}")
     void deleteOrder(Integer orderId);
+
+    @Select("select * from order_info where user_email = #{userEmail}")
+    List<Order> selectAllOrderByUserEmail(String userEmail);
 }

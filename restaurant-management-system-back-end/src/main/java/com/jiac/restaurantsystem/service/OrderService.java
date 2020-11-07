@@ -1,9 +1,11 @@
 package com.jiac.restaurantsystem.service;
 
+import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.error.CommonException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * FileName: OrderService
@@ -20,4 +22,6 @@ public interface OrderService {
     boolean judgeOrderIsExist(Integer orderId) throws CommonException;
 
     void deleteOrder(Integer orderId) throws CommonException;
+
+    List<Order> getAllOrderByUserEmail(String userEmail) throws CommonException;
 }

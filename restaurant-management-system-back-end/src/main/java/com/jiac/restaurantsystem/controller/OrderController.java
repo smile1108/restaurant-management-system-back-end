@@ -108,6 +108,11 @@ public class OrderController extends BaseController{
         }
         // 全部校验完成之后进行数据的写入
         orderService.addOrder(userEmail, foodName, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
+        // 创建一个新的order之后要将缓存中对应用户的orderList删除 避免数据不一致
+        String orderListKey = "user:orders:" + userEmail;
+        if(jedis.exists(orderListKey)){
+            jedis.del(orderListKey);
+        }
 
         return CommonReturnType.success();
     }
@@ -144,6 +149,15 @@ public class OrderController extends BaseController{
         }
         // 全部判断完成之后 才可以进行删除
         orderService.deleteOrder(orderId);
+        // 删除之后要将用户orderList key删除 并且将对应orderId的orderInfo删除 防止数据不一致
+        String orderListKey = "user:orders:" + userEmail;
+        if(jedis.exists(orderListKey)){
+            jedis.del(orderListKey);
+        }
+        String orderInfoKey = "order:info:" + orderId;
+        if(jedis.exists(orderInfoKey)){
+            jedis.del(orderInfoKey);
+        }
         return CommonReturnType.success();
     }
 

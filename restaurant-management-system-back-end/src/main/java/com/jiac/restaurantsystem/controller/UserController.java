@@ -1,12 +1,17 @@
 package com.jiac.restaurantsystem.controller;
 
+import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.DO.Merchant;
+import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.controller.VO.FoodVO;
 import com.jiac.restaurantsystem.controller.VO.MerchantVO;
+import com.jiac.restaurantsystem.controller.VO.OrderVO;
 import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
+import com.jiac.restaurantsystem.service.OrderService;
 import com.jiac.restaurantsystem.service.UserService;
 import com.jiac.restaurantsystem.utils.SHA;
 import com.jiac.restaurantsystem.utils.SerializeUtil;
@@ -28,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -46,6 +53,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -297,6 +307,42 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @ApiOperation("用户获取自己所有订单")
+    @GetMapping("/getAllOrders")
+    @ResponseBody
+    public CommonReturnType getAllOrders() throws CommonException, IOException, ClassNotFoundException {
+        String userEmail = null;
+        try{
+            // 先通过sessionId获取对应的用户邮箱
+            userEmail = searchEmailBySessionId();
+        }catch (CommonException e){
+            throw new CommonException(e);
+        }
+        // 构建对应用户的全部订单的键
+        String orderListKey = "user:orders:" + userEmail;
+        List<OrderVO> userOrderVos = new ArrayList<>();
+        if(jedis.exists(orderListKey)){
+            LOG.info("UserController -> getAllOrders -> redis缓存中有对应用户的所有订单");
+            List<String> orderIdList = jedis.lrange(orderListKey, 0, -1);
+            for(String orderIdStr : orderIdList){
+                // 先将orderId 转化为Integer
+                Integer orderId = Integer.valueOf(orderIdStr);
+                String orderInfoKey = "order:info:" + orderId;
+                OrderVO orderVO = (OrderVO)(SerializeUtil.serializeToObject(jedis.get(orderInfoKey)));
+                userOrderVos.add(orderVO);
+            }
+        }else{
+            LOG.info("UserController -> getAllOrders -> redis缓存中没有对应用户的所有订单");
+            // 然后通过该email 获取所有的订单
+            List<Order> orders = orderService.getAllOrderByUserEmail(userEmail);
+            addAllOrderInfoToRedis(orders, orderListKey);
+            userOrderVos = convertFromOrderList(orders);
+        }
+
+        // 直接返回结果
+        return CommonReturnType.success(userOrderVos);
+    }
+
     private UserVO convertFromUserDO(User user) {
         if (user == null) {
             return null;
@@ -304,5 +350,75 @@ public class UserController extends BaseController {
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         return userVO;
+    }
+
+    private String searchEmailBySessionId() throws CommonException {
+        String userEmail = null;
+        Cookie[] cookies = httpServletRequest.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                String sessionId = cookie.getValue();
+                if(jedis.exists(sessionId)){
+                    // redis缓存中存在对应sessionId的键
+                    String objectStr = jedis.get(sessionId);
+                    try {
+                        Object object = SerializeUtil.serializeToObject(objectStr);
+                        if(object instanceof UserVO){
+                            UserVO userVO = (UserVO)object;
+                            LOG.info("OrderController -> 反序列化的对象为UserVO对象");
+                            userEmail = userVO.getEmail();
+                            break;
+                        }else{
+                            // 表示不是用户 所以没有权限
+                            LOG.error("OrderController -> 反序列化对象不是UserVO对象,没有权限执行此操作");
+                            throw new CommonException(ResultCode.HAVE_NOT_ACCESS);
+                        }
+                    } catch (ClassNotFoundException | IOException | CommonException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    // 没有对应的键 表示身份认证过期
+                    LOG.error("OrderController -> 身份认证过期");
+                    throw new CommonException(ResultCode.AUTH_EXPIRED);
+                }
+            }
+        }
+        return userEmail;
+    }
+
+    private void addAllOrderInfoToRedis(List<Order> orders, String key) throws IOException {
+        String orderInfoKey = null;
+        for(Order order : orders){
+            Integer orderId = order.getOrderId();
+            // 获取对应order的id
+            jedis.lpush(key, orderId.toString());
+            // 设置过期时间
+            jedis.expire(key, 60);
+            orderInfoKey = "order:info:" + orderId;
+            OrderVO orderVO = convertFromOrder(order);
+            jedis.setex(orderInfoKey, 60, SerializeUtil.serialize(orderVO));
+        }
+    }
+
+    private OrderVO convertFromOrder(Order order){
+        if(order == null){
+            return null;
+        }
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(order, orderVO);
+        return orderVO;
+    }
+
+    private List<OrderVO> convertFromOrderList(List<Order> orders){
+        if(orders == null){
+            return null;
+        }
+        List<OrderVO> orderVOS = new ArrayList<>();
+        for(Order order : orders){
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(order, orderVO);
+            orderVOS.add(orderVO);
+        }
+        return orderVOS;
     }
 }

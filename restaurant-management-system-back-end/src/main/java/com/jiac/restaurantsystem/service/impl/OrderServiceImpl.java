@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * FileName: OrderServiceImpl
@@ -54,5 +55,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Integer orderId) throws CommonException {
         orderMapper.deleteOrder(orderId);
+    }
+
+    @Override
+    public List<Order> getAllOrderByUserEmail(String userEmail) throws CommonException {
+        return orderMapper.selectAllOrderByUserEmail(userEmail);
     }
 }
