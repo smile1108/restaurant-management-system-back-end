@@ -14,4 +14,10 @@ public interface OrderService {
 
     void addOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete
             , Timestamp orderTime, Integer number, Double totalPrice) throws CommonException;
+
+    boolean judgeOrderBelongToUser(String userEmail, Integer orderId) throws CommonException;
+
+    boolean judgeOrderIsExist(Integer orderId) throws CommonException;
+
+    void deleteOrder(Integer orderId) throws CommonException;
 }

@@ -13,6 +13,9 @@ public class Order {
     //订单id
     private String orderId;
 
+    // 用户邮箱
+    private String userEmail;
+
     //订单中菜的id
     private String foodName;
 
@@ -107,5 +110,13 @@ public class Order {
 
     public void setGrade(Integer grade) {
         this.grade = grade;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

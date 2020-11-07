@@ -1,6 +1,9 @@
 package com.jiac.restaurantsystem.mapper;
 
+import com.jiac.restaurantsystem.DO.Order;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -18,4 +21,10 @@ public interface OrderMapper {
             "#{totalPrice})")
     void insertOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete,
                      Timestamp orderTime, Integer number, Double totalPrice);
+
+    @Select("select * from order_info where order_id = #{orderId}")
+    Order selectOrderById(Integer orderId);
+
+    @Delete("delete from order_info where order_id = #{orderId}")
+    void deleteOrder(Integer orderId);
 }

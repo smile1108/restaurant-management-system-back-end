@@ -32,6 +32,8 @@ public enum ResultCode implements CommonError {
     ORDER_NUMBER_ERROR("316", "订餐数量异常(数量不能超过20,也不能为负数)"),
     PACKAGE_PARAMETER_ERROR("317", "是否打包参数异常"),
     TIME_ERROR("318", "预取时间不能早于当前时间"),
+    ORDER_IS_NOT_EXIST("319", "对应订单不存在"),
+    ORDER_NOT_BELONG_USER("320", "对应订单不属于该用户"),
 
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),

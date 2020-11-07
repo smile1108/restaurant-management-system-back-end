@@ -1,5 +1,6 @@
 package com.jiac.restaurantsystem.service.impl;
 
+import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.OrderMapper;
 import com.jiac.restaurantsystem.service.OrderService;
@@ -27,5 +28,31 @@ public class OrderServiceImpl implements OrderService {
     public void addOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete,
                          Timestamp orderTime, Integer number, Double totalPrice) throws CommonException {
         orderMapper.insertOrder(email, foodName, takeTime, isPackage, isComplete, orderTime, number, totalPrice);
+    }
+
+    @Override
+    public boolean judgeOrderBelongToUser(String userEmail, Integer orderId) throws CommonException {
+        Order order = orderMapper.selectOrderById(orderId);
+        if(!order.getUserEmail().equals(userEmail)){
+            // 表示对应订单不属于该用户 没有权限
+            LOG.error("OrderServiceImpl -> judgeOrderBelongToUser -> 对应订单不属于该用户");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean judgeOrderIsExist(Integer orderId) throws CommonException {
+        Order order = orderMapper.selectOrderById(orderId);
+        if(order == null){
+            LOG.error("OrderServiceImpl -> judgeOrderIsExist -> 对应订单不存在");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void deleteOrder(Integer orderId) throws CommonException {
+        orderMapper.deleteOrder(orderId);
     }
 }
