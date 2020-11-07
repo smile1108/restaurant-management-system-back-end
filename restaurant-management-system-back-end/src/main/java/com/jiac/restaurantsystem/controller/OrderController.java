@@ -147,6 +147,8 @@ public class OrderController extends BaseController{
             LOG.error("OrderController -> deleteOrder -> 对应订单不属于该用户");
             throw new CommonException(ResultCode.ORDER_NOT_BELONG_USER);
         }
+        // 还要检查对应订单是否已经完成 如果完成 不能取消订单
+        orderService.judgeOrderCompleted(orderId);
         // 全部判断完成之后 才可以进行删除
         orderService.deleteOrder(orderId);
         // 删除之后要将用户orderList key删除 并且将对应orderId的orderInfo删除 防止数据不一致
