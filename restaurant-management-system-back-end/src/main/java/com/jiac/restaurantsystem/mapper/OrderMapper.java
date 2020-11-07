@@ -4,6 +4,7 @@ import com.jiac.restaurantsystem.DO.Order;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -36,4 +37,7 @@ public interface OrderMapper {
             "(select name from food where wicket_id in" +
             "(select wicket_id from wicket where merchant_id = #{merchantId}))")
     List<Order> selectAllOrderByMerchantId(Integer merchantId);
+
+    @Update("update order_info set is_complete = 1 where order_id = #{orderId}")
+    void updateOrderCompleteByOrderId(Integer orderId);
 }

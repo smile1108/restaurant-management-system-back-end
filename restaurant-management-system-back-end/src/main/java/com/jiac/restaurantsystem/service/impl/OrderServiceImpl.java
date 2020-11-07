@@ -3,6 +3,7 @@ package com.jiac.restaurantsystem.service.impl;
 import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.mapper.OrderMapper;
+import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,26 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllOrderByMerchantId(Integer merchantId) throws CommonException {
         return orderMapper.selectAllOrderByMerchantId(merchantId);
+    }
+
+    @Override
+    public void judgeOrderCompleted(Integer orderId) throws CommonException {
+        Order order = orderMapper.selectOrderById(orderId);
+        if(order == null){
+            LOG.error("OrderServiceImpl -> judgeOrderCompleted -> 不存在该订单");
+            throw new CommonException(ResultCode.ORDER_IS_NOT_EXIST);
+        }
+        if(order.getIsComplete().intValue() == 1){
+            // 表示对应订单已完成 抛出异常 不能重复完成订单
+            LOG.error("OrderServiceImpl -> judgeOrderCompleted -> 对应订单已经完成");
+            throw new CommonException(ResultCode.ORDER_HAVE_COMPLETED);
+        }
+    }
+
+    @Override
+    public void completeOrder(Integer orderId) throws CommonException {
+        // 直接修改数据库
+        orderMapper.updateOrderCompleteByOrderId(orderId);
     }
 
 }

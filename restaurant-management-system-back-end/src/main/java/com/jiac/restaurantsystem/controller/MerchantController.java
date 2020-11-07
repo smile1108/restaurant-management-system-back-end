@@ -302,7 +302,16 @@ public class MerchantController extends BaseController{
     })
     @GetMapping("/completeOrder")
     @ResponseBody
-    public CommonReturnType completeOrder(Integer orderId){
+    public CommonReturnType completeOrder(Integer orderId) throws CommonException {
+        // 先检查参数是否为空
+        if(orderId == null){
+            LOG.error("MerchantController -> completeOrder -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        // 然后检查对应order是否已完成
+        orderService.judgeOrderCompleted(orderId);
+        // 如果都没有错 再修改对应订单的完成状态
+        orderService.completeOrder(orderId);
         return CommonReturnType.success();
     }
 

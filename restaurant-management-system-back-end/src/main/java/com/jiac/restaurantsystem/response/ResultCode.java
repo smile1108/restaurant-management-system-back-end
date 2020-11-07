@@ -34,6 +34,7 @@ public enum ResultCode implements CommonError {
     TIME_ERROR("318", "预取时间不能早于当前时间"),
     ORDER_IS_NOT_EXIST("319", "对应订单不存在"),
     ORDER_NOT_BELONG_USER("320", "对应订单不属于该用户"),
+    ORDER_HAVE_COMPLETED("321", "对应订单已经完成"),
 
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),
