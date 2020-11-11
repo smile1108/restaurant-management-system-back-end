@@ -60,6 +60,7 @@ public class FoodController extends BaseController{
     private Jedis jedis;
 
     @ApiOperation("搜索全部菜品")
+    @ApiImplicitParams({})
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public CommonReturnType list() throws CommonException, IOException, ClassNotFoundException {
         LOG.info("FoodController -> 进入/food/list接口");

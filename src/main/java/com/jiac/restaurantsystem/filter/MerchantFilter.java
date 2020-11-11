@@ -39,6 +39,10 @@ public class MerchantFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         Cookie[] cookies = httpServletRequest.getCookies();
+        String uri = httpServletRequest.getRequestURI();
+        if(uri.equals("/swagger-ui.html") || uri.equals("/favicon.ico")){
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
         for(Cookie cookie : cookies){
             if(cookie.getName().equals("JSESSIONID")){
                 String sessionId = cookie.getValue();

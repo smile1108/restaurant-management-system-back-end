@@ -275,7 +275,6 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
     })
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
-    @ResponseBody
     public CommonReturnType getCode(String email) throws CommonException {
         String code = userService.getCode(email);
         jedis.setex(email, 180, code);
@@ -287,7 +286,6 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "email", value = "用户邮箱", dataType = "string", paramType = "query", required = true)
     })
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    @ResponseBody
     public CommonReturnType logout(String email) throws CommonException{
         if(email == null || email.trim().length() == 0){
             LOG.error("UserController -> 用户退出登录 -> 参数不能为空");
@@ -308,8 +306,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("用户获取自己所有订单")
-    @GetMapping("/getAllOrders")
-    @ResponseBody
+    @RequestMapping(value = "/getAllOrders", method = RequestMethod.GET)
     public CommonReturnType getAllOrders() throws CommonException, IOException, ClassNotFoundException {
         String userEmail = null;
         try{
@@ -348,8 +345,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "orderId", value = "订单号", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "grade", value = "用户评分", dataType = "int", paramType = "query", required = true)
     })
-    @PostMapping("/gradeOrder")
-    @ResponseBody
+    @RequestMapping(value = "/gradeOrder", method = RequestMethod.POST)
     public CommonReturnType gradeOrder(Integer orderId, Integer grade) throws CommonException {
         // 先判断参数是否为空
         if(orderId == null){

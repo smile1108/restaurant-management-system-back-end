@@ -33,6 +33,9 @@ public class InterceptFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String uri = httpServletRequest.getRequestURI();
+        if(uri.equals("/swagger-ui.html") || uri.equals("/favicon.ico")){
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
         if(!needFilter(uri)){
             // 如果不需要过滤请求 直接交给filterChain
             filterChain.doFilter(servletRequest, servletResponse);

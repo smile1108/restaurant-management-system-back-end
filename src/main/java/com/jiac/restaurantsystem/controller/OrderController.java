@@ -197,14 +197,14 @@ public class OrderController extends BaseController{
         return userEmail;
     }
 
-    public static void main(String[] args) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m:s");
-        LocalDateTime dateTime = LocalDateTime.now();
-        Timestamp dateTime1 = Timestamp.valueOf(formatter.format(dateTime));
-        System.out.println(dateTime1);
-
-        String time = "2020-11-05 15:36:57";
-        Timestamp dateTime2 = Timestamp.valueOf(time);
-        System.out.println(dateTime2);
-    }
+//    public static void main(String[] args) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m:s");
+//        LocalDateTime dateTime = LocalDateTime.now();
+//        Timestamp dateTime1 = Timestamp.valueOf(formatter.format(dateTime));
+//        System.out.println(dateTime1);
+//
+//        String time = "2020-11-05 15:36:57";
+//        Timestamp dateTime2 = Timestamp.valueOf(time);
+//        System.out.println(dateTime2);
+//    }
 }

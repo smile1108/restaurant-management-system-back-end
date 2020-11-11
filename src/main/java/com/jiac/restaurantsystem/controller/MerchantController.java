@@ -83,7 +83,7 @@ public class MerchantController extends BaseController{
 //    }
 
     @ApiOperation("商家登录验证")
-        @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true ),
             @ApiImplicitParam(name = "password", value = "商家密码", dataType = "string", paramType = "query", required = true)
@@ -247,7 +247,6 @@ public class MerchantController extends BaseController{
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
     })
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
-    @ResponseBody
     public CommonReturnType getCode(String email) throws CommonException {
         String code = merchantService.getCode(email);
         jedis.setex(email, 180, code);
@@ -259,7 +258,6 @@ public class MerchantController extends BaseController{
             @ApiImplicitParam(name = "email", value = "商家邮箱", dataType = "string", paramType = "query", required = true)
     })
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    @ResponseBody
     public CommonReturnType logout(String email) throws CommonException{
         if(email == null || email.trim().length() == 0){
             LOG.error("MerchantController -> 商家退出登录 -> 参数不能为空");
@@ -280,8 +278,7 @@ public class MerchantController extends BaseController{
     }
 
     @ApiOperation("商家获取自己所有订单")
-    @GetMapping("/getAllOrders")
-    @ResponseBody
+    @RequestMapping(value = "/getAllOrders", method = RequestMethod.GET)
     public CommonReturnType getAllOrders() throws CommonException, IOException, ClassNotFoundException {
         Integer merchantId = null;
         try{
@@ -300,8 +297,7 @@ public class MerchantController extends BaseController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderId", value = "订单号", dataType = "int", paramType = "query", required = true)
     })
-    @GetMapping("/completeOrder")
-    @ResponseBody
+    @RequestMapping(value = "/completeOrder", method = RequestMethod.GET)
     public CommonReturnType completeOrder(Integer orderId) throws CommonException {
         // 先检查参数是否为空
         if(orderId == null){
