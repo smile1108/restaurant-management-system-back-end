@@ -170,8 +170,8 @@ public class UserController extends BaseController {
         if(s == null){
             LOG.info("用户登录，创建cookie");
             UserVO userVO = convertFromUserDO(user);
-            jedis.setex(key, 60, httpServletRequest.getSession().getId());
-            jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(userVO));
+            jedis.setex(key, 10, httpServletRequest.getSession().getId());
+            jedis.setex(httpServletRequest.getSession().getId(), 10, SerializeUtil.serialize(userVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);

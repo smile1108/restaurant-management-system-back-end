@@ -18,7 +18,7 @@ import java.io.IOException;
  * Date: 2020/10/30 10:21
  */
 @Order(2)
-@WebFilter
+@WebFilter("/*")
 public class InterceptFilter implements Filter {
 
     // 不需要登录就可以访问的路径
@@ -33,9 +33,6 @@ public class InterceptFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String uri = httpServletRequest.getRequestURI();
-        if(uri.equals("/swagger-ui.html") || uri.equals("/favicon.ico")){
-            filterChain.doFilter(servletRequest, servletResponse);
-        }
         if(!needFilter(uri)){
             // 如果不需要过滤请求 直接交给filterChain
             filterChain.doFilter(servletRequest, servletResponse);
@@ -66,6 +63,9 @@ public class InterceptFilter implements Filter {
 
     // 判断是否需要过滤请求的方法
     private boolean needFilter(String uri){
+        if(uri.equals("/swagger-ui.html") || uri.equals("/favicon.ico")){
+            return false;
+        }
         for(String str : includeUrls){
             if(("/api/dbcourse" + str).equals(uri)){
                 return false;
