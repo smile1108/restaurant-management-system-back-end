@@ -185,6 +185,41 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("注册用户")
+    @RequestMapping(value = "/modifyMsg", method = RequestMethod.POST)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "用户昵称", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "id", value = "学生号", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "email", value = "学生邮箱", dataType = "string", paramType = "query", required = true)
+    })
+    public CommonReturnType modifyMsg(String name, String id, String email) throws CommonException {
+        // 先判断参数是否为空
+        if(name == null || name.trim().length() == 0
+            || id == null || id.trim().length() == 0
+            || email == null || email.trim().length() == 0){
+            LOG.error("UserController -> modifyMsg -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        boolean userIsExist = userService.judgeUserIsExistByEmail(email);
+        if(!userIsExist){
+            LOG.error("UserController -> modifyMsg -> 邮箱对应用户不存在");
+            throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
+        }
+        // 修改信息
+        userService.modifyMsgByEmail(name, id, email);
+        // 然后要删除掉redis中对应的缓存 防止数据不一致
+        String key1 = "user:info:" + email;
+        String key2 = "user:info:" + id;
+        if(jedis.exists(key1)){
+            jedis.del(key1);
+        }
+        if(jedis.exists(key2)){
+            jedis.del(key2);
+        }
+        return CommonReturnType.success();
+    }
+
+
+    @ApiOperation("注册用户")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string", paramType = "query", required = true),

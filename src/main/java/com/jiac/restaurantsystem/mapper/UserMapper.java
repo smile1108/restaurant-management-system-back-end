@@ -25,4 +25,7 @@ public interface UserMapper {
 
     @Insert("insert into student (name, email, password) values (#{name}, #{email}, #{password})")
     void insert(String name, String password, String email);
+
+    @Update("update student set name = #{name}, id = #{id} where email = #{email}")
+    void updateMsg(String name, String id, String email);
 }

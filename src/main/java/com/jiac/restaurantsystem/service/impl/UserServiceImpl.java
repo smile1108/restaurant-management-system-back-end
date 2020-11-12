@@ -160,4 +160,9 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
+
+    @Override
+    public void modifyMsgByEmail(String name, String id, String email) throws CommonException {
+        userMapper.updateMsg(name, id, email);
+    }
 }

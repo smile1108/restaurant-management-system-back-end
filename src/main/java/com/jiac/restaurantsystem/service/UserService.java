@@ -24,4 +24,6 @@ public interface UserService {
     User register(String name, String password, String email) throws CommonException;
 
     boolean judgeUserIsExistByEmail(String email) throws CommonException;
+
+    void modifyMsgByEmail(String name, String id, String email) throws CommonException;
 }
