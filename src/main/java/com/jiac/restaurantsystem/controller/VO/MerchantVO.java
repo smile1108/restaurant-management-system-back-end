@@ -34,6 +34,14 @@ public class MerchantVO implements Serializable {
         this.email = email;
     }
 
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "MerchantVO{" +
