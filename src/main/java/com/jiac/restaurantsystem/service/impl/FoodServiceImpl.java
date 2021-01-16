@@ -62,9 +62,9 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> selectFoodsByFloor(Integer floor) throws CommonException {
+    public List<Food> selectFoodsByFloor(Integer floor, Integer page, Integer size) throws CommonException {
         LOG.info("FoodServiceImpl -> 根据楼层查找菜品 -> " + floor);
-        List<Food> foods = foodMapper.selectFoodsByFloor(floor);
+        List<Food> foods = foodMapper.selectFoodsByFloor(floor, (page - 1) * size, size);
         return foods;
     }
 

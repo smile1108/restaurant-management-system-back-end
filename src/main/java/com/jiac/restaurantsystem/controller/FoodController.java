@@ -273,9 +273,11 @@ public class FoodController extends BaseController{
     @ApiOperation("按照楼层查找菜品")
     @RequestMapping(value = "/getByFloor", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
+            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "page", value = "当前页数", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "size", value = "页面大小", dataType = "int", paramType = "query", required = true)
     })
-    public CommonReturnType getByFloor(Integer floor) throws CommonException, IOException, ClassNotFoundException {
+    public CommonReturnType getByFloor(Integer floor, Integer page, Integer size) throws CommonException, IOException, ClassNotFoundException {
         // 先检查参数是否为空
         if(floor == null){
             LOG.error("FoodController -> 根据楼层查找菜品 -> 参数不能为空");
@@ -291,7 +293,7 @@ public class FoodController extends BaseController{
         }
         // 表示对应的楼层存在或者有开通的窗口
         // 然后先判断redis缓存中是否有对应楼层的缓存记录
-        String floorKey = "food:floor:" + floor;
+        String floorKey = "food:floor:" + floor + ":" + page + ":" + size;
         // 构建FoodVO的集合
         List<FoodVO> foodVOS = new ArrayList<>();
         // 然后先看redis缓存中是否有这个键 如果有的话直接使用缓存
@@ -301,7 +303,7 @@ public class FoodController extends BaseController{
             convertRedisToFoodList(floorKey, foodVOS);
         }else{
             LOG.info("FoodController -> 根据楼层查找菜品 -> 缓存中没有对应楼层的菜品");
-            List<Food> foods = foodService.selectFoodsByFloor(floor);
+            List<Food> foods = foodService.selectFoodsByFloor(floor, page, size);
             addRecordToRedis(floorKey, foods);
             foodVOS = convertFromFoodList(foods);
         }

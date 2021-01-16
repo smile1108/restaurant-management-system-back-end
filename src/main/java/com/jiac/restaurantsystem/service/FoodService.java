@@ -20,7 +20,7 @@ public interface FoodService {
 
     List<Food> selectFoodsByTaste(String taste, Integer page, Integer size) throws CommonException;
 
-    List<Food> selectFoodsByFloor(Integer floor) throws CommonException;
+    List<Food> selectFoodsByFloor(Integer floor, Integer page, Integer size) throws CommonException;
 
     boolean judgeFoodIsBelongMerchant(Integer merchantId, Integer wicketId) throws CommonException;
 
