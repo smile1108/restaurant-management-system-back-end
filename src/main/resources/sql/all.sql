@@ -47,6 +47,7 @@ insert into `food` (name, price, taste, wicket_id) values ('test4', 10, 'test4',
 insert into `food` (name, price, taste, wicket_id) values ('test5', 10, 'test5', 1);
 insert into `food` (name, price, taste, wicket_id) values ('test6', 10, 'test6', 1);
 insert into `food` (name, price, taste, wicket_id) values ('test7', 10, 'test7', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣1', 10, '辣', 1);
 
 DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(

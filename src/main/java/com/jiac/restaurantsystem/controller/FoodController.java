@@ -206,9 +206,11 @@ public class FoodController extends BaseController{
     @RequestMapping(value = "/getByWindowId", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "wicketNumber", value = "窗口号", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
-            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0")
+            @ApiImplicitParam(name = "floor", value = "楼层", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
+            @ApiImplicitParam(name = "page", value = "当前页数", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "size", value = "页面大小", dataType = "int", paramType = "query", required = true)
     })
-    public CommonReturnType getByWindowId(Integer wicketNumber, Integer floor) throws CommonException, IOException, ClassNotFoundException {
+    public CommonReturnType getByWindowId(Integer wicketNumber, Integer floor, Integer page, Integer size) throws CommonException, IOException, ClassNotFoundException {
         // 先校验参数是否为空
         if(wicketNumber == null || floor == null){
             LOG.error("FoodController -> 按照窗口查找菜品 -> 参数不能为空");
@@ -218,9 +220,8 @@ public class FoodController extends BaseController{
         Window window = windowService.findWindowByNumberAndFloor(wicketNumber, floor);
         // findWindowByNumberAndFloor方法内部如果窗口不存在 会抛出异常 所以如果执行到下边 表示窗口存在
         Integer windowId = window.getWicketId();
-        String windowKey = "food:window:" + windowId;
+        String windowKey = "food:window:" + windowId + ":" + page + ":" + size;
         List<FoodVO> foodVOS = new ArrayList<>();
-        String foodInfoKey = null;
         if(jedis.exists(windowKey)){
             LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中有对应窗口的菜品缓存,不需要查找数据库");
             // 如果对应窗口id 存在缓存的数据 直接从缓存中拿取
@@ -228,7 +229,7 @@ public class FoodController extends BaseController{
         }else{
             LOG.info("FoodController -> 根据窗口id查找菜品 -> 缓存中没有对应窗口的菜品,需要查询数据库");
             // 如果缓存中不存在对应的数据 应该从数据库进行查找 并写入缓存中
-            List<Food> foods = foodService.selectFoodsByWindowId(windowId);
+            List<Food> foods = foodService.selectFoodsByWindowId(windowId, page, size);
             // 从数据库中获取数据之后 写入缓存中 以便之后从缓存中获取数据 不需要通过数据库
             addRecordToRedis(windowKey, foods);
             foodVOS = convertFromFoodList(foods);
