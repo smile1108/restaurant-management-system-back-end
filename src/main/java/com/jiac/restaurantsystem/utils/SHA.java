@@ -2,7 +2,6 @@ package com.jiac.restaurantsystem.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * FileName: SHA
