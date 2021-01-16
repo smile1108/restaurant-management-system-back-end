@@ -60,11 +60,14 @@ public class FoodController extends BaseController{
     private Jedis jedis;
 
     @ApiOperation("搜索全部菜品")
-    @ApiImplicitParams({})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页数", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "size", value = "页面大小", dataType = "int", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonReturnType list() throws CommonException, IOException, ClassNotFoundException {
+    public CommonReturnType list(Integer page, Integer size) throws CommonException, IOException, ClassNotFoundException {
         LOG.info("FoodController -> 进入/food/list接口");
-        String listKey = "food:list";
+        String listKey = "food:list:" + page + ":" + size;
         Boolean listExist = jedis.exists(listKey);
         List<FoodVO> foodVOS = new ArrayList<>();
         if(listExist){
@@ -73,7 +76,7 @@ public class FoodController extends BaseController{
             convertRedisToFoodList(listKey, foodVOS);
         }else{
             LOG.info("FoodController -> 缓存中没有数据,要查询数据库");
-            List<Food> foods = foodService.list();
+            List<Food> foods = foodService.list(page, size);
             String foodInfoKey = null;
             addRecordToRedis(listKey, foods);
             foodVOS = convertFromFoodList(foods);
@@ -359,6 +362,7 @@ public class FoodController extends BaseController{
             if(!jedis.exists(foodInfoKey)){
                 FoodVO foodVO = convertFromFood(food);
                 jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
+                jedis.expire(foodInfoKey, 30);
             }
         }
     }

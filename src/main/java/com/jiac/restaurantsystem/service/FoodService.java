@@ -14,7 +14,7 @@ public interface FoodService {
 
     void insert(String name, Double price, String taste, Integer wicketId) throws CommonException;
 
-    List<Food> list() throws CommonException;
+    List<Food> list(Integer page, Integer size) throws CommonException;
 
     List<Food> selectFoodsByWindowId(Integer windowId) throws CommonException;
 

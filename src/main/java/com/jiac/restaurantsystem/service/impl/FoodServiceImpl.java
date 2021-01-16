@@ -41,9 +41,9 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> list() throws CommonException {
+    public List<Food> list(Integer page, Integer size) throws CommonException {
         LOG.info("FoodServiceImpl -> 查找所有菜品");
-        List<Food> foods = foodMapper.selectAllFood();
+        List<Food> foods = foodMapper.selectAllFood((page - 1) * size, size);
         return foods;
     }
 

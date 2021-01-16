@@ -23,6 +23,16 @@ public class Food {
     //窗口号
     private Integer wicketId;
 
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public String getName() {
         return name;
     }
@@ -61,5 +71,18 @@ public class Food {
 
     public void setWicketId(Integer wicketId) {
         this.wicketId = wicketId;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Food{");
+        sb.append("foodId=").append(foodId);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", taste='").append(taste).append('\'');
+        sb.append(", wicketId=").append(wicketId);
+        sb.append(", image='").append(image).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

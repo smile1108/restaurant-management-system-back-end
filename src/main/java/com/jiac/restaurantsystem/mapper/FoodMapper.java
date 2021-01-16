@@ -23,8 +23,8 @@ public interface FoodMapper {
     @Select("select * from food where name = #{name}")
     Food selectFoodByName(String name);
 
-    @Select("select * from food")
-    List<Food> selectAllFood();
+    @Select("select * from food limit #{page}, #{size}")
+    List<Food> selectAllFood(Integer page, Integer size);
 
     @Select("select * from food where wicket_id = #{windowId}")
     List<Food> selectFoodsByWindowId(Integer windowId);

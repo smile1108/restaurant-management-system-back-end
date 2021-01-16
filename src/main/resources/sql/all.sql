@@ -38,6 +38,16 @@ CREATE TABLE `food`(
     FOREIGN KEY (`wicket_id`) REFERENCES wicket (`wicket_id`)
 )ENGINE=InnoDB, default charset = UTF8;
 
+alter table `food` add column (`image` varchar(50) default '');
+
+insert into `food` (name, price, taste, wicket_id) values ('test1', 10, 'test1', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test2', 10, 'test2', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test3', 10, 'test3', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test4', 10, 'test4', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test5', 10, 'test5', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test6', 10, 'test6', 1);
+insert into `food` (name, price, taste, wicket_id) values ('test7', 10, 'test7', 1);
+
 DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(
     `order_id` INT NOT NULL AUTO_INCREMENT,
