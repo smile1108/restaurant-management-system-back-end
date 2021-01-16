@@ -48,6 +48,15 @@ insert into `food` (name, price, taste, wicket_id) values ('test5', 10, 'test5',
 insert into `food` (name, price, taste, wicket_id) values ('test6', 10, 'test6', 1);
 insert into `food` (name, price, taste, wicket_id) values ('test7', 10, 'test7', 1);
 insert into `food` (name, price, taste, wicket_id) values ('辣1', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣2', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣3', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣4', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣5', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣6', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣7', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣8', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣9', 10, '辣', 1);
+insert into `food` (name, price, taste, wicket_id) values ('辣10', 10, '辣', 1);
 
 DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(

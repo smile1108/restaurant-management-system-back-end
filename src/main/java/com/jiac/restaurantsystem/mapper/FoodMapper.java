@@ -29,8 +29,8 @@ public interface FoodMapper {
     @Select("select * from food where wicket_id = #{windowId} limit #{page}, #{size}")
     List<Food> selectFoodsByWindowId(Integer windowId, Integer page, Integer size);
 
-    @Select("select * from food where taste like '%${taste}%'")
-    List<Food> selectFoodsByTaste(String taste);
+    @Select("select * from food where taste like '%${taste}%' limit #{page}, #{size}")
+    List<Food> selectFoodsByTaste(String taste, Integer page, Integer size);
 
     @Select("select * from food where wicket_id in (select wicket_id from wicket where floor = #{floor})")
     List<Food> selectFoodsByFloor(Integer floor);

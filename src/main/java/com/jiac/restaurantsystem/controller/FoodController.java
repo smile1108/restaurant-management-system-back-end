@@ -240,16 +240,18 @@ public class FoodController extends BaseController{
     @ApiOperation("按照口味查找菜品")
     @RequestMapping(value = "/getByTaste", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "taste", value = "口味", dataType = "string", paramType = "query", required = true)
+            @ApiImplicitParam(name = "taste", value = "口味", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "page", value = "当前页数", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "size", value = "页面大小", dataType = "int", paramType = "query", required = true)
     })
-    public CommonReturnType getByTaste(String taste) throws CommonException, IOException, ClassNotFoundException {
+    public CommonReturnType getByTaste(String taste, Integer page, Integer size) throws CommonException, IOException, ClassNotFoundException {
         // 先判断对应参数是否为空
         if(taste == null || taste.trim().length() == 0){
             LOG.error("FoodController -> getByTaste -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
         // 构建taste对用的键
-        String tasteKey = "food:taste:" + taste;
+        String tasteKey = "food:taste:" + taste + ":" + page + ":" + size;
         // 构建FoodVO的集合
         List<FoodVO> foodVOS = new ArrayList<>();
         // 然后先看redis缓存中是否有这个键 如果有的话直接使用缓存
@@ -261,7 +263,7 @@ public class FoodController extends BaseController{
         }else{
             LOG.info("FoodController -> 根据口味查找菜品 -> 缓存中没有对应口味的菜品");
             // 从数据库中获取数据
-            List<Food> foods = foodService.selectFoodsByTaste(taste);
+            List<Food> foods = foodService.selectFoodsByTaste(taste, page, size);
             addRecordToRedis(tasteKey, foods);
             foodVOS = convertFromFoodList(foods);
         }

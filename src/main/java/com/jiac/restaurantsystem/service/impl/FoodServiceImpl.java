@@ -55,9 +55,9 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> selectFoodsByTaste(String taste) throws CommonException {
+    public List<Food> selectFoodsByTaste(String taste, Integer page, Integer size) throws CommonException {
         LOG.info("FoodServiceImpl -> 根据口味查找菜品 -> " + taste);
-        List<Food> foods = foodMapper.selectFoodsByTaste(taste);
+        List<Food> foods = foodMapper.selectFoodsByTaste(taste, (page - 1) * size, size);
         return foods;
     }
 
