@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -308,6 +309,27 @@ public class FoodController extends BaseController{
             foodVOS = convertFromFoodList(foods);
         }
         return CommonReturnType.success(foodVOS);
+    }
+
+    @GetMapping("/details")
+    public CommonReturnType details(Integer foodId) throws CommonException, IOException, ClassNotFoundException {
+        // 先校验参数不能为空
+        if(foodId == null){
+            LOG.error("FoodController -> 菜品详情 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String foodInfoKey = "food:info:" + foodId;
+        if(jedis.exists(foodInfoKey)){
+            LOG.info("redis中有缓存数据，从redis中获取");
+            FoodVO foodVO = (FoodVO) SerializeUtil.serializeToObject(jedis.get(foodInfoKey));
+            return CommonReturnType.success(foodVO);
+        }else {
+            Food food = foodService.selectFoodById(foodId);
+            FoodVO foodVO = convertFromFood(food);
+            jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
+            jedis.expire(foodInfoKey, 30);
+            return CommonReturnType.success(foodVO);
+        }
     }
 
     private FoodVO convertFromFood(Food food){

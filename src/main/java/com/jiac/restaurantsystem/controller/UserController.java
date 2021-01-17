@@ -164,10 +164,9 @@ public class UserController extends BaseController {
 //            }
 //        }
         String key = "session:user:" + userEmail;
-        String s = jedis.get(key);
 
         // 如果没有sessionId才创建cookie 否则不创建cookie
-        if(s == null){
+        if(!jedis.exists(key)){
             LOG.info("用户登录，创建cookie");
             UserVO userVO = convertFromUserDO(user);
             jedis.setex(key, 10, httpServletRequest.getSession().getId());

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -105,6 +106,16 @@ public class FoodServiceImpl implements FoodService {
             throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
         }
         return food.getPrice();
+    }
+
+    @Override
+    public Food selectFoodById(Integer foodId) throws CommonException {
+        Food food = foodMapper.selectFoodById(foodId);
+        if(food == null){
+            LOG.error("FoodServiceImpl -> selectFoodById -> 没有对应菜品");
+            throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
+        }
+        return food;
     }
 
 }
