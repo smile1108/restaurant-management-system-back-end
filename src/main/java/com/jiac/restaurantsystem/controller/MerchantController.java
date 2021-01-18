@@ -144,8 +144,8 @@ public class MerchantController extends BaseController{
         if(s == null){
             LOG.info("商家登录，创建cookie");
             MerchantVO merchantVO = convertFromMerchant(merchant);
-            jedis.setex(key, 60, httpServletRequest.getSession().getId());
-            jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(merchantVO));
+            jedis.setex(key, 300, httpServletRequest.getSession().getId());
+            jedis.setex(httpServletRequest.getSession().getId(), 300, SerializeUtil.serialize(merchantVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);

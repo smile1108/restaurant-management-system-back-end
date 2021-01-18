@@ -107,8 +107,8 @@ public class AdminController extends BaseController{
         if(s == null){
             LOG.info("管理员登录，创建cookie");
             AdminVO adminVO = convertFromAdmin(admin);
-            jedis.setex(key, 60, httpServletRequest.getSession().getId());
-            jedis.setex(httpServletRequest.getSession().getId(), 60, SerializeUtil.serialize(adminVO));
+            jedis.setex(key, 300, httpServletRequest.getSession().getId());
+            jedis.setex(httpServletRequest.getSession().getId(), 300, SerializeUtil.serialize(adminVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);

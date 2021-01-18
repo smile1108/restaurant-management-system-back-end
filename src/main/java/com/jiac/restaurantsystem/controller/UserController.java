@@ -169,8 +169,8 @@ public class UserController extends BaseController {
         if(!jedis.exists(key)){
             LOG.info("用户登录，创建cookie");
             UserVO userVO = convertFromUserDO(user);
-            jedis.setex(key, 10, httpServletRequest.getSession().getId());
-            jedis.setex(httpServletRequest.getSession().getId(), 10, SerializeUtil.serialize(userVO));
+            jedis.setex(key, 300, httpServletRequest.getSession().getId());
+            jedis.setex(httpServletRequest.getSession().getId(), 300, SerializeUtil.serialize(userVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
             cookie.setMaxAge(60);
             httpServletResponse.addCookie(cookie);
@@ -183,7 +183,7 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
-    @ApiOperation("注册用户")
+    @ApiOperation("修改信息")
     @RequestMapping(value = "/modifyMsg", method = RequestMethod.POST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "用户昵称", dataType = "string", paramType = "query", required = true),
