@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface OrderService {
 
-    void addOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete
+    void addOrder(String email, Integer foodId, Timestamp takeTime, Integer isPackage, Integer isComplete
             , Timestamp orderTime, Integer number, Double totalPrice) throws CommonException;
 
     boolean judgeOrderBelongToUser(String userEmail, Integer orderId) throws CommonException;

@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public interface OrderMapper {
 
-    @Insert("insert into order_info (user_email, food_name, take_time, is_package, is_complete, order_time, number, total_price)" +
-            "values (#{email}, #{foodName}, #{takeTime}, #{isPackage}, #{isComplete}, #{orderTime}, #{number}," +
+    @Insert("insert into order_info (user_email, food_id, take_time, is_package, is_complete, order_time, number, total_price)" +
+            "values (#{email}, #{foodId}, #{takeTime}, #{isPackage}, #{isComplete}, #{orderTime}, #{number}," +
             "#{totalPrice})")
-    void insertOrder(String email, String foodName, Timestamp takeTime, Integer isPackage, Integer isComplete,
+    void insertOrder(String email, Integer foodId, Timestamp takeTime, Integer isPackage, Integer isComplete,
                      Timestamp orderTime, Integer number, Double totalPrice);
 
     @Select("select * from order_info where order_id = #{orderId}")

@@ -64,16 +64,15 @@ public class OrderController extends BaseController{
     @ApiOperation("创建订单操作")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "foodName", value = "菜品名称", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "foodId", value = "菜品id", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "number", value = "预定菜品的数量", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "isPackage", value = "是否打包", dataType = "int", paramType = "query", required = true, defaultValue = "0", example = "0"),
             @ApiImplicitParam(name = "takeTime", value = "用户预取时间", dataType = "string", paramType = "query", required = true)
     })
-    public CommonReturnType create(String foodName, Integer number, Integer isPackage, String takeTime) throws CommonException {
+    public CommonReturnType create(Integer foodId, Integer number, Integer isPackage, String takeTime) throws CommonException {
         String userEmail = searchEmailBySessionId();
         // 先校验参数是否为空
-        if(foodName == null || foodName.trim().length() == 0 ||
-                number == null || isPackage == null || takeTime == null
+        if(foodId == null || number == null || isPackage == null || takeTime == null
                 || takeTime.trim().length() == 0){
             LOG.error("OrderController -> createOrder -> 参数不能为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
@@ -93,7 +92,7 @@ public class OrderController extends BaseController{
             throw new CommonException(ResultCode.USER_IS_NOT_EXIST);
         }
         // 获取对应菜品的单价
-        Double foodPrice = foodService.selectFoodPriceByFoodName(foodName);
+        Double foodPrice = foodService.selectFoodPriceByFoodId(foodId);
         // 将前端传递过来的时间字符串转换为Timestamp
         Timestamp takeTime2 = Timestamp.valueOf(takeTime);
         // 构建当前时间 用于传入数据库中
@@ -107,7 +106,7 @@ public class OrderController extends BaseController{
             throw new CommonException(ResultCode.TIME_ERROR);
         }
         // 全部校验完成之后进行数据的写入
-        orderService.addOrder(userEmail, foodName, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
+        orderService.addOrder(userEmail, foodId, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
         // 创建一个新的order之后要将缓存中对应用户的orderList删除 避免数据不一致
         String orderListKey = "user:orders:" + userEmail;
         if(jedis.exists(orderListKey)){

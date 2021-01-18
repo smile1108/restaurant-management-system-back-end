@@ -30,7 +30,7 @@ CREATE TABLE `wicket`(
 DROP TABLE IF EXISTS `food`;
 CREATE TABLE `food`(
     `food_id` INT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(10) NOT NULL DEFAULT '' UNIQUE,
+    `name` VARCHAR(10) NOT NULL DEFAULT '',
     `price` DOUBLE NOT NULL DEFAULT 0,
     `taste` VARCHAR(5) NOT NULL DEFAULT '',
     `wicket_id` INT NOT NULL DEFAULT 0,
@@ -61,7 +61,7 @@ insert into `food` (name, price, taste, wicket_id) values ('辣10', 10, '辣', 1
 DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info`(
     `order_id` INT NOT NULL AUTO_INCREMENT,
-    `food_name` VARCHAR(10) NOT NULL DEFAULT '',
+    `food_id` INT NOT NULL,
     `user_email` VARCHAR(35) NOT NULL DEFAULT '',
     `take_time` DATETIME NOT NULL,
     `is_package` TINYINT NOT NULL DEFAULT 0,
@@ -72,7 +72,8 @@ CREATE TABLE `order_info`(
     `grade` TINYINT NOT NULL DEFAULT 0,
     CHECK ( `number` > 0 AND `number` < 20 ),
     PRIMARY KEY (`order_id`),
-    FOREIGN KEY (`user_email`) REFERENCES student (`email`)
+    FOREIGN KEY (`user_email`) REFERENCES student (`email`),
+    FOREIGN KEY (`food_id`) REFERENCES food (`food_id`)
 )ENGINE=InnoDB, default charset = UTF8;
 
 DROP TABLE IF EXISTS `administrator`;
