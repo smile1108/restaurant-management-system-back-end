@@ -29,6 +29,9 @@ public class FoodVO implements Serializable {
 
     private String image;
 
+    // 所有该菜品订单的平均评分
+    private double grade;
+
     public String getImage() {
         return image;
     }
@@ -85,6 +88,14 @@ public class FoodVO implements Serializable {
         this.floor = floor;
     }
 
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("FoodVO{");
@@ -95,6 +106,7 @@ public class FoodVO implements Serializable {
         sb.append(", wicketNumber=").append(wicketNumber);
         sb.append(", floor=").append(floor);
         sb.append(", image='").append(image).append('\'');
+        sb.append(", grade=").append(grade);
         sb.append('}');
         return sb.toString();
     }

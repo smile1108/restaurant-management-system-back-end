@@ -36,6 +36,7 @@ public enum ResultCode implements CommonError {
     ORDER_NOT_BELONG_USER("320", "对应订单不属于该用户"),
     ORDER_HAVE_COMPLETED("321", "对应订单已经完成"),
     ORDER_HAVE_NOT_COMPLETED("322", "订单尚未完成,不能评分"),
+    GRADE_EXCEPTION("323", "评分不能小于等于0或大于10"),
 
     //4开头代表认证错误
     AUTH_FAILED("401", "用户名或密码错误"),

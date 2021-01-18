@@ -43,4 +43,7 @@ public interface OrderMapper {
 
     @Update("update order_info set grade = #{grade} where order_id = #{orderId}")
     void updateOrderGradeByOrderId(Integer orderId, Integer grade);
+
+    @Select("select grade from order_info where food_id = #{foodId}")
+    List<Integer> selectAllGradeByFoodId(Integer foodId);
 }

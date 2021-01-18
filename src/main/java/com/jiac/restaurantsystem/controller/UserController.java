@@ -386,13 +386,18 @@ public class UserController extends BaseController {
             LOG.error("UserController -> gradeOrder -> 参数为空");
             throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
         }
+        // 判断grade是否小于等于0
+        if(grade <= 0 || grade > 10){
+            LOG.error("UserController -> gradeOrder -> 评分不能小于等于0或大于10");
+            throw new CommonException(ResultCode.GRADE_EXCEPTION);
+        }
         boolean orderIsExist = orderService.judgeOrderIsExist(orderId);
         if(!orderIsExist){
             // 表示订单不存在
             LOG.error("UserController -> gradeOrder -> 订单不存在");
             throw new CommonException(ResultCode.ORDER_IS_NOT_EXIST);
         }
-        boolean orderIsCompleted = orderService.judgeOrderIsExist(orderId);
+        boolean orderIsCompleted = orderService.judgeOrderIsCompleted(orderId);
         if(!orderIsCompleted){
             // 表示订单未完成 此时不能评分
             LOG.error("UserController -> gradeOrder -> 订单尚未完成,不能评分");

@@ -34,4 +34,6 @@ public interface OrderService {
     boolean judgeOrderIsCompleted(Integer orderId) throws CommonException;
 
     void gradeOrder(Integer orderId, Integer grade) throws CommonException;
+
+    List<Integer> selectAllGradeByFoodId(Integer foodId) throws CommonException;
 }

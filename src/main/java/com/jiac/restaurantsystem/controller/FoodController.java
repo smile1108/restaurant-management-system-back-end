@@ -10,6 +10,7 @@ import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.MerchantService;
+import com.jiac.restaurantsystem.service.OrderService;
 import com.jiac.restaurantsystem.service.WindowService;
 import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
@@ -56,6 +57,9 @@ public class FoodController extends BaseController{
 
     @Autowired
     private FoodService foodService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private Jedis jedis;
@@ -326,9 +330,25 @@ public class FoodController extends BaseController{
         }else {
             Food food = foodService.selectFoodById(foodId);
             FoodVO foodVO = convertFromFood(food);
+            setAVGGradeToFoodVO(food.getFoodId(), foodVO);
             jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
             jedis.expire(foodInfoKey, 30);
             return CommonReturnType.success(foodVO);
+        }
+    }
+
+    private void setAVGGradeToFoodVO(Integer foodId, FoodVO foodVO) throws CommonException {
+        List<Integer> grades = orderService.selectAllGradeByFoodId(foodId);
+        int size = grades.size();
+        if(size == 0){
+            LOG.info("该菜品当前没有订单");
+            foodVO.setGrade(-1);
+        } else {
+            int total = 0;
+            for(Integer grade : grades){
+                total += grade;
+            }
+            foodVO.setGrade(((double) total) / size);
         }
     }
 

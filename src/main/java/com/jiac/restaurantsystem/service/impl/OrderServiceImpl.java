@@ -102,4 +102,9 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateOrderGradeByOrderId(orderId, grade);
     }
 
+    @Override
+    public List<Integer> selectAllGradeByFoodId(Integer foodId) throws CommonException {
+        return orderMapper.selectAllGradeByFoodId(foodId);
+    }
+
 }
