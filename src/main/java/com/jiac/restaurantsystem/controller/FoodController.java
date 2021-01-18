@@ -332,16 +332,17 @@ public class FoodController extends BaseController{
         }
     }
 
-    private FoodVO convertFromFood(Food food){
+    private FoodVO convertFromFood(Food food) throws CommonException {
         if(food == null){
             return null;
         }
         FoodVO foodVO = new FoodVO();
         BeanUtils.copyProperties(food, foodVO);
+        setWicketNumberAndFloorToFoodVO(food.getWicketId(), foodVO);
         return foodVO;
     }
 
-    private List<FoodVO> convertFromFoodList(List<Food> foods){
+    private List<FoodVO> convertFromFoodList(List<Food> foods) throws CommonException {
         if(foods == null){
             return null;
         }
@@ -349,9 +350,16 @@ public class FoodController extends BaseController{
         for(Food food : foods){
             FoodVO foodVO = new FoodVO();
             BeanUtils.copyProperties(food, foodVO);
+            setWicketNumberAndFloorToFoodVO(food.getWicketId(), foodVO);
             foodVOS.add(foodVO);
         }
         return foodVOS;
+    }
+
+    private void setWicketNumberAndFloorToFoodVO(Integer wicketId, FoodVO foodVO) throws CommonException {
+        Window window = windowService.selectWindowById(wicketId);
+        foodVO.setWicketNumber(window.getWicketNumber());
+        foodVO.setFloor(window.getFloor());
     }
 
     /**
@@ -377,7 +385,7 @@ public class FoodController extends BaseController{
      * @param allFoods 将从数据库中查询到的所有的记录封装为一个List
      * @throws IOException
      */
-    private void addRecordToRedis(String key, List<Food> allFoods) throws IOException {
+    private void addRecordToRedis(String key, List<Food> allFoods) throws IOException, CommonException {
         for(Food food : allFoods){
             // 遍历查询到的food数组 将其加入缓存中
             LOG.info("FoodController -> 将查找到的taste的菜品加入缓存");

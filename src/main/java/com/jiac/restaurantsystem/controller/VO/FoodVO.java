@@ -19,8 +19,13 @@ public class FoodVO implements Serializable {
     //口味
     private String taste;
 
+//    private Integer wicketId;
+
     //窗口号
-    private Integer wicketId;
+    private Integer wicketNumber;
+
+    // 楼层
+    private Integer floor;
 
     private String image;
 
@@ -56,20 +61,28 @@ public class FoodVO implements Serializable {
         this.taste = taste;
     }
 
-    public Integer getWicketId() {
-        return wicketId;
-    }
-
-    public void setWicketId(Integer wicketId) {
-        this.wicketId = wicketId;
-    }
-
     public Integer getFoodId() {
         return foodId;
     }
 
     public void setFoodId(Integer foodId) {
         this.foodId = foodId;
+    }
+
+    public Integer getWicketNumber() {
+        return wicketNumber;
+    }
+
+    public void setWicketNumber(Integer wicketNumber) {
+        this.wicketNumber = wicketNumber;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
     @Override
@@ -79,7 +92,8 @@ public class FoodVO implements Serializable {
         sb.append(", name='").append(name).append('\'');
         sb.append(", price=").append(price);
         sb.append(", taste='").append(taste).append('\'');
-        sb.append(", wicketId=").append(wicketId);
+        sb.append(", wicketNumber=").append(wicketNumber);
+        sb.append(", floor=").append(floor);
         sb.append(", image='").append(image).append('\'');
         sb.append('}');
         return sb.toString();

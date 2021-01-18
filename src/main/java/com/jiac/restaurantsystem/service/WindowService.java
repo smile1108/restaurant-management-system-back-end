@@ -17,4 +17,5 @@ public interface WindowService {
 
     boolean judgeFloorIsExist(Integer floor) throws CommonException;
 
+    Window selectWindowById(Integer wicketId) throws CommonException;
 }

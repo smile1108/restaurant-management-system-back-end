@@ -75,4 +75,14 @@ public class WindowServiceImpl implements WindowService {
         return true;
     }
 
+    @Override
+    public Window selectWindowById(Integer wicketId) throws CommonException {
+        Window window = windowMapper.selectWindowById(wicketId);
+        if(window == null){
+            LOG.error("该窗口不存在");
+            throw new CommonException(ResultCode.WINDOW_IS_NOT_OPEN);
+        }
+        return window;
+    }
+
 }
