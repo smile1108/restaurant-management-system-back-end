@@ -36,4 +36,6 @@ public interface OrderService {
     void gradeOrder(Integer orderId, Integer grade) throws CommonException;
 
     List<Integer> selectAllGradeByFoodId(Integer foodId) throws CommonException;
+
+    Order selectOrderById(Integer orderId) throws CommonException;
 }

@@ -107,4 +107,14 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectAllGradeByFoodId(foodId);
     }
 
+    @Override
+    public Order selectOrderById(Integer orderId) throws CommonException {
+        Order order = orderMapper.selectOrderById(orderId);
+        if(order == null){
+            LOG.error("OrderServiceImple -> selectOrderById -> 数据库中没有该订单");
+            throw new CommonException(ResultCode.ORDER_IS_NOT_EXIST);
+        }
+        return order;
+    }
+
 }

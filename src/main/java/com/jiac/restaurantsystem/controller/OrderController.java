@@ -1,6 +1,10 @@
 package com.jiac.restaurantsystem.controller;
 
+import com.jiac.restaurantsystem.DO.Food;
+import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.controller.VO.FoodVO;
+import com.jiac.restaurantsystem.controller.VO.OrderVO;
 import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
@@ -16,7 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -162,6 +168,28 @@ public class OrderController extends BaseController{
         return CommonReturnType.success();
     }
 
+    @GetMapping("/details")
+    public CommonReturnType details(Integer orderId) throws CommonException, IOException, ClassNotFoundException {
+        // 先校验参数不能为空
+        if(orderId == null){
+            LOG.error("OrderController -> 订单详情 -> 参数不能为空");
+            throw new CommonException(ResultCode.PARAMETER_IS_BLANK);
+        }
+        String orderInfoKey = "order:info:" + orderId;
+        if(jedis.exists(orderInfoKey)){
+            LOG.info("OrderController -> details -> redis中有缓存数据，从redis中获取");
+            OrderVO orderVO = (OrderVO) SerializeUtil.serializeToObject(jedis.get(orderInfoKey));
+            return CommonReturnType.success(orderVO);
+        }else {
+            LOG.info("OrderController -> details -> 缓存中没有数据,查询数据库");
+            Order order = orderService.selectOrderById(orderId);
+            OrderVO orderVO = convertFromOrder(order);
+            jedis.set(orderInfoKey, SerializeUtil.serialize(orderVO));
+            jedis.expire(orderInfoKey, 30);
+            return CommonReturnType.success(orderVO);
+        }
+    }
+
     private String searchEmailBySessionId() throws CommonException {
         String userEmail = null;
         Cookie[] cookies = httpServletRequest.getCookies();
@@ -194,6 +222,15 @@ public class OrderController extends BaseController{
             }
         }
         return userEmail;
+    }
+
+    private OrderVO convertFromOrder(Order order) throws CommonException {
+        if(order == null){
+            return null;
+        }
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(order, orderVO);
+        return orderVO;
     }
 
 //    public static void main(String[] args) {

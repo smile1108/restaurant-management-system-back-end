@@ -16,7 +16,7 @@ public class OrderVO implements Serializable {
     private String userEmail;
 
     //订单中菜的id
-    private String foodName;
+    private String foodId;
 
     //预取时间
     private Time takeTime;
@@ -47,12 +47,12 @@ public class OrderVO implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public String getFoodId() {
+        return foodId;
     }
 
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
     }
 
     public Time getTakeTime() {
@@ -117,5 +117,22 @@ public class OrderVO implements Serializable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("OrderVO{");
+        sb.append("orderId=").append(orderId);
+        sb.append(", userEmail='").append(userEmail).append('\'');
+        sb.append(", foodId='").append(foodId).append('\'');
+        sb.append(", takeTime=").append(takeTime);
+        sb.append(", isPackage=").append(isPackage);
+        sb.append(", isComplete=").append(isComplete);
+        sb.append(", orderTime=").append(orderTime);
+        sb.append(", number=").append(number);
+        sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", grade=").append(grade);
+        sb.append('}');
+        return sb.toString();
     }
 }
