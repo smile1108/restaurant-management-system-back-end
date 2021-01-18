@@ -25,7 +25,7 @@ public class InterceptFilter implements Filter {
     String[] includeUrls = new String[]{"/user/login", "/user/register", "/user/getbackPass",
                                         "/merchant/login", "/merchant/register", "/merchant/getbackPass",
                                         "/admin/login", "/user/getCode", "/merchant/getCode",
-                                        "/food/list", "/food/getByWindowId", "/food/getByTaste", "/food/getByFloor"};
+                                        "/food/list", "/food/getByWindowId", "/food/getByTaste", "/food/getByFloor", "/food/details"};
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
