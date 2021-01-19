@@ -17,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,15 +29,10 @@ import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 /**
  * FileName: OrderController
@@ -236,6 +230,7 @@ public class OrderController extends BaseController{
 //    public static void main(String[] args) {
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m:s");
 //        LocalDateTime dateTime = LocalDateTime.now();
+//        System.out.println(dateTime);
 //        Timestamp dateTime1 = Timestamp.valueOf(formatter.format(dateTime));
 //        System.out.println(dateTime1);
 //

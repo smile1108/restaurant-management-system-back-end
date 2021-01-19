@@ -1,7 +1,10 @@
 package com.jiac.restaurantsystem.controller.VO;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * FileName: Order
@@ -19,7 +22,7 @@ public class OrderVO implements Serializable {
     private String foodId;
 
     //预取时间
-    private Time takeTime;
+    private Timestamp takeTime;
 
     //是否打包
     private Integer isPackage;
@@ -28,7 +31,7 @@ public class OrderVO implements Serializable {
     private Integer isComplete;
 
     //下单时间
-    private Time orderTime;
+    private Timestamp orderTime;
 
     //下单数量
     private Integer number;
@@ -55,14 +58,6 @@ public class OrderVO implements Serializable {
         this.foodId = foodId;
     }
 
-    public Time getTakeTime() {
-        return takeTime;
-    }
-
-    public void setTakeTime(Time takeTime) {
-        this.takeTime = takeTime;
-    }
-
     public Integer getIsPackage() {
         return isPackage;
     }
@@ -79,11 +74,20 @@ public class OrderVO implements Serializable {
         this.isComplete = isComplete;
     }
 
-    public Time getOrderTime() {
+
+    public Timestamp getTakeTime() {
+        return takeTime;
+    }
+
+    public void setTakeTime(Timestamp takeTime) {
+        this.takeTime = takeTime;
+    }
+
+    public Timestamp getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(Time orderTime) {
+    public void setOrderTime(Timestamp orderTime) {
         this.orderTime = orderTime;
     }
 

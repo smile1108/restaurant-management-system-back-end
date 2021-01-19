@@ -2,7 +2,10 @@ package com.jiac.restaurantsystem.DO;
 
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * FileName: Order
@@ -20,7 +23,7 @@ public class Order {
     private String foodId;
 
     //预取时间
-    private Time takeTime;
+    private Timestamp takeTime;
 
     //是否打包
     private Integer isPackage;
@@ -29,7 +32,7 @@ public class Order {
     private Integer isComplete;
 
     //下单时间
-    private Time orderTime;
+    private Timestamp orderTime;
 
     //下单数量
     private Integer number;
@@ -56,12 +59,20 @@ public class Order {
         this.foodId = foodId;
     }
 
-    public Time getTakeTime() {
+    public Timestamp getTakeTime() {
         return takeTime;
     }
 
-    public void setTakeTime(Time takeTime) {
+    public void setTakeTime(Timestamp takeTime) {
         this.takeTime = takeTime;
+    }
+
+    public Timestamp getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Timestamp orderTime) {
+        this.orderTime = orderTime;
     }
 
     public Integer getIsPackage() {
@@ -80,13 +91,6 @@ public class Order {
         this.isComplete = isComplete;
     }
 
-    public Time getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(Time orderTime) {
-        this.orderTime = orderTime;
-    }
 
     public Integer getNumber() {
         return number;
