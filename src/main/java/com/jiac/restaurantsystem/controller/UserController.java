@@ -149,6 +149,7 @@ public class UserController extends BaseController {
             jedis.hset(infoKey, "name", user.getName());
             jedis.hset(infoKey, "password", user.getPassword());
             jedis.hset(infoKey, "id", user.getId());
+            jedis.expire(infoKey, 300);
         }else{
             user = new User();
             user.setId(jedis.hget(infoKey, "id"));
