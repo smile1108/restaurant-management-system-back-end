@@ -458,7 +458,7 @@ public class UserController extends BaseController {
         return userEmail;
     }
 
-    private void addAllOrderInfoToRedis(List<Order> orders, String key) throws IOException {
+    private void addAllOrderInfoToRedis(List<Order> orders, String key) throws IOException, CommonException {
         String orderInfoKey = null;
         for(Order order : orders){
             Integer orderId = order.getOrderId();
@@ -472,12 +472,13 @@ public class UserController extends BaseController {
         }
     }
 
-    private OrderVO convertFromOrder(Order order){
+    private OrderVO convertFromOrder(Order order) throws CommonException {
         if(order == null){
             return null;
         }
         OrderVO orderVO = new OrderVO();
         BeanUtils.copyProperties(order, orderVO);
+        setOtherPropertyToOrderVO(orderVO, order);
         return orderVO;
     }
 
@@ -489,13 +490,17 @@ public class UserController extends BaseController {
         for(Order order : orders){
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(order, orderVO);
-            Food food = foodService.selectFoodById(order.getFoodId());
-            orderVO.setFoodName(food.getName());
-            Window window = windowService.selectWindowById(food.getWicketId());
-            orderVO.setWicketNumber(window.getWicketNumber());
-            orderVO.setFloor(window.getFloor());
+            setOtherPropertyToOrderVO(orderVO, order);
             orderVOS.add(orderVO);
         }
         return orderVOS;
+    }
+
+    private void setOtherPropertyToOrderVO(OrderVO orderVO, Order order) throws CommonException {
+        Food food = foodService.selectFoodById(order.getFoodId());
+        orderVO.setFoodName(food.getName());
+        Window window = windowService.selectWindowById(food.getWicketId());
+        orderVO.setWicketNumber(window.getWicketNumber());
+        orderVO.setFloor(window.getFloor());
     }
 }
