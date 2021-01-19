@@ -3,6 +3,7 @@ package com.jiac.restaurantsystem.controller;
 import com.jiac.restaurantsystem.DO.Food;
 import com.jiac.restaurantsystem.DO.Order;
 import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.DO.Window;
 import com.jiac.restaurantsystem.controller.VO.FoodVO;
 import com.jiac.restaurantsystem.controller.VO.OrderVO;
 import com.jiac.restaurantsystem.controller.VO.UserVO;
@@ -12,6 +13,7 @@ import com.jiac.restaurantsystem.response.ResultCode;
 import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.OrderService;
 import com.jiac.restaurantsystem.service.UserService;
+import com.jiac.restaurantsystem.service.WindowService;
 import com.jiac.restaurantsystem.utils.SerializeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -57,6 +59,9 @@ public class OrderController extends BaseController{
 
     @Autowired
     private FoodService foodService;
+
+    @Autowired
+    private WindowService windowService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -178,6 +183,11 @@ public class OrderController extends BaseController{
             LOG.info("OrderController -> details -> 缓存中没有数据,查询数据库");
             Order order = orderService.selectOrderById(orderId);
             OrderVO orderVO = convertFromOrder(order);
+            Food food = foodService.selectFoodById(order.getFoodId());
+            orderVO.setFoodName(food.getName());
+            Window window = windowService.selectWindowById(food.getWicketId());
+            orderVO.setWicketNumber(window.getWicketNumber());
+            orderVO.setFloor(window.getFloor());
             jedis.set(orderInfoKey, SerializeUtil.serialize(orderVO));
             jedis.expire(orderInfoKey, 30);
             return CommonReturnType.success(orderVO);
