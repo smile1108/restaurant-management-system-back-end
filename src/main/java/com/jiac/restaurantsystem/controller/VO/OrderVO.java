@@ -19,7 +19,7 @@ public class OrderVO implements Serializable {
     private String userEmail;
 
     //订单中菜的id
-    private String foodId;
+    private Integer foodId;
 
     //预取时间
     private Timestamp takeTime;
@@ -91,11 +91,11 @@ public class OrderVO implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getFoodId() {
+    public Integer getFoodId() {
         return foodId;
     }
 
-    public void setFoodId(String foodId) {
+    public void setFoodId(Integer foodId) {
         this.foodId = foodId;
     }
 
