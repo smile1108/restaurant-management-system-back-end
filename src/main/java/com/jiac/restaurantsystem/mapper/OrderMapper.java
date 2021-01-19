@@ -30,12 +30,12 @@ public interface OrderMapper {
     @Delete("delete from order_info where order_id = #{orderId}")
     void deleteOrder(Integer orderId);
 
-    @Select("select * from order_info where user_email = #{userEmail}")
+    @Select("select * from order_info where user_email = #{userEmail} order by order_time desc")
     List<Order> selectAllOrderByUserEmail(String userEmail);
 
     @Select("select * from order_info where food_name in" +
             "(select name from food where wicket_id in" +
-            "(select wicket_id from wicket where merchant_id = #{merchantId}))")
+            "(select wicket_id from wicket where merchant_id = #{merchantId})) order by order_time desc")
     List<Order> selectAllOrderByMerchantId(Integer merchantId);
 
     @Update("update order_info set is_complete = 1 where order_id = #{orderId}")
