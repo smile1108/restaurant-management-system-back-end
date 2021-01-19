@@ -1,9 +1,6 @@
 package com.jiac.restaurantsystem.controller;
 
-import com.jiac.restaurantsystem.DO.Food;
-import com.jiac.restaurantsystem.DO.Merchant;
-import com.jiac.restaurantsystem.DO.Order;
-import com.jiac.restaurantsystem.DO.User;
+import com.jiac.restaurantsystem.DO.*;
 import com.jiac.restaurantsystem.controller.VO.FoodVO;
 import com.jiac.restaurantsystem.controller.VO.MerchantVO;
 import com.jiac.restaurantsystem.controller.VO.OrderVO;
@@ -11,8 +8,10 @@ import com.jiac.restaurantsystem.controller.VO.UserVO;
 import com.jiac.restaurantsystem.error.CommonException;
 import com.jiac.restaurantsystem.response.CommonReturnType;
 import com.jiac.restaurantsystem.response.ResultCode;
+import com.jiac.restaurantsystem.service.FoodService;
 import com.jiac.restaurantsystem.service.OrderService;
 import com.jiac.restaurantsystem.service.UserService;
+import com.jiac.restaurantsystem.service.WindowService;
 import com.jiac.restaurantsystem.utils.SHA;
 import com.jiac.restaurantsystem.utils.SerializeUtil;
 import com.jiac.restaurantsystem.utils.UserNameGenerator;
@@ -56,6 +55,12 @@ public class UserController extends BaseController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private FoodService foodService;
+
+    @Autowired
+    private WindowService windowService;
 
     @Autowired
     private HttpServletRequest httpServletRequest;
@@ -476,7 +481,7 @@ public class UserController extends BaseController {
         return orderVO;
     }
 
-    private List<OrderVO> convertFromOrderList(List<Order> orders){
+    private List<OrderVO> convertFromOrderList(List<Order> orders) throws CommonException {
         if(orders == null){
             return null;
         }
@@ -484,6 +489,11 @@ public class UserController extends BaseController {
         for(Order order : orders){
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(order, orderVO);
+            Food food = foodService.selectFoodById(order.getFoodId());
+            orderVO.setFoodName(food.getName());
+            Window window = windowService.selectWindowById(food.getWicketId());
+            orderVO.setWicketNumber(window.getWicketNumber());
+            orderVO.setFloor(window.getFloor());
             orderVOS.add(orderVO);
         }
         return orderVOS;

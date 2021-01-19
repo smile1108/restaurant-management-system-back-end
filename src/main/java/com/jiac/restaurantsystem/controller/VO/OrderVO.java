@@ -42,6 +42,47 @@ public class OrderVO implements Serializable {
     //用户评价
     private Integer grade;
 
+    private String foodName;
+
+    private String foodImg;
+
+    private Integer wicketNumber;
+
+    private Integer floor;
+
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public String getFoodImg() {
+        return foodImg;
+    }
+
+    public void setFoodImg(String foodImg) {
+        this.foodImg = foodImg;
+    }
+
+    public Integer getWicketNumber() {
+        return wicketNumber;
+    }
+
+    public void setWicketNumber(Integer wicketNumber) {
+        this.wicketNumber = wicketNumber;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
     public Integer getOrderId() {
         return orderId;
     }
@@ -136,6 +177,10 @@ public class OrderVO implements Serializable {
         sb.append(", number=").append(number);
         sb.append(", totalPrice=").append(totalPrice);
         sb.append(", grade=").append(grade);
+        sb.append(", foodName='").append(foodName).append('\'');
+        sb.append(", foodImg='").append(foodImg).append('\'');
+        sb.append(", wicketNumber=").append(wicketNumber);
+        sb.append(", floor=").append(floor);
         sb.append('}');
         return sb.toString();
     }
