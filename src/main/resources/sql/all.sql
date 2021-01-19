@@ -69,7 +69,7 @@ CREATE TABLE `order_info`(
     `order_time` DATETIME NOT NULL ,
     `number` INT NOT NULL DEFAULT 0,
     `total_price` DOUBLE NOT NULL DEFAULT 0,
-    `grade` TINYINT NOT NULL DEFAULT 0,
+    `grade` TINYINT NOT NULL DEFAULT -1,
     CHECK ( `number` > 0 AND `number` < 20 ),
     PRIMARY KEY (`order_id`),
     FOREIGN KEY (`user_email`) REFERENCES student (`email`),
