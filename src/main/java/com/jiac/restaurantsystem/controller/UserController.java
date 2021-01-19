@@ -396,6 +396,11 @@ public class UserController extends BaseController {
             LOG.error("UserController -> gradeOrder -> 评分不能小于等于0或大于10");
             throw new CommonException(ResultCode.GRADE_EXCEPTION);
         }
+        String orderInfoKey = "order:info:" + orderId;
+        // 如果缓存中有对应订单 先将缓存清空
+        if(jedis.exists(orderInfoKey)){
+            jedis.del(orderInfoKey);
+        }
         boolean orderIsExist = orderService.judgeOrderIsExist(orderId);
         if(!orderIsExist){
             // 表示订单不存在
