@@ -111,7 +111,7 @@ public class OrderController extends BaseController{
             throw new CommonException(ResultCode.TIME_ERROR);
         }
         // 全部校验完成之后进行数据的写入
-        orderService.addOrder(userEmail, foodId, takeTime2, isPackage, 0, orderTime, number, number * foodPrice);
+        orderService.addOrder(userEmail, foodId, takeTime2, isPackage, 0, orderTime, number, Double.valueOf(String.format("%.2f", number * foodPrice)));
         // 创建一个新的order之后要将缓存中对应用户的orderList删除 避免数据不一致
         String orderListKey = "user:orders:" + userEmail;
         if(jedis.exists(orderListKey)){
