@@ -469,7 +469,7 @@ public class UserController extends BaseController {
         for(Order order : orders){
             Integer orderId = order.getOrderId();
             // 获取对应order的id
-            jedis.lpush(key, orderId.toString());
+            jedis.rpush(key, orderId.toString());
             // 设置过期时间
             jedis.expire(key, 60);
             orderInfoKey = "order:info:" + orderId;
