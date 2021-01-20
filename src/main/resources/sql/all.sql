@@ -7,6 +7,8 @@ CREATE TABLE `student`(
     PRIMARY KEY (`email`)
 )ENGINE=InnoDB, default charset = UTF8;
 
+alter table student modify id varchar(15) unique;
+
 DROP TABLE IF EXISTS `merchant`;
 CREATE TABLE `merchant`(
     `merchant_id` int NOT NULL auto_increment,
