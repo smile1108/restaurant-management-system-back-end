@@ -346,7 +346,9 @@ public class FoodController extends BaseController{
         } else {
             int total = 0;
             for(Integer grade : grades){
-                total += grade;
+                if(grade != -1){
+                    total += grade;
+                }
             }
             double avg = ((double) total) / size;
             foodVO.setGrade(Double.valueOf(String.format("%.2f", avg)));
