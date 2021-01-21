@@ -23,4 +23,5 @@ public interface MerchantService {
 
     String getCode(String email) throws CommonException;
 
+    boolean judgeMerchantIsExistByEmail(String email) throws CommonException;
 }

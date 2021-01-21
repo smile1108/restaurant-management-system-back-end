@@ -141,4 +141,13 @@ public class MerchantServiceImpl implements MerchantService {
         return stringBuilder.toString();
     }
 
+    @Override
+    public boolean judgeMerchantIsExistByEmail(String email) throws CommonException {
+        Merchant merchant = merchantMapper.selectByEmail(email);
+        if(merchant == null){
+            return false;
+        }
+        return true;
+    }
+
 }

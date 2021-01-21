@@ -251,6 +251,11 @@ public class UserController extends BaseController {
             LOG.error("UserController -> 用户注册 -> 验证码不正确");
             throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
         }
+        boolean userIsExist = userService.judgeUserIsExistByEmail(email);
+        if(userIsExist) {
+            LOG.error("该用户已被注册");
+            throw new CommonException(ResultCode.USER_HAVE_EXISTED);
+        }
         String randomName = UserNameGenerator.getRandomName();
         User user = userService.register(randomName, SHA.getResult(password), email);
         UserVO userVO = convertFromUserDO(user);

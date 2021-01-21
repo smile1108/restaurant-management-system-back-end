@@ -237,6 +237,11 @@ public class MerchantController extends BaseController{
             LOG.error("MerchantController -> 商家注册 -> 验证码不正确");
             throw new CommonException(ResultCode.CODE_IS_NOT_RIGHT);
         }
+        boolean merchantIsExist = merchantService.judgeMerchantIsExistByEmail(email);
+        if(merchantIsExist){
+            LOG.error("该邮箱已被注册");
+            throw new CommonException(ResultCode.EMAIL_HAVE_EXISTED);
+        }
         Merchant merchant = merchantService.register(SHA.getResult(password), email);
         MerchantVO merchantVO = convertFromMerchant(merchant);
         return CommonReturnType.success(merchantVO);
