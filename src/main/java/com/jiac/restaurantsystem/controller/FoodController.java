@@ -427,6 +427,7 @@ public class FoodController extends BaseController{
             // 不存在的话才添加对应的数据
             if(!jedis.exists(foodInfoKey)){
                 FoodVO foodVO = convertFromFood(food);
+                setAVGGradeToFoodVO(food.getFoodId(), foodVO);
                 jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
                 jedis.expire(foodInfoKey, 30);
             }
