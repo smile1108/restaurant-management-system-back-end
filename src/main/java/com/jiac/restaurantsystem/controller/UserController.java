@@ -178,7 +178,7 @@ public class UserController extends BaseController {
             jedis.setex(key, 300, httpServletRequest.getSession().getId());
             jedis.setex(httpServletRequest.getSession().getId(), 300, SerializeUtil.serialize(userVO));
             Cookie cookie = new Cookie("JSESSIONID", httpServletRequest.getSession().getId());
-            cookie.setMaxAge(60);
+            cookie.setMaxAge(300);
             httpServletResponse.addCookie(cookie);
         }else{
             LOG.error("不可以重复登录");

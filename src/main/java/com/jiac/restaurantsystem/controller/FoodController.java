@@ -329,6 +329,10 @@ public class FoodController extends BaseController{
             return CommonReturnType.success(foodVO);
         }else {
             Food food = foodService.selectFoodById(foodId);
+            if(food == null) {
+                LOG.error("该菜品不存在");
+                throw new CommonException(ResultCode.FOOD_IS_NOT_EXIST);
+            }
             FoodVO foodVO = convertFromFood(food);
             setAVGGradeToFoodVO(food.getFoodId(), foodVO);
             jedis.set(foodInfoKey, SerializeUtil.serialize(foodVO));
@@ -350,8 +354,12 @@ public class FoodController extends BaseController{
                     total += grade;
                 }
             }
-            double avg = ((double) total) / size;
-            foodVO.setGrade(Double.valueOf(String.format("%.2f", avg)));
+            if(total == 0) {
+                foodVO.setGrade(-1);
+            }else {
+                double avg = ((double) total) / size;
+                foodVO.setGrade(Double.valueOf(String.format("%.2f", avg)));
+            }
         }
     }
 
