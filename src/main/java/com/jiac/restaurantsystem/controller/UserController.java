@@ -1,6 +1,7 @@
 package com.jiac.restaurantsystem.controller;
 
 import com.jiac.restaurantsystem.DO.*;
+import com.jiac.restaurantsystem.config.RabbitMQConfig;
 import com.jiac.restaurantsystem.controller.VO.FoodVO;
 import com.jiac.restaurantsystem.controller.VO.MerchantVO;
 import com.jiac.restaurantsystem.controller.VO.OrderVO;
@@ -18,6 +19,7 @@ import com.jiac.restaurantsystem.utils.UserNameGenerator;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +52,8 @@ public class UserController extends BaseController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private UserService userService;
@@ -67,7 +72,7 @@ public class UserController extends BaseController {
 
     private Pattern pattern = Pattern.compile("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$");
 
-    @Autowired
+    @Resource
     private HttpServletResponse httpServletResponse;
 
     @Autowired
@@ -321,8 +326,9 @@ public class UserController extends BaseController {
     })
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
     public CommonReturnType getCode(String email) throws CommonException {
-        String code = userService.getCode(email);
-        jedis.setex(email, 180, code);
+//        String code = userService.getCode(email);
+//        jedis.setex(email, 180, code);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_INFORM_EMAIL, email);
         return CommonReturnType.success();
     }
 
